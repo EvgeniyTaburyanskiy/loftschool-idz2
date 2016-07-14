@@ -38,6 +38,8 @@ $ gulp
         $ git checkout  dev //-> Переходим в ветку Dev<br>
         $ git merge task/0  //-> Сливаем ветку task/0 с текущей активной веткой dev<br>
         ```
+        
+        
 ### Team Members 
 * <img src="https://github.com/favicon.ico" width="64">[Максим Орлов](http://github.com)
 * <img src="https://avatars1.githubusercontent.com/u/19729612?v=3&s=460" width="64">[Дмитрий Гавриш](https://github.com/dmitrygavrish)
