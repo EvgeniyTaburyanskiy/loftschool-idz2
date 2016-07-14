@@ -1,25 +1,25 @@
 # Loftshool **PHOTOGRAMM**
 
 ### Projects Links
-* [Task list](https://docs.google.com/spreadsheets/d/1fGqRRAGeujqcND2gL5ljCe2yVsB1Guc97A_XADirQ3I/edit#gid=0)
-* [Dev site]()
-* [Prod site]()
+* <img src="http://image.flaticon.com/icons/png/512/104/104111.png" width="24"> [TASK LIST](https://docs.google.com/spreadsheets/d/1fGqRRAGeujqcND2gL5ljCe2yVsB1Guc97A_XADirQ3I/edit#gid=0)
+* <img src="http://image.flaticon.com/icons/svg/18/18454.svg" width="24">[Dev site]()
+* <img src="http://image.flaticon.com/icons/svg/18/18454.svg" width="24">[Prod site]()
 
 ### Getting started:
 
-```
-$ mkdir idz2-photogramm
-$ cd ./idz2-photogramm
-$ git clone https://github.com/EvgeniyTaburyanskiy/loftschool-idz2.git .
+```sh
+mkdir idz2-photogramm
+cd ./idz2-photogramm
+git clone https://github.com/EvgeniyTaburyanskiy/loftschool-idz2.git .
 
-$ npm install
-$ gulp
+npm install
+gulp
 ```
 
 ###  Branch Naming Agreement
 * _master_ - Для стабильных релизов которые можно публиковать на боевой сайт
 * _dev_ - В эту ветку сливаем законченые таски
-* _task/num_ - Ветка задач где: _num_ - Номер таска соответствует номеру из таск листа [Task list](https://docs.google.com/spreadsheets/d/1fGqRRAGeujqcND2gL5ljCe2yVsB1Guc97A_XADirQ3I/edit#gid=0)
+* _task/num_ - Ветка задач где: _num_ - Номер таска соответствует номеру из таск листа <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqluQ-FpmFJ4P0-C_j5NI0nzSdF2uPpl3ftSIw0M6EfdaX7Seorw" width="24">[TASK LIST](https://docs.google.com/spreadsheets/d/1fGqRRAGeujqcND2gL5ljCe2yVsB1Guc97A_XADirQ3I/edit#gid=0)
     * делаем это так:
     ```sh
     git checkout  dev //-> Переходим в ветку Dev
