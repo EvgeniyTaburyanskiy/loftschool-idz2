@@ -1,14 +1,15 @@
-# Loftshool IDZ2 - Photoalbum
+# Loftshool **PHOTOGRAMM**
 
 ### Projects Links
 * [Task list]()
-* [Test site]()
+* [Dev site]()
+* [Prod site]()
 
 ### Getting started:
 
 ```
-$ mkdir idz2-photoalbum
-$ cd ./idz2-photoalbum
+$ mkdir idz2-photogramm
+$ cd ./idz2-photogramm
 $ git clone https://github.com/EvgeniyTaburyanskiy/loftschool-idz2.git .
 
 $ npm install

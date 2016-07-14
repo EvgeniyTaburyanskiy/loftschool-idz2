@@ -1,12 +1,12 @@
 {
-  "name": "loftschool-IDZ2",
+  "name": "IDZ2-photogramm",
   "version": "1.0.0",
   "author": "",
   "license": "ISC",
   "repository": {
     "type": "git",
     "url": "https://github.com/EvgeniyTaburyanskiy/loftschool-idz2.git"
-  }
+  },
   "scripts": {
     "postinstall": "bower install"
   },
