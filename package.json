@@ -1,8 +1,12 @@
 {
-  "name": "loftschool-builder",
+  "name": "loftschool-IDZ2",
   "version": "1.0.0",
-  "author": "a.kalin",
+  "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EvgeniyTaburyanskiy/loftschool-idz2.git"
+  }
   "scripts": {
     "postinstall": "bower install"
   },
