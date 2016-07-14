@@ -15,7 +15,7 @@ $ git clone https://github.com/EvgeniyTaburyanskiy/loftschool-idz2.git .
 $ npm install
 $ gulp
 ```
-
+ 
 ### Team Members 
 * <img src="https://github.com/favicon.ico" width="64">[Максим Орлов](http://github.com)
 * <img src="https://avatars1.githubusercontent.com/u/19729612?v=3&s=460" width="64">[Дмитрий Гавриш](https://github.com/dmitrygavrish)
