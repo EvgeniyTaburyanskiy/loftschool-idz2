@@ -19,9 +19,9 @@ $screen-md-max : 1200px; //laptop
 $screen-lg-min : $screen-md-max + 1;
 
 // breakpoints
-$breakpoint-laptop : "only screen and (max-width : #{$screen-md-max})";
-$breakpoint-tablet : "only screen and (max-width : #{$screen-sm-max})";
-$breakpoint-mobile : "only screen and (max-width : #{$screen-xs-max})";
+$breakpoint-laptop : "only screen and (max-width : "+$screen-md-max+")";
+$breakpoint-tablet : "only screen and (max-width : "+$screen-sm-max+")";
+$breakpoint-mobile : "only screen and (max-width : "+$screen-xs-max+")";
 
 // media containers
 

@@ -10,7 +10,8 @@ https://operatino.github.io/MCSS/modules/shorthand_dictionary.html
 @import "base/typography";
 
 // VENDORS
-@import "../../node_modules/normalize.css/normalize.css";
+//- в данной сборке вендорные css подключаются через gulp. gulp/paths/css.foundation.js
+//-@import "../../node_modules/normalize.css/normalize.css";
 
 // HELPERS
 @import "helpers/functions";
@@ -26,7 +27,7 @@ https://operatino.github.io/MCSS/modules/shorthand_dictionary.html
 
 // MODULES_PROJECT
 // - @import "modules/project/*.scss";
-
+@import "modules/*.scss";
 /* ------------ PROJECT ------------ */
 
 // PAGES

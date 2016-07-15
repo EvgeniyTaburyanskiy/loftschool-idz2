@@ -11,8 +11,13 @@ global.$ = {
   },
   gulp:        require('gulp'),
   rimraf:      require('rimraf'),
-  browserSync: require('browser-sync').create(),
-  gp:          require('gulp-load-plugins')()
+  browserSync: require('browser-sync'),//.create(),
+  gp:          require('gulp-load-plugins')({
+    rename: {
+      'gulp-svg-sprite': 'svgSprite',
+      'gulp-sass-glob':  'sassGlob'
+    }
+  })
 };
 
 $.path.task.forEach(function (taskPath) {
@@ -27,7 +32,7 @@ $.gulp.task('default', $.gulp.series(
         'js:foundation',  //-> Собирает  все Вендорные JS указанные в  gulp/paths/foundation.js в один foundation.js
         'js:process',     //-> Собирает все JS указанные в gulp/paths/app.js в один файл с картой app.js
         'copy:image',     //-> Копирует все(кроме svg) картинки из src/images в /assets/img
-        'css:foundation', //-> Собирает  все Вендорные CSS указанные в  gulp/paths/foundation.css в один foundation.css
+        'css:foundation', //-> Собирает  все Вендорные CSS указанные в  gulp/paths/css.foundation.js один foundation.css
         'sprite:svg'      //-> Собирает  все ./source/images/svg/ очищает их от атрибутов и генерит спрайт svg
     ),
     $.gulp.parallel(
