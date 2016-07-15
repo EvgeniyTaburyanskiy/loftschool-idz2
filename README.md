@@ -1,4 +1,4 @@
-# Loftshool **LOFTOGRAM**
+# Loftschool **LOFTOGRAM**
 
 <img src="http://www.windows-phone-user.de/var/ezdemo_site/storage/images/heftarchiv/2013/06/apps-fuer-windows-phones-von-samsung-und-htc/photogram-icon.png/38027-1-ger-DE/photogram-icon.png1_large.png" width="256" >
 
@@ -42,7 +42,43 @@ gulp
     git checkout  dev //-> Переходим в ветку Dev
     git merge task/0  //-> Сливаем ветку task/0 с текущей активной веткой dev
     ```
-            
+
+## Server
+### Server PKGs
+
+PKG                 | Description
+------------------- |------------------- 
+body-parser         | пакет обрабатывает тела application/x-www-form-urlencoded и application/json запросов и выставляет для них req.body
+cookie-parser       | пакет для синтаксического анализа Cookie  выставляет для них  req.cookies
+debug               | пакет для логирования в консоль с подсветкой разных типов событий
+express             | базовый пакет, для создания http-сервера
+faker               | пакет для генерации фейковых данных, например при наполнении БД демо данными
+method-override     |
+mongoose            | фреймверк, для удобной работы с MongoDB
+nconf               | пакет для удобной работы с настройками приложения (собственный config.json)
+winston             | пакет для продвинутого логирования HTTP запросов и ошибок в файл
+pug                 | пакет для обработки pug/jade шаблонов
+passport            | пакет для проведения авторизации под node.js.
+passport-local      | плагин для passport реализующий стратегии локальной авторизации
+bcrypt              | библиотека для хеширования паролей
+nodemailer          | пакет для отправки писем с сервера nodejs
+express-validator   | пакет для валидации данных на стророне сервера
+   
+### Server scaffolding
+<pre>
+/server
+   |-config         |-> Файлы конфигураций для пакетов проекта
+   |-db             |-> Файлы касающиеса работы с БД (миграции/сидды/модели ...)
+   |---migrations   |-> Файлы Миграций 
+   |---model        |-> Файлы Моделей БД
+   |---seeds        |-> Файлы для наполнения Базы тестовыми данными
+   |-logs           |-> Файлы Логов работы Приложения
+   |-middleware     |-> Файлы прослоек (авторизация/проверка сессий / валидация ...)
+   |-public         |-> DocumentRoot для фронт части
+   |-routes         |-> Обработчики маршрутов сервера
+   |-utils          |-> Пакеты инструментов для приложения сервера (mongoose/ loging / nodemailer /faker ...)
+   |-views          |-> Шаблоны HTML представлений
+</pre>
         
 ### Team Members 
 * <img src="https://github.com/favicon.ico" width="64">[Максим Орлов](http://github.com)
@@ -50,3 +86,4 @@ gulp
 * <img src="https://avatars1.githubusercontent.com/u/7986099?v=3&s=460" width="64">[Дима Ганин](https://github.com/ganya555)
 * <img src="https://avatars1.githubusercontent.com/u/7585251?v=3&s=460" width="64">[Евгений Табурянский](https://github.com/EvgeniyTaburyanskiy)
 * <img src="https://avatars2.githubusercontent.com/u/16744815?v=3&s=460" width="64">[Олег Богданов](https://github.com/obogdanov)
+
