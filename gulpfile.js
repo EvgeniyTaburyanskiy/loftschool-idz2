@@ -12,7 +12,7 @@ global.$ = {
   gulp:        require('gulp'),
   rimraf:      require('rimraf'),
   rsp: require('remove-svg-properties').stream,
-  browserSync: require('browser-sync').create(),
+  browserSync: require('browser-sync'),//.create(),
   gp:          require('gulp-load-plugins')({
     rename: {
       'gulp-svg-sprite': 'svgSprite',
