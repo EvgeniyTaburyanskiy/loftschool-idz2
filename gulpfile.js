@@ -11,7 +11,7 @@ global.$ = {
   },
   gulp:        require('gulp'),
   rimraf:      require('rimraf'),
-  rsp: require('remove-svg-properties').stream,
+  rsp:         require('remove-svg-properties').stream,
   browserSync: require('browser-sync'),//.create(),
   gp:          require('gulp-load-plugins')({
     rename: {
