@@ -6,7 +6,7 @@ module.exports = function () {
     $.browserSync(
         {
           notify: false,
-          port:   9000,
+          port:   3000,
           server: $.config.root
         }
     );
