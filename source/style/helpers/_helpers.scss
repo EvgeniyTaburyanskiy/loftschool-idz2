@@ -1,0 +1,43 @@
+/* ------------ Class & placeholders helpers------------ */
+// GENERAL
+$btn-text-color: #fff;
+$btn-darken-percent: 15%;
+$btn-lighten-percent: 20%;
+$btn-height: 50px;
+$btn-border-radius: 5px;
+$btn-padding: 16px;
+$btn-font-size: $base-font-size;
+$btn-shadow-color: #666;
+$btn-font-weight: 300;
+$btn-font-family: 'RobotoMedium', Helvetica, Arial, sans-serif;
+
+%btn {
+  display       : inline-block;
+  font-family   : $btn-font-family;
+  height        : $btn-height;
+  font-weight   : $btn-font-weight;
+  border-radius : $btn-border-radius;
+  padding       : $btn-padding;
+  font-size     : $btn-font-size;
+  background    : $btn-bg;
+  cursor        : pointer;
+  outline       : none;
+  text-align    : center;
+
+  &:disabled {
+    cursor : default;
+    &:hover { box-shadow : none; }
+  }
+
+  &:hover,
+  &:hover,
+  &.hover {
+    box-shadow : 0px 2px 2px $btn-shadow-color;
+  }
+
+  &:active,
+  &.active {
+    box-shadow : none;
+  }
+
+}

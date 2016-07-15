@@ -1,0 +1,46 @@
+mixin GTM(TAG)
+  //Google Tag Manager
+  | <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TRS3HP"
+  |    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  | <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  | new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  | j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  | '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  | })(window,document,'script','dataLayer','#{TAG}');</script>
+  //END Google Tag Manager
+
+mixin GA (GA_ID)
+  //- GA_ID = UA-XXXXX-X
+  // Google Analytics: change UA-XXXXX-X to be your site's ID.
+  | <script>
+  | (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+  | function(){(b[l].q=b[l].q || []).push(arguments)});b[l].l=+new Date;
+  | e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+  | e.src='//www.google-analytics.com/analytics.js';
+  | r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+  | ga('create','#{GA_ID}','auto');ga('send','pageview');
+  | </script>
+  // End Google Analytics
+
+mixin FavIcon
+  | <link rel="apple-touch-icon" href="./images/favicon/apple-touch-icon.png">
+  | <link rel="apple-touch-icon" sizes="57x57" href="./images/favicon/apple-icon-57x57.png">
+  | <link rel="apple-touch-icon" sizes="60x60" href="./images/favicon/apple-icon-60x60.png">
+  | <link rel="apple-touch-icon" sizes="72x72" href="./images/favicon/apple-icon-72x72.png">
+  | <link rel="apple-touch-icon" sizes="76x76" href="./images/favicon/apple-icon-76x76.png">
+  | <link rel="apple-touch-icon" sizes="114x114" href="./images/favicon/apple-icon-114x114.png">
+  | <link rel="apple-touch-icon" sizes="120x120" href="./images/favicon/apple-icon-120x120.png">
+  | <link rel="apple-touch-icon" sizes="144x144" href="./images/favicon/apple-icon-144x144.png">
+  | <link rel="apple-touch-icon" sizes="152x152" href="./images/favicon/apple-icon-152x152.png">
+  | <link rel="apple-touch-icon" sizes="180x180" href="./images/favicon/apple-icon-180x180.png">
+  | <link rel="icon" type="image/png" sizes="192x192" href="./images/favicon/android-icon-192x192.png">
+  | <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon/favicon-32x32.png">
+  | <link rel="icon" type="image/png" sizes="96x96" href="./images/favicon/favicon-96x96.png">
+  | <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon/favicon-16x16.png">
+  | <link rel="manifest" href="./images/favicon/manifest.json">
+  meta(name="msapplication-TileColor", content="#ffffff")
+  meta(name="msapplication-TileImage", content="./images/favicon/ms-icon-144x144.png")
+  meta(name="theme-color", content="#ffffff")
+  meta(name="msapplication-config", content="./images/favicon/browserconfig.xml")
+
+

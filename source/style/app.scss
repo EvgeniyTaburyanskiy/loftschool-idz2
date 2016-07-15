@@ -1,5 +1,37 @@
-body {
-  margin: 0;
-}
+/*
+http://frontender.info/organizing-your-css-code-for-preprocessors/
+https://operatino.github.io/MCSS/modules/shorthand_dictionary.html
+*/
 
-@import 'common/greating';
+/* ------------ BASE ------------ */
+// BASE
+@import "base/variables";
+@import "base/color-swatch";
+@import "base/typography";
+
+// VENDORS
+@import "../../node_modules/normalize.css/normalize.css";
+
+// HELPERS
+@import "helpers/functions";
+@import "helpers/helpers";
+@import "helpers/mixins";
+@import "helpers/animations";
+
+// LAYOUTS
+@import "base/normalize";
+
+// MODULES_BASE
+// - @import "modules/base/*.scss";
+
+// MODULES_PROJECT
+// - @import "modules/project/*.scss";
+
+/* ------------ PROJECT ------------ */
+
+// PAGES
+@import "pages/index";
+
+
+
+

@@ -22,13 +22,13 @@ $.path.task.forEach(function (taskPath) {
 $.gulp.task('default', $.gulp.series(
     'clean',
     $.gulp.parallel(
-        'sass',
-        'pug',
-        'js:foundation',
-        'js:process',
-        'copy:image',
-        'css:foundation',
-        'sprite:svg'
+        'sass',           //-> Обрабатывает app.scss  
+        'pug',            //-> Обрабатывает PUG/ Jade из папки Pages
+        'js:foundation',  //-> Собирает  все Вендорные JS указанные в  gulp/paths/foundation.js в один foundation.js
+        'js:process',     //-> Собирает все JS указанные в gulp/paths/app.js в один файл с картой app.js
+        'copy:image',     //-> Копирует все(кроме svg) картинки из src/images в /assets/img
+        'css:foundation', //-> Собирает  все Вендорные CSS указанные в  gulp/paths/foundation.css в один foundation.css
+        'sprite:svg'      //-> Собирает  все ./source/images/svg/ очищает их от атрибутов и генерит спрайт svg
     ),
     $.gulp.parallel(
         'watch',
