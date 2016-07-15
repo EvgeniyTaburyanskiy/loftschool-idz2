@@ -44,25 +44,31 @@ gulp
     ```
 
 ## Server
+* CD to root directory project and:
+```
+node ./source/server/www
+```
 ### Server PKGs
 
 PKG                 | Description
 ------------------- |------------------- 
 body-parser         | пакет обрабатывает тела application/x-www-form-urlencoded и application/json запросов и выставляет для них req.body
 cookie-parser       | пакет для синтаксического анализа Cookie  выставляет для них  req.cookies
-debug               | пакет для логирования в консоль с подсветкой разных типов событий
 express             | базовый пакет, для создания http-сервера
 faker               | пакет для генерации фейковых данных, например при наполнении БД демо данными
-method-override     |
+method-override     | пакет для поддержки put и delete
 mongoose            | фреймверк, для удобной работы с MongoDB
 nconf               | пакет для удобной работы с настройками приложения (собственный config.json)
-winston             | пакет для продвинутого логирования HTTP запросов и ошибок в файл
-pug                 | пакет для обработки pug/jade шаблонов
+winston             | пакет для продвинутого логирования (продвинутая альтернатива пакета debug)
+jade                 | пакет для обработки pug/jade шаблонов
 passport            | пакет для проведения авторизации под node.js.
 passport-local      | плагин для passport реализующий стратегии локальной авторизации
 bcrypt              | библиотека для хеширования паролей
 nodemailer          | пакет для отправки писем с сервера nodejs
 express-validator   | пакет для валидации данных на стророне сервера
+serve-favicon       | пакет для express устанавливающий favicon (по умолчанию)
+
+
    
 ### Server scaffolding
 <pre>
