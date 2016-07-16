@@ -1,9 +1,10 @@
-var express = require('express');
-var router = express.Router();
+var logger = require('../utils/winston')(module);
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+/* GET search page. */
+var search = function (req, res, next) {
+  res.render('index', {title: 'search'});
+};
 
-module.exports = router;
+module.exports = {
+  search: search
+};

@@ -1,9 +1,17 @@
-var express = require('express');
-var router = express.Router();
+var logger = require('../utils/winston')(module);
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+/* GET users page. */
+var getUsers = function (req, res, next) {
+  res.render('index', {title: 'albums'});
+};
 
-module.exports = router;
+/* GET user by ID. */
+var getUserById = function (req, res, next) {
+  res.render('index', {title: 'album'});
+};
+
+
+module.exports = {
+  users: getUsers,
+  user:  getUserById
+};

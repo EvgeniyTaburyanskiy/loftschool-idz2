@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+var schemaLike = require('./Like').schema;
 /**
  * Схема Фотки
  */
@@ -41,6 +41,7 @@ var schemaPhoto = new Schema({
     type:     Schema.Types.ObjectId,
     required: false
   },
+  likes:      [schemaLike],
   created_at: {
     type:    Date,
     default: Date.now

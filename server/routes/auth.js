@@ -1,9 +1,21 @@
-var express = require('express');
-var router = express.Router();
+var logger = require('../utils/winston')(module);
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
 
-module.exports = router;
+var login = function (req, res, next) {
+  res.render('index', {title: 'login'});
+};
+
+var register = function (req, res, next) {
+  res.render('index', {title: 'register'});
+};
+
+var fogot = function (req, res, next) {
+  res.render('index', {title: 'fogot'});
+};
+
+
+module.exports = {
+  login:    login,
+  register: register,
+  fogot:    fogot
+};
