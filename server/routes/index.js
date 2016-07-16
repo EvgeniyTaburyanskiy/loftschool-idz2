@@ -1,4 +1,9 @@
 /**
+ * Module dependencies.
+ */
+var logger = require('../utils/winston')(module);
+
+/**
  * ROUTING CONTROLLERS
  */
 var controllers = {
@@ -18,8 +23,13 @@ var controllers = {
  * @private
  */
 var _router = function (app) {
-  var express = require('express');
-  var router = express.Router();
+  var router = require('express').Router();
+
+  router.use(function Logger(req, res, next) {
+    //logger.debug('Request Url %s ', req.url);
+    next();
+  });
+
   // ==============================================
   /**
    * HOME Routes
@@ -41,7 +51,6 @@ var _router = function (app) {
   router.get('/albums', controllers.albums.albums);
 
   // ==============================================
-
   /**
    * USERS Routes
    */
@@ -58,18 +67,18 @@ var _router = function (app) {
   /**
    * DEFAULT Routes
    */
-  app.use(r_error.err_404);
+  router.use(controllers.error.err_404);
 
   // error handlers
   if (app.get('env') === 'development') {
     // development error handler
     // will print stacktrace
-    app.use(r_error.err_allDev);
+    router.use(controllers.error.err_allDev);
   }
   else {
     // production error handler
     // no stacktraces leaked to user
-    app.use(r_error.err_all);
+    router.use(controllers.error.err_all);
   }
 
   return router;

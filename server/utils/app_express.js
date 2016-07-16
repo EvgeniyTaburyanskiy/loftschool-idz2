@@ -1,3 +1,6 @@
+/**
+ * Module dependencies.
+ */
 var express        = require('express'),
     app            = express(),
     path           = require('path'),
@@ -5,13 +8,16 @@ var express        = require('express'),
     bodyParser     = require('body-parser'),
     methodOverride = require('method-override'),
     favicon        = require('serve-favicon'),
+    expressSession = require('express-session'),
+    MongoStore     = require('connect-mongo')(expressSession),
     passport       = require('passport');
 
 
 var
-    config = require('./nconf'),
-    logger = require('./winston')(module),
-    router = require('../routes');
+    config   = require('./nconf'),
+    logger   = require('./winston')(module),
+    router   = require('../routes'),
+    mongoose = require('./mongoose');
 
 var serverRoot = config.get('serverRoot');
 var documentRoot = path.join(serverRoot, config.get('documentRoot'));
@@ -29,14 +35,26 @@ app.set('views', viewsDir);
 //app.use(favicon(path.join(cwd , 'public', 'favicon.ico')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
 app.use(methodOverride());
+app.use(cookieParser());
+app.use(expressSession({
+      secret:            config.get('session:secret'),
+      name:              config.get('session:key'),
+      cookie:            config.get('session:cookie'),
+      store:             new MongoStore({
+        mongooseConnection: mongoose.connection
+      }),
+      resave:            false, //don't save session if unmodified
+      saveUninitialized: false // don't create session until something stored
+    })
+);
+
 app.use(express.static(documentRoot));
 app.use(passport.initialize());
 
 
-/**
- * Start Routing
+/** 
+ * MAIN ROUTING MODULE
  * */
 app.use(router(app));
 
