@@ -1,9 +1,11 @@
 var nconf = require('nconf');
+var path   = require('path');
 
-nconf.argv()
+nconf
+.argv()
 .env()
 .file({
-  file: process.cwd() + '/config/config.json'
+  file: __dirname + '/../config/local.env.json'
 });
 
 module.exports = nconf;

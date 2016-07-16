@@ -2,12 +2,23 @@
 /**
  * Module dependencies.
  */
+
 var
-    utils  = process.cwd() + '/utils/',
+    path   = require('path'),
+    http   = require('http'),
+    utils  = path.join(__dirname, '/utils/'),
     config = require(utils + 'nconf'),
-    log    = require(utils + 'winston')(module),
-    app    = require(utils + 'app_express'),
-    http   = require('http');
+    logger = require(utils + 'winston')(module),
+    app    = require(utils + 'app_express');
+
+config.set('serverRoot', __dirname);
+config.save(function (err) {
+  if (err) {
+    logger.error(err.message);
+    return;
+  }
+  logger.info('Config saved successfully!');
+});
 
 /**
  * Get port from environment and store in Express.
@@ -25,7 +36,7 @@ var server = http.createServer(app);
  */
 server.listen(port);
 server.on('listening', function () {
-  log.info('Express server listening on port ' + app.get('port'));
+  logger.info('Express server listening on port ' + app.get('port'));
 });
 
 /**
