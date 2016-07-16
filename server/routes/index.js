@@ -1,15 +1,18 @@
 /**
- * ROUTING WORKERS
+ * ROUTING CONTROLLERS
  */
-var r_main = require('./main');         //-> Обработчик Маршрута Гланая стр
-var r_auth = require('./auth');         //-> Обработчик Маршрута Авторизация/Регистрация/Восстановление пароля
-var r_albums = require('./albums');     //-> Обработчик Маршрута Альбом редактирвание
-var r_users = require('./users');       //-> Обработчик Маршрута Пользователь-Альбомы
-var r_search = require('./search');     //-> Обработчик Маршрута Результаты поиска
-var r_error = require('./error');       //-> Обработчик Ошибочных запросов
+var controllers = {
+  main:   require('./main'),         //-> Обработчик Маршрута Гланая стр
+  auth:   require('./auth'),         //-> Обработчик Маршрута Авторизация/Регистрация/Восстановление пароля
+  albums: require('./albums'),       //-> Обработчик Маршрута Альбом редактирвание
+  users:  require('./users'),        //-> Обработчик Маршрута Пользователь-Альбомы
+  search: require('./search'),       //-> Обработчик Маршрута Результаты поиска
+  error:  require('./error')         //-> Обработчик Ошибочных запросов
+};
+
 
 /**
- * 
+ * Router Wrapper
  * @param app
  * @returns {*}
  * @private
@@ -21,35 +24,35 @@ var _router = function (app) {
   /**
    * HOME Routes
    */
-  router.get('/', r_main.home);
+  router.get('/', controllers.main.home);
 
   // ==============================================
   /**
    * AUTH Routes
    */
-  router.post('/auth/:login', r_auth.login);
-  router.post('/auth/:register', r_auth.register);
-  router.post('/auth/:fogot', r_auth.fogot);
+  router.post('/auth/:login', controllers.auth.login);
+  router.post('/auth/:register', controllers.auth.register);
+  router.post('/auth/:fogot', controllers.auth.fogot);
 
   // ==============================================
   /**
    * ALBUM Routes
    */
-  router.get('/albums', r_albums.albums);
+  router.get('/albums', controllers.albums.albums);
 
   // ==============================================
 
   /**
    * USERS Routes
    */
-  router.get('/users', r_users.users);
-  router.get('/users/:id', r_users.user);
+  router.get('/users', controllers.users.users);
+  router.get('/users/:id', controllers.users.user);
 
   // ==============================================
   /**
    * SEARCH Routes
    */
-  router.get('/search', r_search.search);
+  router.get('/search', controllers.search.search);
 
   // ==============================================
   /**
