@@ -9,7 +9,10 @@ var schemaLike = require('./Like').sLike;
  * Схема Фотки
  */
 var schemaPhoto = new Schema({
-  _album_id:  Schema.Types.ObjectId,
+  _album_id:  {
+    type: Schema.Types.ObjectId,
+    ref:  'Album'
+  },
   name:       {
     type:      String,
     default:   "Фото без названия!",
@@ -20,8 +23,8 @@ var schemaPhoto = new Schema({
   },
   descr:      {
     type:      String,
-    minlength: 3,
-    maxlength: 1000,
+    default:   '',
+    maxlength: 250,
     trim:      true,
     required:  false
   },
@@ -33,6 +36,7 @@ var schemaPhoto = new Schema({
   },
   thumbURL:   {//-> URL
     type:      String,
+    default:   '',
     maxlength: 2000,
     trim:      true,
     required:  false
@@ -41,11 +45,17 @@ var schemaPhoto = new Schema({
     type:    Boolean,
     default: false
   },
-  comments:   {
+  comments:   { //-> Комменты Храним в отдельной коллекции. В данной только ссылку на документ коменнтов к данной фотке.
     type:     Schema.Types.ObjectId,
+    ref:      'PhotoComments', //-> Указывает на имя Модели.
     required: false
   },
-  likes:      [schemaLike],
+  likes:      [{
+    _user_id: { //-> 
+      type: Schema.Types.ObjectId,
+      ref:  'User'
+    }
+  }], //-> Лайки храним как вложенный объект
   created_at: {
     type:    Date,
     default: Date.now

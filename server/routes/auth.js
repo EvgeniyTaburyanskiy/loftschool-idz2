@@ -20,9 +20,9 @@ var _login = function (req, res, next) {
 
 var _logout = function (req, res, next) {
   req.logout();          //-> метод добавляется модулем passport. http://passportjs.org/docs/logout
-  //(согласно доке passport он сам удаляет сессии)
-  //req.session.destroy(); //-> Удаляем сессию пользователя
-  req.redirect('/auth'); //-> Редиректим на страницу авторизации
+  //(согласно доке passport удаляет свои данные из сессии, но объект сессии нет.)
+  req.session.destroy(); //-> Удаляем сессию пользователя
+  res.redirect('/auth'); //-> Редиректим на страницу авторизации
 };
 
 var _register = function (req, res, next) {

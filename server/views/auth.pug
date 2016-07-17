@@ -2,8 +2,34 @@ extends ./_template
 
 block APP_content
 
-  h3 "Авторизация"
-  form#loginForm(method="POST" action="/auth/login")
-    input(type='text' name='email' placeholder='email')
-    input(type='text' name='password' placeholder='password')
-    button( type='submit') Войти
+  h4 Register your account
+  form(action='/auth/register' method='post')
+    fieldset
+      label(for='email') Email
+      input(type='email' name='email' placeholder='Your Email')
+      label(for='password') Password
+      input(type='password' name='password' placeholder='Your Password')
+      button(type='Register')
+
+  br
+  h4 Login to your account
+  form(action='/auth/login' method='post')
+    fieldset
+      label(for='email') Email
+      input(type='email' name='email' placeholder='Your Email')
+      label(for='password') Password
+      input(type='password' name='password' placeholder='Your Password')
+      button(type='Login')
+
+  br
+  h4 Forgot Password
+  form(action='/auth/fogot' method='POST')
+    legend Forgot Password
+    .form-group
+      label(for='email') Email
+      input.form-control(type='text', name='email',placeholder='Your Email', autofocus)
+    button.btn.btn-primary(type='submit') Reset Password
+
+  br
+  h4 LOGOUT
+    a(href='/auth/logout') logout

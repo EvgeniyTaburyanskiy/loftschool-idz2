@@ -43,7 +43,7 @@ var _router = function (app) {
   /**
    * HOME Routes
    */
-  router.get('/', controllers.main.home);
+  router.get('/', checkAuth, controllers.main.home);
 
   // ==============================================
   /**
@@ -52,13 +52,10 @@ var _router = function (app) {
   router.get('/auth', controllers.auth.get);
 
   router.post('/auth/login',
-      passport.authenticate('local', {
-        successRedirect: '/',
-        failureRedirect: '/auth',
-        failureFlash:    false
-      }),
+      passport.authenticate('local'),
       controllers.auth.post.login
   );
+  router.get('/auth/logout', controllers.auth.post.logout);
   router.post('/auth/logout', controllers.auth.post.logout);
   router.post('/auth/register', controllers.auth.post.register);
   router.post('/auth/fogot', controllers.auth.post.fogot);

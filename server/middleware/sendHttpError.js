@@ -15,17 +15,21 @@ var ENV = process.env.NODE_ENV;
 module.exports = function (req, res, next) {
   res.sendHttpError = function (error) {
     res.status(error.status);
-    if (res.req.headers['x-requested-with'] == 'XMLHttpRequest'){ //-> Это AJAX запрос
+
+    if (res.req.headers['x-requested-with'] == 'XMLHttpRequest') { //-> Это AJAX запрос
       res.json(error);
     }
-    else{
+    else if (401 == res.statusCode) {
+      res.redirect('/auth');
+    }
+    else {
       res.render('error', {
         message: error.message,
         error:   ENV === 'development' ? error : ''
-      });      
+      });
     }
-    
-    logger.debug('%s %d %s', req.method, res.statusCode, error.message + ' [' + req.url +']');
+
+    logger.debug('%s %d %s', req.method, res.statusCode, error.message + ' [' + req.url + ']');
   };
 
   next();

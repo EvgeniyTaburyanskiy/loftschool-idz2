@@ -1,17 +1,22 @@
 /**
+ * Module dependencies.
+ */
+var logger = require('../utils/winston')(module);
+var AuthLocalStrategy = require('passport-local').Strategy;
+//var AuthFacebookStrategy = require('passport-facebook').Strategy;
+//var AuthVKStrategy = require('passport-vkontakte').Strategy;
+
+var AuthError = require('../db/schemas/User').AuthError;
+var HttpError = require('../utils/HttpError').HttpError;
+
+var User = require('../db/models/User').mUser;
+
+/**
  * Модуль конфигурирует Мидлвар Passport.js
  * @param passport
  */
 module.exports = function (passport) {
-  var AuthLocalStrategy = require('passport-local').Strategy;
-//var AuthFacebookStrategy = require('passport-facebook').Strategy;
-//var AuthVKStrategy = require('passport-vkontakte').Strategy;
 
-
-  var AuthError = require('../db/schemas/User').AuthError;
-  var HttpError = require('../utils/HttpError').HttpError;
-
-  var User = require('../db/models/User').mUser;
 // ================= Конфигурация Стратегий  =============================
   /**
    * Стратегия Локальной Авторизации.
@@ -25,13 +30,16 @@ module.exports = function (passport) {
           if (err) {
             return done(err);
           }
+
           if (!user) {//-> пользователь по email не найден в БД
-            done(null, false, {message: 'Не верное имя пользователя'});
+            return done(null, false, {message: 'Не верное имя пользователя'});
           }
+
           if (!user.checkPassword(password)) { //-> Проверяем пароль
-            done(null, false, {message: 'Не верный Пароль'});
+            return done(null, false, {message: 'Не верный Пароль'});
           }
-          done(null, user); //-> Все ОК отдаем Pasport(у) пользователя
+
+          done(null, user); //-> Все ОК отдаем Passport(у) пользователя
         });
       }
   ));

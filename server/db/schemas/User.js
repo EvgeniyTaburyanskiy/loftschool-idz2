@@ -3,6 +3,7 @@
  */
 var mongoose = require('mongoose');
 var async = require('async');
+var crypto = require('crypto');
 var util = require('util');
 var Schema = mongoose.Schema;
 var schemaUserData = require('./UserData').sUserData;
@@ -11,29 +12,40 @@ var schemaUserData = require('./UserData').sUserData;
  * Схема Коллекции Пользователей
  */
 var schemaUser = new Schema({
-  email:          {
-    type:     String,
-    unique:   true,
-    required: true
+  username:             {
+    type:      String,
+    maxlength: 254,
+    default:   '',
+    trim:      true,
+    required:  false
   },
-  hashedPassword: {
-    type:     String,
-    required: true
-  },
-  salt:           {
+  hashedPassword:       {
     type:     String,
     required: true
   },
-  userdata:       schemaUserData,
-  created:        {
+  salt:                 {
+    type:     String,
+    required: true
+  },
+  resetPasswordToken:   {
+    type:      String,
+    maxlength: 1024,
+    default:   ''
+  },
+  resetPasswordExpires: {
+    type:    Date,
+    default: Date.now() + 3600000 // 1 hour
+  },
+  userdata:             schemaUserData, // Данные пользователя будем хранить в этой же коллекции. Схема данных описана в UserData
+  created:              {
     type:    Date,
     default: Date.now
   }
 });
 // ================= User Entyty Methods =============================
 schemaUser.methods.encryptPassword = function (password) {
-  //less secure -return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
-  return crypto.pbkdf2Sync(password, this.salt, 10000, 512);
+  return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
+  //more secure -return crypto.pbkdf2Sync(password, this.salt, 10000, 512);
 };
 
 schemaUser.methods.checkPassword = function (password) {
@@ -41,22 +53,21 @@ schemaUser.methods.checkPassword = function (password) {
 };
 
 // ================= Schema Statics Methods =============================
-schemaUser.statics.authorise = function (login, password, callback) {
-  var User = this;
-};
-
-schemaUser.statics.register = function (login, password, callback) {
+schemaUser.statics.register = function (username, password, callback) {
   var User = this;
   async.waterfall([
         function (callback) {
-          User.findOne({email: login}, callback);//-> Ищем пользователя в БД по email(он же логин)
+          User.findOne({username: username}, callback);//-> Ищем пользователя в БД по username(он же email)
         },
         function (user, callback) {// ошибок не возникло возвращен результат из пред функции
-          if (user) {//-> если пользователь найден проверяем его пароль
+          if (user) {//-> если пользователь найден
             callback(new AuthError('Пользователь с таким email уже существует')); //-> возвращаем собственную ошибку
           }
           else {//-> пользователь по email не найден в БД
-            var newUser = new User({email: login, password: password});
+            var newUser = new User({username: username, password: password});
+            // Заполняем данными Поля пользователя.
+            newUser.userdata.email = username;
+            // Сохраняем нового пользователя в БД
             newUser.save(function (err) {
               if (err) return callback(err);
               callback(null, newUser);
