@@ -21,7 +21,7 @@ gulp
 ###  Branch Naming Agreement
 * _master_ - Для стабильных релизов которые можно публиковать на боевой сайт
 * _dev_ - В эту ветку сливаем законченые таски
-* _task/num_ - Ветка задач где: _num_ - Номер таска соответствует номеру из таск листа <img src="http://image.flaticon.com/icons/png/512/104/104111.png" width="24">[TASK LIST](https://docs.google.com/spreadsheets/d/1fGqRRAGeujqcND2gL5ljCe2yVsB1Guc97A_XADirQ3I/edit#gid=0)
+* _task/num_ - Ветка задач, где: _num_ - Номер таска соответствует номеру из таск листа <img src="http://image.flaticon.com/icons/png/512/104/104111.png" width="24">[TASK LIST](https://docs.google.com/spreadsheets/d/1fGqRRAGeujqcND2gL5ljCe2yVsB1Guc97A_XADirQ3I/edit#gid=0)
     * делаем это так:
     ```sh
     git checkout  dev //-> Переходим в ветку Dev
