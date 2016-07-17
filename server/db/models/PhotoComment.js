@@ -6,6 +6,8 @@ var mongoose = require('mongoose');
 /**
  * Схема Коллекции Комментариев к Фоткам
  */
-var schemaPhotoCommentList = require('../schemas/PhotoComment');
+var schemaPhotoComments = require('../schemas/PhotoComment');
 
-module.exports =  mongoose.model('PhotoCommentList', schemaPhotoCommentList);;
+module.exports = {
+  PhotoComments: mongoose.model('PhotoComments', schemaPhotoComments)
+};

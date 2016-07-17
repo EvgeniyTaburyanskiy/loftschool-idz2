@@ -12,9 +12,7 @@ var ENV = process.env.NODE_ENV;
  * @param next
  */
 module.exports = function (req, res, next) {
-
   res.sendHttpError = function (error) {
-
     res.status(error.status);
     if (res.req.headers['x-requested-with'] == 'XMLHttpRequest'){ //-> Это AJAX запрос
       res.json(error);

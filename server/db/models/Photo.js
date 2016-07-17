@@ -8,4 +8,6 @@ var mongoose = require('mongoose');
  */
 var schemaPhoto = require('../schemas/Photo');
 
-module.exports = mongoose.model('Photo', schemaPhoto);
+module.exports = {
+  mPhoto: mongoose.model('Photo', schemaPhoto)
+};

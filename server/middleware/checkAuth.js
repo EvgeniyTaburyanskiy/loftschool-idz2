@@ -3,7 +3,6 @@
  * Проверяет статус авторизации пользователя
  */
 
-
 var HttpError = require('../utils/error').HttpError;
 
 module.exports =  function (req, res, next) {

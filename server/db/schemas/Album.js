@@ -32,5 +32,7 @@ var schemaAlbum = new Schema({
 
 //var modelAlbum = mongoose.model('Album', schemaAlbum);
 
-module.exports = schemaAlbum;
+module.exports = {
+  sAlbum : schemaAlbum
+};
 

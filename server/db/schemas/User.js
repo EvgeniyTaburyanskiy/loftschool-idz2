@@ -57,7 +57,7 @@ schemaUser.statics.authorise = function (login, password, callback) {
             }
           }
           else {//-> пользователь по email не найден в БД
-
+            callback(new AuthError('Не найден пользователь')); //-> возвращаем собственную ошибку
           }
         }
       ],
@@ -73,15 +73,14 @@ schemaUser.statics.register = function (login, password, callback) {
         },
         function (user, callback) {// ошибок не возникло возвращен результат из пред функции
           if (user) {//-> если пользователь найден проверяем его пароль
-            if (user.checkPassword(password)) {
-              callback(null, user); //-> передаем юзера дальше по цепочке колбеков
-            }
-            else {
-              callback(new AuthError('Не верный Пароль')); //-> возвращаем собственную ошибку
-            }
+            callback(new AuthError('Пользователь с таким email уже существует')); //-> возвращаем собственную ошибку
           }
           else {//-> пользователь по email не найден в БД
-
+            var newUser = new User({email: login, password: password});
+            newUser.save(function (err) {
+              if (err) return callback(err);
+              callback(null, newUser);
+            });
           }
         }
       ],
@@ -106,11 +105,7 @@ schemaUser.virtual('password')
   return this._plainPassword;
 });
 
-
-//var modelUser = mongoose.model('User', schemaUser);
-
-module.exports = schemaUser;
-
+// ================= Private Func =============================
 function AuthError(message) {
   Error.apply(this, arguments);
   Error.captureStackTrace(this, AuthError);
@@ -119,5 +114,15 @@ function AuthError(message) {
 }
 
 util.inherits(AuthError, Error);
+
 AuthError.prototype.name = 'AuthError';
-exports.AuthError = AuthError;
+// ================= Exports =============================
+//var modelUser = mongoose.model('User', schemaUser);
+
+module.exports = {
+  sUser:      schemaUser,
+  AuthError: AuthError
+}
+
+
+

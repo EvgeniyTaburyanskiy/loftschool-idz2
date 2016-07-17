@@ -17,7 +17,7 @@ var _login = function (req, res, next) {
   User.authorise(email, password, function (err, user) {
     if (err) {//-> если в процессе авторзации была Ошибка, обрабатываем ее.
       if (err instanceof AuthError) { //-> Это наша ошибка из схемы Юзера
-        return next(new HttpError('403', err.message)); //-> обрабатываем ее так как нам нужно. Например возвращаем 403
+        return next(new HttpError(403, err.message)); //-> обрабатываем ее так как нам нужно. Например возвращаем 403
       }
       else {//-> Это ошибка не нами сгенерена , отдаем ее express
         return next(err);
@@ -33,7 +33,7 @@ var _login = function (req, res, next) {
   });
 };
 
-var _logout = function (req, res, next) {
+var _logout = function (req, res) {
   req.session.destroy(); //-> Удаляем сессию пользователя
   req.redirect('/auth'); //-> Редиректим на страницу авторизации
 };
@@ -44,11 +44,26 @@ var _register = function (req, res, next) {
           email: email
       } = req.body;
 
+  User.register(email, password, function (err, user) {
+    if (err) {//-> если в процессе регистрации была Ошибка, обрабатываем ее.
+      if (err instanceof AuthError) { //-> Это наша ошибка из схемы Юзера
+        return next(new HttpError(403, err.message)); //-> обрабатываем ее так как нам нужно. Например возвращаем 403
+      }
+      else {//-> Это ошибка не нами сгенерена , отдаем ее express
+        return next(err);
+      }
+    }
 
+    // Ошибок небыло.
+    // Пишем в Сессию ID пользователя. Чтобы потом его легко находить  и связанные с ним данные
+    req.session.user = user._id;
 
+    // Редиректим на главную страницу.
+    res.redirect('/');
+  });
 };
 
-var _fogot = function (req, res, next) {
+var _fogot = function (req, res) {
   res.send({
     "action": req.params.action,
     "req":    req.body
@@ -57,28 +72,24 @@ var _fogot = function (req, res, next) {
   //res.render('index', {title: 'fogot'});
 };
 
-var getAuth = function (req, res, next) {
+var getAuth = function (req, res) {
   res.render('auth', {title: 'getAuth'});
 };
 
 var postAuth = function (req, res, next) {
   var action = req.params.action;
+  logger.debug('Param = %s', req.params);
 
-  switch (action) {
-    case 'login':
-      _login(req, res, next);
-      break;
-    case 'logout':
-      _logout(req, res, next);
-      break;
-    case 'register':
-      _register(req, res, next);
-      break;
-    case 'fogot':
-      _fogot(req, res, next);
-      break;
+  if (action === 'login') {
+    _login(req, res, next);
+  } else if (action === 'logout') {
+    _logout(req, res, next);
+  } else if (action === 'register') {
+    _register(req, res, next);
+  } else if (action === 'fogot') {
+    _fogot(req, res, next);
   }
-
+  next();
 };
 
 module.exports = {

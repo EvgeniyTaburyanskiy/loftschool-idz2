@@ -19,4 +19,5 @@ function HttpError(status, message) {
 
 util.inherits(HttpError, Error);
 HttpError.prototype.name = 'HttpError';
-exports.HttpError = HttpError;
+
+module.exports.HttpError = HttpError;

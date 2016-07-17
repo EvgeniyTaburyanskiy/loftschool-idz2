@@ -6,7 +6,9 @@ var mongoose = require('mongoose');
 /**
  * Схема Альбома
  */
-var schemaAlbum = require('../schemas/Album');
+var schemaAlbum = require('../schemas/Album').sAlbum;
 
-module.exports = mongoose.model('Album', schemaAlbum);
+module.exports = {
+  mAlbum: mongoose.model('Album', schemaAlbum)
+};
 
