@@ -1,6 +1,6 @@
 var logger = require('../utils/winston')(module);
-var User = require('../db/models/User');
-var HttpError = require('../utils/error').HttpError;
+var User = require('../db/models/User').mUser;
+var HttpError = require('../utils/HttpError').HttpError;
 
 
 /* GET users page. */
@@ -19,7 +19,5 @@ var getUserById = function (req, res, next) {
 };
 
 
-module.exports = {
-  users: getUsers,
-  user:  getUserById
-};
+module.exports.users = getUsers;
+module.exports.user = getUserById;

@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var async = require('async');
 var util = require('util');
 var Schema = mongoose.Schema;
-var schemaUserData = require('./UserData');
+var schemaUserData = require('./UserData').sUserData;
 
 /**
  * Схема Коллекции Пользователей
@@ -43,26 +43,6 @@ schemaUser.methods.checkPassword = function (password) {
 // ================= Schema Statics Methods =============================
 schemaUser.statics.authorise = function (login, password, callback) {
   var User = this;
-  async.waterfall([
-        function (callback) {
-          User.findOne({email: login}, callback);//-> Ищем пользователя в БД по email(он же логин)
-        },
-        function (user, callback) {// ошибок не возникло возвращен результат из пред функции
-          if (user) {//-> если пользователь найден проверяем его пароль
-            if (user.checkPassword(password)) {
-              callback(null, user); //-> передаем юзера дальше по цепочке колбеков
-            }
-            else {
-              callback(new AuthError('Не верный Пароль')); //-> возвращаем собственную ошибку
-            }
-          }
-          else {//-> пользователь по email не найден в БД
-            callback(new AuthError('Не найден пользователь')); //-> возвращаем собственную ошибку
-          }
-        }
-      ],
-      callback
-  );
 };
 
 schemaUser.statics.register = function (login, password, callback) {
@@ -120,9 +100,15 @@ AuthError.prototype.name = 'AuthError';
 //var modelUser = mongoose.model('User', schemaUser);
 
 module.exports = {
-  sUser:      schemaUser,
+  sUser:     schemaUser,
   AuthError: AuthError
-}
+};
+
+module.exports.sUser = schemaUser;
+module.exports.AuthError = AuthError;
+
+
+
 
 
 

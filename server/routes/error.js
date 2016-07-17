@@ -3,7 +3,7 @@
  */
 var logger = require('../utils/winston')(module);
 var ENV = process.env.NODE_ENV;
-var HttpError = require('../utils/error').HttpError;
+var HttpError = require('../utils/HttpError').HttpError;
 var express = require('express');
 
 
@@ -33,7 +33,6 @@ var err_all = function (err, req, res, next) {
 };
 
 
-module.exports = {
-  err_404: err_404,
-  err_all: err_all
-};
+module.exports.err_404 = err_404;
+module.exports.err_all = err_all;
+

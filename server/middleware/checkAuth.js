@@ -3,11 +3,13 @@
  * Проверяет статус авторизации пользователя
  */
 
-var HttpError = require('../utils/error').HttpError;
+var HttpError = require('../utils/HttpError').HttpError;
 
 module.exports =  function (req, res, next) {
   if(!req.session.user){
-    return next(new HttpError(401,'Вы не авторизованы!'));
+    res.redirect('/auth');
+    //return next(new HttpError(401,'Вы не авторизованы!'));
+  }else{
+    next();
   }
-  next();
 };

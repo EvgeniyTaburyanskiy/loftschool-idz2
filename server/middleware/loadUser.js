@@ -4,7 +4,7 @@
  * Проверяет статус авторизации пользователя
  */
 
-var User = require('../db/models/User');
+var User = require('../db/models/User').mUser;
 
 /**
  * Мидлвар Подгружает данные пользователя на каждом Хите.
@@ -24,7 +24,7 @@ module.exports = function (req, res, next) {
 
   User.findById(req.session.user, function (err, user) {
     if (err) return next(err);
-
+    
     req.user = res.locals.user = user;
     next();
   });

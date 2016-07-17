@@ -25,4 +25,4 @@ var schemaComment = new Schema({
 
 //var modelComment = mongoose.model('Comment', schemaComment);
 
-module.exports = schemaComment;
+module.exports.sComment = schemaComment;

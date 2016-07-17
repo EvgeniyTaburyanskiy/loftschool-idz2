@@ -18,5 +18,5 @@ var schemaUserData = new Schema({
 
 //var modelUserData = mongoose.model('UserData', schemaUserData);
 
-module.exports = schemaUserData;
+module.exports.sUserData = schemaUserData;
 

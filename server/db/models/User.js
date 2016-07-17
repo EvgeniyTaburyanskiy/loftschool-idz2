@@ -9,6 +9,4 @@ var mongoose = require('mongoose');
 var schemaUser = require('../schemas/User').sUser;
 
 
-module.exports = {
-  mUser: mongoose.model('User', schemaUser)
-};
+module.exports.mUser = mongoose.model('User', schemaUser);

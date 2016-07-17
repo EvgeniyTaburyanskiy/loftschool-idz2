@@ -1,5 +1,5 @@
 var logger = require('../utils/winston')(module);
-var HttpError = require('../utils/error').HttpError;
+var HttpError = require('../utils/HttpError').HttpError;
 
 /* GET albums page. */
 var albums = function (req, res, next) {
@@ -13,7 +13,5 @@ var album = function (req, res, next) {
 };
 
 
-module.exports = {
-  albums: albums,
-  album:  album
-};
+module.exports.albums = albums;
+module.exports.album = album;

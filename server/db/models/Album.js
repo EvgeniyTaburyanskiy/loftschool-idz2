@@ -8,7 +8,5 @@ var mongoose = require('mongoose');
  */
 var schemaAlbum = require('../schemas/Album').sAlbum;
 
-module.exports = {
-  mAlbum: mongoose.model('Album', schemaAlbum)
-};
+module.exports.mAlbum = mongoose.model('Album', schemaAlbum);
 

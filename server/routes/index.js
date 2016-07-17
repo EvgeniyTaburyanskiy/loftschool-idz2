@@ -7,12 +7,14 @@
  * Module dependencies.
  */
 var logger = require('../utils/winston')(module);
-var HttpError = require('../utils/error').HttpError;
+var HttpError = require('../utils/HttpError').HttpError;
 var checkAuth = require('../middleware/checkAuth');
 
+var passport = require('passport');
+var passportConf = require('../config/passportAuthConf');
 
 /**
- * Router 
+ * Router
  * @param app
  * @returns {*}
  * @private
@@ -30,7 +32,7 @@ var _router = function (app) {
     search: require('./search'),       //-> Обработчик Маршрута Поиска
     error:  require('./error')         //-> Обработчик Ошибочных запросов
   };
-  
+
   router.use(function Logger(req, res, next) {
     var sess = req.session;
     sess.numOfVisits = sess.numOfVisits + 1 || 1;
@@ -41,14 +43,25 @@ var _router = function (app) {
   /**
    * HOME Routes
    */
-  router.get('/', checkAuth, controllers.main.home);
+  router.get('/', controllers.main.home);
 
   // ==============================================
   /**
    * AUTH Routes
    */
   router.get('/auth', controllers.auth.get);
-  router.post('/auth/:action', controllers.auth.post);
+
+  router.post('/auth/login',
+      passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/auth',
+        failureFlash:    false
+      }),
+      controllers.auth.post.login
+  );
+  router.post('/auth/logout', controllers.auth.post.logout);
+  router.post('/auth/register', controllers.auth.post.register);
+  router.post('/auth/fogot', controllers.auth.post.fogot);
   // ==============================================
   /**
    * ALBUM Routes
@@ -81,4 +94,4 @@ var _router = function (app) {
   return router;
 };
 
-module.exports = _router;
+module.exports.Router = _router;

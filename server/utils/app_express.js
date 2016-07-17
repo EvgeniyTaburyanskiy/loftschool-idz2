@@ -18,12 +18,24 @@ var express        = require('express'),
 var
     config   = require('./nconf'),
     logger   = require('./winston')(module),
-    router   = require('../routes'),
+    router   = require('../routes').Router,
     mongoose = require('./mongoose');
 
 var serverRoot = config.get('serverRoot');
 var documentRoot = path.join(serverRoot, config.get('documentRoot'));
 var viewsDir = path.join(serverRoot, config.get('viewsDir'));
+var sessionOptions = {
+  secret:            config.get('session:secret'),
+  name:              config.get('session:key'),
+  cookie:            config.get('session:cookie'),
+  store:             new MongoStore({
+    mongooseConnection: mongoose.connection
+  }),
+  resave:            false, //don't save session if unmodified
+  saveUninitialized: false // don't create session until something stored
+};
+
+
 
 /**
  * EXPRESS CONFIG
@@ -34,33 +46,26 @@ app.use(helmet());
 app.set('view engine', 'pug');
 app.set('views', viewsDir);
 
+//if behind a reverse proxy such as Varnish or Nginx
+//app.enable('trust proxy');
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(cwd , 'public', 'favicon.ico')));
 if (app.get('env') === 'development') {
   app.use(morgan('dev'));
 }
+app.use(express.static(documentRoot));
 app.use(bodyParser.json()); // req.body
 app.use(bodyParser.urlencoded({extended: false}));
-
 //app.use(methodOverride());
 app.use(cookieParser());    // req.cookies
-app.use(expressSession({
-      secret:            config.get('session:secret'),
-      name:              config.get('session:key'),
-      cookie:            config.get('session:cookie'),
-      store:             new MongoStore({
-        mongooseConnection: mongoose.connection
-      }),
-      resave:            false, //don't save session if unmodified
-      saveUninitialized: false // don't create session until something stored
-    })
-);
+app.use(expressSession(sessionOptions));
 
 app.use(sendHttpError);
-app.use(loadUser);
 
-app.use(express.static(documentRoot));
+require('../config/passportAuthConf')(passport);
 app.use(passport.initialize());
+app.use(passport.session());
 
 
 /**
