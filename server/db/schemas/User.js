@@ -3,9 +3,13 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var schemaUserData = require('./UserData');
 
+/**
+ * Схема Коллекции Пользователей
+ */
 var schemaUser = new Schema({
-  username:       {
+  email:          {
     type:     String,
     unique:   true,
     required: true
@@ -18,29 +22,30 @@ var schemaUser = new Schema({
     type:     String,
     required: true
   },
+  userdata:       schemaUserData,
   created:        {
     type:    Date,
     default: Date.now
   }
 });
 // ================= User Methods =============================
-User.methods.encryptPassword = function (password) {
-  return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
-  //more secure - return crypto.pbkdf2Sync(password, this.salt, 10000, 512);
+schemaUser.methods.encryptPassword = function (password) {
+  //less secure -return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
+  return crypto.pbkdf2Sync(password, this.salt, 10000, 512);
 };
 
-User.methods.checkPassword = function (password) {
+schemaUser.methods.checkPassword = function (password) {
   return this.encryptPassword(password) === this.hashedPassword;
 };
 
 
 // ================= User Virtuals =============================
-User.virtual('userId')
+schemaUser.virtual('userId')
 .get(function () {
   return this.id;
 });
 
-User.virtual('password')
+schemaUser.virtual('password')
 .set(function (password) {
   this._plainPassword = password;
   this.salt = crypto.randomBytes(32).toString('base64');
@@ -52,7 +57,7 @@ User.virtual('password')
 });
 
 
-var modelUser = mongoose.model('User', schemaUser);
+//var modelUser = mongoose.model('User', schemaUser);
 
-modules.exports = modelUser;
+module.exports = schemaUser;
 

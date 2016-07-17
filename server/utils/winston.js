@@ -1,14 +1,21 @@
+/**
+ * Module dependencies.
+ */
 var winston = require('winston');
+var path = require('path');
+var ENV = process.env.NODE_ENV;
 
 winston.emitErrs = true;
 
-function logger(module) {
+function getLogger(module) {
+  //var modulePath = module.filename.split('/').slice(-2).join('/'); //-> for Nix OS
+  var modulePath = module.filename.split('\\').slice(-2).join('/');
 
   return new winston.Logger({
     transports:  [
       new winston.transports.File({
         level:           'info',
-        filename:        process.cwd() + '/logs/all.log',
+        filename:        path.join(__dirname, '/../logs/all.log'),
         handleException: true,
         json:            true,
         maxSize:         5242880, //5mb
@@ -16,8 +23,8 @@ function logger(module) {
         colorize:        false
       }),
       new winston.transports.Console({
-        level:           'debug',
-        label:           getFilePath(module),
+        level:           ENV === 'development' ? 'debug' : 'error',
+        label:           modulePath,
         handleException: true,
         json:            false,
         colorize:        true
@@ -27,9 +34,4 @@ function logger(module) {
   });
 }
 
-function getFilePath(module) {
-  //using filename in log statements
-  return module.filename.split('/').slice(-2).join('/');
-}
-
-module.exports = logger;
+module.exports = getLogger;

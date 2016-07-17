@@ -26,7 +26,9 @@ var _router = function (app) {
   var router = require('express').Router();
 
   router.use(function Logger(req, res, next) {
-    //logger.debug('Request Url %s ', req.url);
+    var sess = req.session;
+    sess.numOfVisits = sess.numOfVisits + 1 || 1;
+    //logger.debug(sess);
     next();
   });
 
@@ -65,21 +67,12 @@ var _router = function (app) {
 
   // ==============================================
   /**
-   * DEFAULT Routes
+   * DEFAULT Route
    */
   router.use(controllers.error.err_404);
 
   // error handlers
-  if (app.get('env') === 'development') {
-    // development error handler
-    // will print stacktrace
-    router.use(controllers.error.err_allDev);
-  }
-  else {
-    // production error handler
-    // no stacktraces leaked to user
-    router.use(controllers.error.err_all);
-  }
+  router.use(controllers.error.err_all);
 
   return router;
 };

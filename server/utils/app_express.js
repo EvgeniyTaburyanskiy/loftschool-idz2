@@ -4,6 +4,7 @@
 var express        = require('express'),
     app            = express(),
     path           = require('path'),
+    morgan         = require('morgan'),
     cookieParser   = require('cookie-parser'),
     bodyParser     = require('body-parser'),
     methodOverride = require('method-override'),
@@ -33,10 +34,15 @@ app.set('views', viewsDir);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(cwd , 'public', 'favicon.ico')));
-app.use(bodyParser.json());
+if (app.get('env') === 'development') {
+  app.use(morgan('dev'));
+} else {
+  app.use(morgan('default'));
+}
+app.use(bodyParser.json()); // req.body
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(methodOverride());
-app.use(cookieParser());
+//app.use(methodOverride());
+app.use(cookieParser());    // req.cookies
 app.use(expressSession({
       secret:            config.get('session:secret'),
       name:              config.get('session:key'),
@@ -53,7 +59,7 @@ app.use(express.static(documentRoot));
 app.use(passport.initialize());
 
 
-/** 
+/**
  * MAIN ROUTING MODULE
  * */
 app.use(router(app));

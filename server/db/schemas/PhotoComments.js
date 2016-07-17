@@ -3,7 +3,7 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var schemaComment = require('./Comment').schema;
+var schemaComment = require('./Comment');
 
 /**
  * Схема Коллекции Комментариев к Фоткам
@@ -12,6 +12,6 @@ var schemaPhotoCommentList = new Schema({
   commentlist: [schemaComment]
 });
 
-var modelPhotoCommentList = mongoose.model('PhotoCommentList', schemaPhotoCommentList);
+//var modelPhotoCommentList = mongoose.model('PhotoCommentList', schemaPhotoCommentList);
 
-modules.exports = modelPhotoCommentList;
+module.exports = schemaPhotoCommentList;

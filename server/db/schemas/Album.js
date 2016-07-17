@@ -30,7 +30,7 @@ var schemaAlbum = new Schema({
   }
 });
 
-var modelAlbum = mongoose.model('Album', schemaAlbum);
+//var modelAlbum = mongoose.model('Album', schemaAlbum);
 
-modules.exports = modelAlbum;
+module.exports = schemaAlbum;
 

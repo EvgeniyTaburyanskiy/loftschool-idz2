@@ -3,7 +3,8 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var schemaLike = require('./Like').schema;
+var schemaLike = require('./Like');
+
 /**
  * Схема Фотки
  */
@@ -51,6 +52,5 @@ var schemaPhoto = new Schema({
   }
 });
 
-var modelPhoto = mongoose.model('Photo', schemaPhoto);
 
-modules.exports = modelPhoto;
+module.exports = schemaPhoto;
