@@ -36,6 +36,7 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('listening', function () {
   logger.info('Express server listening on port ' + app.get('port'));
+  logger.info('Pokemon GO!');
 });
 
 /**

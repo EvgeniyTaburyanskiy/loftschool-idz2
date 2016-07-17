@@ -1,7 +1,19 @@
 'use strict';
 
-(function() {
+(function () {
+  $("#loginForm").submit(function (e) {
+    var url = "/auth/login"; // the script where you handle the form input.
 
+    $.ajax({
+      type:    "POST",
+      url:     url,
+      data:    $("#loginForm").serialize(), // serializes the form's elements.
+      success: function (data) {
+        console.log(data); // show response from the php script.
+      }
+    });
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+  });
 
 })();
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EiLCJmaWxlIjoiYXBwLmpzIiwic291cmNlc0NvbnRlbnQiOlsiJ3VzZSBzdHJpY3QnO1xyXG5cclxuKGZ1bmN0aW9uKCkge1xyXG5cclxuXHJcbn0pKCk7Il0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9

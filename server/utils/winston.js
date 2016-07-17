@@ -14,7 +14,7 @@ function getLogger(module) {
   return new winston.Logger({
     transports:  [
       new winston.transports.File({
-        level:           'info',
+        level:           ENV === 'development' ? 'debug' : 'error',
         filename:        path.join(__dirname, '/../logs/all.log'),
         handleException: true,
         json:            true,

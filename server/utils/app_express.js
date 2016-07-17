@@ -9,10 +9,11 @@ var express        = require('express'),
     bodyParser     = require('body-parser'),
     methodOverride = require('method-override'),
     sendHttpError  = require('../middleware/sendHttpError'),
+    loadUser       = require('../middleware/loadUser'),
     expressSession = require('express-session'),
     MongoStore     = require('connect-mongo')(expressSession),
-    passport       = require('passport');
-
+    passport       = require('passport'),
+    helmet         = require('helmet');
 
 var
     config   = require('./nconf'),
@@ -28,7 +29,8 @@ var viewsDir = path.join(serverRoot, config.get('viewsDir'));
  * EXPRESS CONFIG
  */
 
-// view engine setup
+app.use(helmet());
+
 app.set('view engine', 'pug');
 app.set('views', viewsDir);
 
@@ -36,12 +38,10 @@ app.set('views', viewsDir);
 //app.use(favicon(path.join(cwd , 'public', 'favicon.ico')));
 if (app.get('env') === 'development') {
   app.use(morgan('dev'));
-} else {
-  app.use(morgan('default'));
 }
 app.use(bodyParser.json()); // req.body
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(sendHttpError);
+
 //app.use(methodOverride());
 app.use(cookieParser());    // req.cookies
 app.use(expressSession({
@@ -55,6 +55,9 @@ app.use(expressSession({
       saveUninitialized: false // don't create session until something stored
     })
 );
+
+app.use(sendHttpError);
+app.use(loadUser);
 
 app.use(express.static(documentRoot));
 app.use(passport.initialize());

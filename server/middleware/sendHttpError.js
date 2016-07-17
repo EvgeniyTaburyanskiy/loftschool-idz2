@@ -4,7 +4,13 @@
 var logger = require('../utils/winston')(module);
 var ENV = process.env.NODE_ENV;
 
-
+/**
+ * Мидлвар Обрабатывает ошибки Http котрые мы генерим по коду приложения с помощью HttpError.
+ * На AJAX запросы отдает инфо об ошибке в виде JSON  иначе в виде рендера страницы Ошибки.
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports = function (req, res, next) {
 
   res.sendHttpError = function (error) {
