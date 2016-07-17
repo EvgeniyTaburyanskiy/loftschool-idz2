@@ -24,7 +24,8 @@ gulp
 * _task/num_ - Ветка задач где: _num_ - Номер таска соответствует номеру из таск листа <img src="http://image.flaticon.com/icons/png/512/104/104111.png" width="24">[TASK LIST](https://docs.google.com/spreadsheets/d/1fGqRRAGeujqcND2gL5ljCe2yVsB1Guc97A_XADirQ3I/edit#gid=0)
     * делаем это так:
     ```sh
-    git checkout  dev //-> Переходим в ветку Dev
+    git pull dev //-> Скачиваем актуальную версию Dev к себе
+    git checkout  dev       //-> Переходим в ветку Dev
     git checkout -b task/0  //-> Клонируем Dev в новую ветку и тутже переходим в эту ветку
     ```
 
