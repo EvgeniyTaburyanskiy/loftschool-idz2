@@ -16,9 +16,9 @@ module.exports = function () {
                 }
             }
         };
-        return $.gulp.src('./source/icons/*.svg')
+        return $.gulp.src('./source/images/icons/*.svg')
             .pipe($.gp.svgSprite(config))
             .pipe($.rsp.remove({ properties: [$.rsp.PROPS_FILL] }))
-            .pipe($.gulp.dest($.config.root + '/assets/icons'))
+            .pipe($.gulp.dest($.config.root + '/assets/img/icons'))
     });
 };

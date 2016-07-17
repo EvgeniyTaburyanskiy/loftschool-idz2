@@ -42,4 +42,89 @@ mixin FavIcon
   meta(name="theme-color", content="#ffffff")
   meta(name="msapplication-config", content="./source/images/favicon/browserconfig.xml")
 
-
+//svg
+mixin use(name, sname)
+  - var svg = 'assets/img/icons/sprite.svg'
+  svg(role='img' class=sname)
+    use(xlink:href=svg+'#'+name)
+//синяя кнопка Войти
+mixin btnEnter
+  div.enter-block
+    button.enter-block__btn Войти
+//синяя кнопка Зарегистрироваться
+mixin btnReg
+  div.enter-block
+    button.enter-block__btn Зарегистрироваться
+//прозрачная кнопка Закрыть
+mixin btnClose
+  div.close-block
+    button.close-block__btn Закрыть
+//прозрачная кнопка Показать еще
+mixin btnShow
+  div.show-block
+    button.show-block__btn Показать еще
+//выдвижная кнопка Редактировать
+mixin btnEdit
+  div.edit-block
+    button.edit-block__btn
+      +use('edit', 'edit-block__svg')
+      span.edit-block__tx Редактировать
+//выдвижная кнопка Выйти
+mixin btnExit
+  div.exit-block
+    button.exit-block__btn
+      +use('off', 'exit-block__svg')
+      span.exit-block__tx Выйти
+//выдвижная кнопка Добавить
+mixin btnAdd
+  div.add-block
+    button.add-block__btn
+      +use('add', 'add-block__svg')
+      span.add-block__tx Добавить
+//соц кнопка ВК
+mixin socIconVk
+  div.soc-block
+    a.soc-block__a(href="#")
+      +use('soc_vk','soc-block__svg')
+//соц кнопка ФБ
+mixin socIconFb
+  div.soc-block
+    a.soc-block__a(href="#")
+      +use('soc_fb','soc-block__svg')
+//соц кнопка Твиттер
+mixin socIconTw
+  div.soc-block
+    a.soc-block__a(href="#")
+      +use('soc_twitter','soc-block__svg')
+//соц кнопка Google Plus
+mixin socIconGp
+  div.soc-block
+    a.soc-block__a(href="#")
+      +use('social_google','soc-block__svg')
+//соц кнопка Почты
+mixin socIconEm
+  div.soc-block
+    a.soc-block__a(href="#")
+      +use('soc_email','soc-block__svg')
+//красная кнопка Удалить
+mixin btnDelete
+  div.delete-block
+    btn.delete-block__btn
+      +use('delete','delete-block__svg')
+      span.delete-block__tx Удалить
+//красная кнопка Лайк
+mixin btnLike
+  div.like-block
+    btn.like-block__btn
+      +use('no_like','like-block__svg')
+      span.like-block__tx 22
+//маленькая красная кнопка отмены добавления фото
+mixin btnCancel
+  div.cancel-block
+    btn.cancel-block__btn
+      +use('close', 'cancel-block__svg')
+//две нижние кнопки форм добавления фото и альбома
+mixin formMenu
+  div.form-menu
+    input.form-menu__submit(type='submit' value='Сохранить')
+    input.form-menu__reset(type='reset' value='Отменить')
