@@ -8,7 +8,7 @@ var express        = require('express'),
     cookieParser   = require('cookie-parser'),
     bodyParser     = require('body-parser'),
     methodOverride = require('method-override'),
-    favicon        = require('serve-favicon'),
+    sendHttpError  = require('../middleware/sendHttpError'),
     expressSession = require('express-session'),
     MongoStore     = require('connect-mongo')(expressSession),
     passport       = require('passport');
@@ -41,6 +41,7 @@ if (app.get('env') === 'development') {
 }
 app.use(bodyParser.json()); // req.body
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(sendHttpError);
 //app.use(methodOverride());
 app.use(cookieParser());    // req.cookies
 app.use(expressSession({

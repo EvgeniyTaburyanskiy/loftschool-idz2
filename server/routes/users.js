@@ -1,5 +1,6 @@
 var logger = require('../utils/winston')(module);
 var User = require('../db/models/User');
+var HttpError = require('../utils/error').HttpError;
 
 /* GET users page. */
 var getUsers = function (req, res, next) {
@@ -13,7 +14,7 @@ var getUsers = function (req, res, next) {
 
 /* GET user by ID. */
 var getUserById = function (req, res, next) {
-  res.render('index', {title: 'album'});
+  res.render('index', {title: 'getUserById'});
 };
 
 

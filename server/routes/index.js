@@ -2,7 +2,7 @@
  * Module dependencies.
  */
 var logger = require('../utils/winston')(module);
-
+var HttpError = require('../utils/error').HttpError;
 /**
  * ROUTING CONTROLLERS
  */
@@ -67,7 +67,7 @@ var _router = function (app) {
 
   // ==============================================
   /**
-   * DEFAULT Route
+   * DEFAULT  Route 404
    */
   router.use(controllers.error.err_404);
 

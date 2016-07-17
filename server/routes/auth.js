@@ -1,5 +1,5 @@
 var logger = require('../utils/winston')(module);
-
+var HttpError = require('../utils/error').HttpError;
 
 var login = function (req, res, next) {
   res.render('index', {title: 'login'});

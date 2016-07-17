@@ -1,4 +1,5 @@
 var logger = require('../utils/winston')(module);
+var HttpError = require('../utils/error').HttpError;
 
 /* GET albums page. */
 var albums = function (req, res, next) {

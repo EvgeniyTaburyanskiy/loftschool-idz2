@@ -2,10 +2,11 @@
  * Module dependencies.
  */
 var logger = require('../utils/winston')(module);
+var HttpError = require('../utils/error').HttpError;
 
 /* GET home page. */
 var home = function (req, res, next) {
-  logger.debug('%s %d %s', req.method, res.statusCode, req.url);
+
   res.render('index', {title: 'home'});
 };
 
