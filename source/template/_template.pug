@@ -38,7 +38,31 @@ html.no-js(lang= "ru")
 
     //-Add your site or application content here
     block APP_content
-
+    
+    .main
+      div.parallax
+        - var parallaxImgs = ["assets/img/01.png","assets/img/02.png","assets/img/03.png","assets/img/04.png","assets/img/05.png","assets/img/06.png"]
+        each item, key in parallaxImgs
+          div.parallax-layer(data-key=key)
+            img.parallax-layer__img(src=item alt="parallax layer")
+      .flip-cont.hover
+        .flipper
+          .front
+            .hello-tx Добро пожаловать
+            .dscr-tx Перед вами сервис, который поможет вам организовать свои фотографии в альбомы и поделиться ими со всем миром!
+            .card
+              .autorise_section
+                form.f-itx(name="test" method="post" action="#")
+                input.itx(type="text" placeholder="Электронная почта" size="40")
+                form.f-itx(name="test" method="post" action="#")
+                input.itx(type="text" placeholder="Пароль" size="40")
+              a.pass-tx(href="#") Забыли пароль?
+              .enter-btn
+                +btnEnter
+              .registration
+                .registration-tx Нет аккаунта?
+                a.registration-a(href="#") Зарегистрироваться
+          .back
 
     block footer-scripts
       script(src='/assets/js/foundation.js' defer)

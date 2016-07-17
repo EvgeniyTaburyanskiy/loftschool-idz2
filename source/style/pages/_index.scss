@@ -1,0 +1,171 @@
+body {
+	height: 100%;
+}
+.main
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    min-height: 100vh;
+
+    flex: 1 0 auto;
+
+}
+.parallax {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.parallax-layer {
+    position: absolute;
+    width: 2000px;
+    height: 100%;
+    left: 50%;
+    margin-left: -1000px;
+    bottom: 15%;
+}
+
+.parallax__layer img {
+    display: block;
+    position: absolute;
+    bottom: 0;
+}
+.flip-cont
+{
+    margin: auto;
+
+    perspective: 1000px;
+}
+.flip-cont.hover .flipper
+{
+    transform: rotateY(180deg);
+}
+.flip-cont,
+.front,
+.back
+{
+    display: flex;
+    width: 550px;
+    height: 350px;
+}
+.flipper
+{
+    position: relative;
+
+    transition: .6s;
+
+    transform-style: preserve-3d;
+}
+.front,
+.back
+{
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+
+    backface-visibility: hidden;
+}
+.front
+{
+    z-index: 2;
+
+    transform: rotateY(0deg);
+}
+.hello-tx {
+    margin: 0 0 20px 0;
+    @include type-setting(XL);
+    font-family : 'Panton';
+    font-weight : bold;
+    width: 360px;
+    
+    color: #fff;
+}
+.dscr-tx {
+    margin: 0 0 25px 0;
+    font-size: 1rem;
+    width: 550px;
+    @include type-setting(N);
+    color: #fff;
+}
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+    
+    border-radius: 15px;
+    background-color: #fff;
+}
+.itx
+{
+    position: relative;
+    width: 200px;
+    height: 40px;
+    margin: 0 0 1px 0;
+    padding: 0 0 0 10px;
+    font-family: 'Proxima Nova';
+    font-weight: normal;
+    color: #9A9A9A;
+    border: 0 none;
+    outline: none;
+}
+.itx::after {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    width: 80px;
+    height: 2px;
+    margin-left: -40px;
+    content: ' ';
+    background-color: rgba(55, 62, 66, 0.85);
+
+}
+.pass-tx {
+    padding: 0 0 0 20px;
+    margin: 0 0 20px 0;
+    font-size: 14px;
+    text-decoration: none;
+    color: #28bbf0;
+    text-align: left;
+}
+.itx::-moz-placeholder
+{
+    color: #ccc;
+}
+.itx:-moz-placeholder
+{
+    color: #ccc;
+}
+.itx::-webkit-input-placeholder
+{
+    color: #ccc;
+}
+.enter-btn {
+    margin: auto;
+}
+.registration {
+    padding: 10px 0 20px 20px;
+    display: flex;
+    font-size: 14px;
+    font-family: 'Proxima Nova';
+
+}
+.registration-a {
+    padding: 0 0 0 10px;
+    
+    text-decoration: none;
+    color: #28bbf0;
+    font-weight: bold;
+}
+.back
+{
+    transform: rotateY(180deg);
+}
