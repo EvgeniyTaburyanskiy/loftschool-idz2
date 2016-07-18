@@ -35,6 +35,11 @@ html.no-js(lang= "ru")
     | <![endif]-->
 
     //-Add your site or application content here
+    - if (messages)
+      -if(messages.error)
+        .error= messages.error
+        -console.log(messages)
+
     block APP_content
 
 

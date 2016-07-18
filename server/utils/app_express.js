@@ -8,12 +8,12 @@ var express        = require('express'),
     cookieParser   = require('cookie-parser'),
     bodyParser     = require('body-parser'),
     methodOverride = require('method-override'),
-    sendHttpError  = require('../middleware/sendHttpError'),
+    sendHttpError  = require('../middleware/HttpError').sendHttpError,
     expressSession = require('express-session'),
     MongoStore     = require('connect-mongo')(expressSession),
     passport       = require('passport'),
     helmet         = require('helmet'),
-    flash          = require('connect-flash');
+    flash          = require('express-flash');
 
 var
     config   = require('./nconf'),
@@ -69,6 +69,6 @@ app.use(passport.session());
 /**
  * MAIN ROUTING MODULE
  * */
-app.use(router(app, passport));
+app.use(router(app));
 
 module.exports = app;

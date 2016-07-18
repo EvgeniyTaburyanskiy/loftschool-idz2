@@ -7,7 +7,6 @@
  * Module dependencies.
  */
 var logger = require('../utils/winston')(module);
-var HttpError = require('../utils/HttpError').HttpError;
 var checkAuth = require('../middleware/checkAuth');
 var loadUser = require('../middleware/loadUser');
 
@@ -17,9 +16,7 @@ var loadUser = require('../middleware/loadUser');
  * @returns {*}
  * @private
  */
-var _router = function (app, passport) {
-  //Конфигурируем стратегии Passport
-  require('../config/passportAuthConf')(passport);
+var _router = function (app) {
   var router = require('express').Router();
   /**
    * ROUTING CONTROLLERS
@@ -37,70 +34,46 @@ var _router = function (app, passport) {
     next();
   });
 
-  // ==============================================
-  /**
-   * HOME Routes
-   */
+  // HOME ROUTES ==============================================
   router.all('/', checkAuth);
-
   router.get('/', loadUser, controllers.main.home);
 
-  // ==============================================
-  /**
-   * AUTH Routes
-   */
-  router.get('/auth', controllers.auth.get);
+  // AUTH ROUTES ==============================
 
-  router.post('/auth/signin',
-      passport.authenticate('local-signin', {
-        successRedirect: '/users',
-        failureRedirect: '/auth',
-        failureFlash:    true
-      }),
-      controllers.auth.post.signin); //-> Вход в Систему
+  router.get('/auth', controllers.auth.get); //-> Отдаем страницу Авторизации/Регистрации/Восстановления пароля
 
-  router.get('/auth/signout', controllers.auth.post.signout);//-> Выход из Системы
-  router.post('/auth/signout', controllers.auth.post.signout);//-> Выход из Системы
+  router.post('/auth/signin',  controllers.auth.post.signin); //-> Вход в Систему
 
+  router.all('/auth/signout', controllers.auth.post.signout);//-> GET/POST  Выход из Системы 
 
   router.post('/auth/signup', controllers.auth.post.signup); //-> Регистрация
 
   router.post('/auth/fogot', controllers.auth.post.fogot); //-> Восстановление пароля
-  // ==============================================
-  /**
-   * ALBUM Routes
-   */
+
+  // ALBUM ROUTES ==============================================
   router.all('/albums', checkAuth);
   router.all('/albums/*', checkAuth);
 
   router.get('/albums', controllers.albums.albums);
 
-  // ==============================================
-  /**
-   * USERS Routes
-   */
+  // USERS ROUTES ==============================================
   router.all('/users', checkAuth);
   router.all('/users/*', checkAuth);
 
   router.get('/users', controllers.users.users);
   router.get('/users/:id', controllers.users.user);
 
-  // ==============================================
-  /**
-   * SEARCH Routes
-   */
+  // SEARCH ROUTES ==============================================
+
   router.all('/search', checkAuth);
   router.all('/search/*', checkAuth);
 
   router.get('/search', controllers.search.search);
 
-  // ==============================================
-  /**
-   * DEFAULT  Route 404
-   */
+  // DEFAULT  Route 404 ==============================================
   router.use(controllers.error.err_404);
 
-  // error handlers
+  // ERROR HANDLERS ==============================================
   router.use(controllers.error.err_all);
 
   return router;

@@ -7,7 +7,7 @@ var AuthLocalStrategy = require('passport-local').Strategy;
 //var AuthVKStrategy = require('passport-vkontakte').Strategy;
 
 var AuthError = require('../db/schemas/User').AuthError;
-var HttpError = require('../utils/HttpError').HttpError;
+var HttpError = require('../middleware/HttpError').HttpError;
 var ObjectID = require('mongodb').ObjectID;
 
 var User = require('../db/models/User').mUser;
@@ -19,33 +19,33 @@ var User = require('../db/models/User').mUser;
 module.exports = function (passport) {
 
 // ================= Конфигурация Стратегий  =============================
-  /**
+  /*
    * Стратегия Локальной Авторизации.
+   * Авторизацию форвардим в Схему
    */
   passport.use('local-signin', new AuthLocalStrategy(
+      {
+        usernameField: 'username',
+        passwordField: 'password'
+      },
       function (username, password, done) {
-        logger.debug('Passport auth = ', username, password);
-
-        User.findOne({'username': username}, function (err, user) {//-> Ищем пользователя в БД по email(он же логин)
-          if (err) {
-            return done(err);
-          }
-
-          if (!user) {//-> пользователь по email не найден в БД
-            logger.debug('Не верное имя пользователя %s', username);
-            return done(null, false, {message: 'Не верное имя пользователя'});
-          }
-
-          if (!user.checkPassword(password)) { //-> Проверяем пароль
-            logger.debug('Не верный Пароль %s для пользователя %s', password, username);
-            return done(null, false, {message: 'Не верный Пароль'});
-          }
-          // Пользователь существует и пароль верен, возврат пользователя из
-          // метода done, что будет означать успешную аутентификацию
-          done(null, user); //-> Все ОК отдаем Passport(у) пользователя
-        });
+        return User.authorize(username, password, done);
       }
   ));
+
+  /*
+   * Стратегия Локальной Регистрации
+   */  
+   passport.use('local-signup', new AuthLocalStrategy(
+       {
+         usernameField: 'username',
+         passwordField: 'password'
+       },
+       function (username, password, done) {
+         return User.register(username, password, done);
+       }
+   )   );
+   
 
 
   /*
@@ -93,13 +93,20 @@ module.exports = function (passport) {
    ));
    */
 // ================= Функции для работы с Сессиями =============================
+  /*
+   * Для того, чтобы сохранять или доставать пользовательские данные из сессии, passport использует функции
+   * `passport.serializeUser()` и `passport.deserializeUser()`.
+   */
+
   /**
-   * Для того, чтобы сохранять или доставать пользовательские данные из сессии, паспорт использует функции `passport.serializeUser()` и `passport.deserializeUser()`.
+   * сохраняем только ID
    */
   passport.serializeUser(function (user, done) {
     done(null, user.id);
   });
-
+  /**
+   * Достаем из Сессии ID и получаем свежие данные о Пользователе без оберточных служебных функций Mongoose
+   */
   passport.deserializeUser(function (user_id, done) {
     try {
       var uid = new ObjectID(user_id);
@@ -111,6 +118,6 @@ module.exports = function (passport) {
     User.findById(uid).lean().exec(function (err, user) {
       done(err, user);
     });
-  });
+  }); //-> Достаем
 }
 ;

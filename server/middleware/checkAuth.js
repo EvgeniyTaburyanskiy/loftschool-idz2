@@ -3,7 +3,7 @@
  * Проверяет статус авторизации пользователя
  */
 
-var HttpError = require('../utils/HttpError').HttpError;
+var HttpError = require('../middleware/HttpError').HttpError;
 
 
 module.exports = function (req, res, next) {
@@ -11,5 +11,5 @@ module.exports = function (req, res, next) {
   if (req.isAuthenticated()) {//-> Метод добавляется модулем passport. не документированный метод.
     return next();
   }
-  next(new HttpError(401, 'Необходима авторизация'));
+  next(new HttpError(401));
 };

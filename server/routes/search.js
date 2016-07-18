@@ -1,5 +1,5 @@
 var logger = require('../utils/winston')(module);
-var HttpError = require('../utils/HttpError').HttpError;
+var HttpError = require('../middleware/HttpError').HttpError;
 
 /* GET search page. */
 var search = function (req, res, next) {

@@ -1,6 +1,6 @@
 var logger = require('../utils/winston')(module);
 var User = require('../db/models/User').mUser;
-var HttpError = require('../utils/HttpError').HttpError;
+var HttpError = require('../middleware/HttpError').HttpError;
 var ObjectID = require('mongodb').ObjectID;
 
 /* GET users page. */

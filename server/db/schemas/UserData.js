@@ -15,78 +15,86 @@ var Schema = mongoose.Schema;
  * Схема Коллекции Личных Данных Пользователей
  */
 var schemaUserData = new Schema({
-  name:    {
+  firstName:    {
     type:      String,
-    default:   'Без Имени',
+    default:   'Без',
     minlength: 1,
-    maxlength: 100,
+    maxlength: 50,
     trim:      true,
     required:  true
   },
-  message: {
+  lastName:     {
+    type:      String,
+    default:   'Имени',
+    minlength: 1,
+    maxlength: 50,
+    trim:      true,
+    required:  true
+  },
+  message:      {
     type:      String,
     default:   '',
     maxlength: 250,
     trim:      true,
     required:  false
   },
-  avatar:  {
+  avatar:       {
     type:      String,
     default:   '/images/no-avatar.png',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
-    trim:     true,
-    required: true
+    trim:      true,
+    required:  true
   },
-  imgURL:  {
+  imgURL:       {
     type:      String,
     default:   '/images/no-user-bg.png',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
-    trim:     true,
-    required: true
+    trim:      true,
+    required:  true
   },
-  email:   {
+  emailAddress: {
     type:      String,
     maxlength: 254, // http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690
-    trim:     true,
-    required: true
+    trim:      true,
+    required:  true
   },
-  fb:      {
+  fb:           {
     type:      String,
     default:   '',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
-    trim:     true,
-    required: false
+    trim:      true,
+    required:  false
   },
-  tw:      {
+  tw:           {
     type:      String,
     default:   '',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
-    trim:     true,
-    required: false
+    trim:      true,
+    required:  false
   },
-  vk:      {
+  vk:           {
     type:      String,
     default:   '',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
-    trim:     true,
-    required: false
+    trim:      true,
+    required:  false
   },
-  g:       {
+  g:            {
     type:      String,
     default:   '',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
-    trim:     true,
-    required: false
+    trim:      true,
+    required:  false
   }
 });
 
 // ================= UserData Validators =============================
-schemaUserData.path('email').validate(
+schemaUserData.path('emailAddress').validate(
     function (email) { //-> http://emailregex.com/
       var emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       return emailRegex.test(email); // Assuming email has a text attribute
     },
-    'Поле Email не может быть пустым'
+    'Email не верно заполнен!'
 );
 
 //var modelUserData = mongoose.model('UserData', schemaUserData);
