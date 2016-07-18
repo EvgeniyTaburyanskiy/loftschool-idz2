@@ -1,10 +1,9 @@
-
 /**
  * Промежуточный обработчик уровня приложения
  * Проверяет статус авторизации пользователя
  */
-
-var User = require('../db/models/User');
+var ObjectID = require('mongodb').ObjectID;
+var User = require('../db/models/User').mUser;
 
 /**
  * Мидлвар Подгружает данные пользователя на каждом Хите.
@@ -19,13 +18,20 @@ var User = require('../db/models/User');
  * @returns {*}
  */
 module.exports = function (req, res, next) {
-  req.user = res.locals.user = null;
-  if (!req.session.user) return next();
+  res.locals.user = null;
+  if (!req.session.passport.user) return next();
 
-  User.findById(req.session.user, function (err, user) {
+  try {
+    var uid = new ObjectID(req.session.passport.user);
+  }
+  catch (err) {
+    return next(err);
+  }
+
+  User.findById(uid, 'userdata').lean().exec(function (err, user) {
     if (err) return next(err);
 
-    req.user = res.locals.user = user;
+    res.locals.user = user.userdata;
     next();
   });
 };

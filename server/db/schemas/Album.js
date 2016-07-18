@@ -8,7 +8,10 @@ var Schema = mongoose.Schema;
  * Схема Альбома
  */
 var schemaAlbum = new Schema({
-  _user_id:   Schema.Types.ObjectId,
+  _user_id:   {
+    type: Schema.Types.ObjectId,
+    ref:  'User'
+  },
   name:       {
     type:      String,
     default:   "Альбом без названия!",
@@ -32,5 +35,5 @@ var schemaAlbum = new Schema({
 
 //var modelAlbum = mongoose.model('Album', schemaAlbum);
 
-module.exports = schemaAlbum;
+module.exports.sAlbum = schemaAlbum;
 

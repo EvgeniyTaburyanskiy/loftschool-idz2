@@ -2,13 +2,18 @@ extends ./_template
 
 block APP_content
 
-  h3.
-    "Данные Пользователя = #{user}"
+  h3 "Данные Пользователя =#{user.email}"
+  ul
+    each val, index in user
+      li
+        pre= index + ': ' + val
+
+
   // Пользователь авторизован. Данные о нем из БД получены
-  if (user)
-    a(href="#" onclick="$('<form method=POST action=/auth/logout>').submit();return false") Выйти
-  else
-    script.
-      console.debug('Вы не авторизованы.');
-      window.location.href = '/auth';
+  //if (user)
+  //  a(href="#" onclick="$('<form method=POST action=/auth/logout>').submit();return false") Выйти
+  //else
+  //  script.
+  //    console.debug('Вы не авторизованы.');
+  //    window.location.href = '/auth';
 

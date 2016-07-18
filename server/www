@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Module dependencies. 
+ * Module dependencies.
  */
 var
     path   = require('path'),
@@ -9,15 +9,6 @@ var
     config = require(utils + 'nconf'),
     logger = require(utils + 'winston')(module),
     app    = require(utils + 'app_express');
-
-/*config.set('serverRoot', __dirname);
-config.save(function (err) {
-  if (err) {
-    logger.error(err.message);
-    return;
-  }
-  logger.info('Config saved successfully!');
-});*/
 
 /**
  * Get port from environment and store in Express.

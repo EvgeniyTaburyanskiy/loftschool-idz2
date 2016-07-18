@@ -2,38 +2,60 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose');
+var logger = require('../../utils/winston')(module);
 var async = require('async');
+var crypto = require('crypto');
 var util = require('util');
 var Schema = mongoose.Schema;
-var schemaUserData = require('./UserData');
+var schemaUserData = require('./UserData').sUserData;
 
 /**
  * Схема Коллекции Пользователей
  */
 var schemaUser = new Schema({
-  email:          {
+  username:               {
+    type:      String,
+    maxlength: 254,
+    lowercase: true,
+    trim:      true,
+    unique:    true,
+    required:  true
+  },
+  hashedPassword:         {
     type:     String,
-    unique:   true,
     required: true
   },
-  hashedPassword: {
+  salt:                   {
     type:     String,
     required: true
   },
-  salt:           {
-    type:     String,
-    required: true
+  resetPasswordToken:     {
+    type:      String,
+    maxlength: 1024,
+    default:   ''
   },
-  userdata:       schemaUserData,
-  created:        {
+  resetPasswordExpires:   {
+    type:    Date,
+    default: Date.now() + 3600000 // 1 hour
+  },
+  emailConfirmationToken: {
+    type:    String,
+    default: new mongoose.Types.ObjectId().toString()
+  },
+  userdata:               {
+    type:    schemaUserData,
+    default: schemaUserData
+  }, // Данные пользователя будем хранить в этой же коллекции. Схема данных описана в UserData
+  created:                {
     type:    Date,
     default: Date.now
   }
 });
-// ================= User Entyty Methods =============================
+
+// ================= User Entity Methods =============================
 schemaUser.methods.encryptPassword = function (password) {
-  //less secure -return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
-  return crypto.pbkdf2Sync(password, this.salt, 10000, 512);
+  return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
+  //more secure -return crypto.pbkdf2Sync(password, this.salt, 10000, 512);
 };
 
 schemaUser.methods.checkPassword = function (password) {
@@ -41,51 +63,64 @@ schemaUser.methods.checkPassword = function (password) {
 };
 
 // ================= Schema Statics Methods =============================
-schemaUser.statics.authorise = function (login, password, callback) {
+schemaUser.statics.authorize = function (username, password, next) {
   var User = this;
   async.waterfall([
-        function (callback) {
-          User.findOne({email: login}, callback);//-> Ищем пользователя в БД по email(он же логин)
+        function (cb) {
+          User.findOne({'username': username.toLowerCase()}, cb);//-> Ищем пользователя в БД по username(он же email)
         },
-        function (user, callback) {// ошибок не возникло возвращен результат из пред функции
-          if (user) {//-> если пользователь найден проверяем его пароль
-            if (user.checkPassword(password)) {
-              callback(null, user); //-> передаем юзера дальше по цепочке колбеков
-            }
-            else {
-              callback(new AuthError('Не верный Пароль')); //-> возвращаем собственную ошибку
-            }
+        function (user, cb) {// ошибок не возникло возвращен результат из пред функции
+          if (!user) {//-> пользователь не найден в БД
+            logger.debug('Такого пользователя не существует %s', username);
+            return cb(new AuthError('Такого пользователя не существует'), false);
           }
-          else {//-> пользователь по email не найден в БД
 
+          if (!user.checkPassword(password)) { //-> Проверяем пароль
+            logger.debug('Введен неверный пароль для пользователя %s', username);
+            return cb(new AuthError('Вы ввели неверный пароль'), false);
           }
+          // Пользователь существует и пароль верен, возврат пользователя из
+          // метода done, что будет означать успешную аутентификацию
+          cb(null, user);
         }
       ],
-      callback
+      next //-> Все ОК отдаем Passport(у) результат
   );
 };
 
-schemaUser.statics.register = function (login, password, callback) {
+schemaUser.statics.register = function (username, password, next) {
   var User = this;
   async.waterfall([
-        function (callback) {
-          User.findOne({email: login}, callback);//-> Ищем пользователя в БД по email(он же логин)
+        function (cb) {
+          User.findOne({'username': username.toLowerCase()}, cb);//-> Ищем пользователя в БД по username(он же email)
         },
-        function (user, callback) {// ошибок не возникло возвращен результат из пред функции
-          if (user) {//-> если пользователь найден проверяем его пароль
-            if (user.checkPassword(password)) {
-              callback(null, user); //-> передаем юзера дальше по цепочке колбеков
-            }
-            else {
-              callback(new AuthError('Не верный Пароль')); //-> возвращаем собственную ошибку
-            }
+        function (user, cb) {// ошибок не возникло возвращен результат из пред функции
+          if (user) {//-> если пользователь найден
+            return cb(new AuthError('Имя пользователя уже занято'), false); //-> возвращаем собственную ошибку
           }
           else {//-> пользователь по email не найден в БД
+            var newUser = new User({
+              'username': username,
+              'password': password
+            });
 
+            // Дополняем данными объект пользователя
+            newUser.userdata.emailAddress = username;
+
+            // Сохраняем нового пользователя в БД.
+            // И передаем управление следующему обработчику
+            newUser.save(function (err) {
+              //http://mongoosejs.com/docs/validation.html
+              // err is our ValidationError object
+              // err.errors.emailAddress is a ValidatorError object
+              // err.errors.password is a ValidatorError object
+              if (err) return cb(err, false);
+              cb(null, newUser);
+            });
           }
         }
       ],
-      callback
+      next
   );
 };
 
@@ -106,11 +141,19 @@ schemaUser.virtual('password')
   return this._plainPassword;
 });
 
+// ================= Validation =============================
+schemaUser.path('hashedPassword').validate(function (value) {
+  if (this._plainPassword) {
+    if (this._plainPassword.length < 8) {
+      this.invalidate('password', 'Пароль должен содержать не менее 8 символов ');
+    }
+  }
+  if (this.isNew && !this._plainPassword) {
+    this.invalidate('password', 'Пароль не может быть пустым');
+  }
+}, null);
 
-//var modelUser = mongoose.model('User', schemaUser);
-
-module.exports = schemaUser;
-
+// ================= Private Func =============================
 function AuthError(message) {
   Error.apply(this, arguments);
   Error.captureStackTrace(this, AuthError);
@@ -119,5 +162,17 @@ function AuthError(message) {
 }
 
 util.inherits(AuthError, Error);
+
 AuthError.prototype.name = 'AuthError';
-exports.AuthError = AuthError;
+
+// ================= Exports =============================
+//var modelUser = mongoose.model('User', schemaUser);
+
+module.exports.sUser = schemaUser;
+module.exports.AuthError = AuthError;
+
+
+
+
+
+

@@ -7,12 +7,11 @@
  * Module dependencies.
  */
 var logger = require('../utils/winston')(module);
-var HttpError = require('../utils/error').HttpError;
 var checkAuth = require('../middleware/checkAuth');
-
+var loadUser = require('../middleware/loadUser');
 
 /**
- * Router 
+ * Router
  * @param app
  * @returns {*}
  * @private
@@ -30,55 +29,54 @@ var _router = function (app) {
     search: require('./search'),       //-> Обработчик Маршрута Поиска
     error:  require('./error')         //-> Обработчик Ошибочных запросов
   };
-  
+
   router.use(function Logger(req, res, next) {
-    var sess = req.session;
-    sess.numOfVisits = sess.numOfVisits + 1 || 1;
     next();
   });
 
-  // ==============================================
-  /**
-   * HOME Routes
-   */
-  router.get('/', checkAuth, controllers.main.home);
+  // HOME ROUTES ==============================================
+  router.all('/', checkAuth);
+  router.get('/', loadUser, controllers.main.home);
 
-  // ==============================================
-  /**
-   * AUTH Routes
-   */
-  router.get('/auth', controllers.auth.get);
-  router.post('/auth/:action', controllers.auth.post);
-  // ==============================================
-  /**
-   * ALBUM Routes
-   */
-  router.get('/albums', checkAuth, controllers.albums.albums);
+  // AUTH ROUTES ==============================
 
-  // ==============================================
-  /**
-   * USERS Routes
-   */
-  router.get('/users', checkAuth, controllers.users.users);
-  router.get('/users/:id', checkAuth, controllers.users.user);
+  router.get('/auth', controllers.auth.get); //-> Отдаем страницу Авторизации/Регистрации/Восстановления пароля
 
-  // ==============================================
-  /**
-   * SEARCH Routes
-   */
+  router.post('/auth/signin',  controllers.auth.post.signin); //-> Вход в Систему
 
-  router.get('/search', checkAuth, controllers.search.search);
+  router.all('/auth/signout', controllers.auth.post.signout);//-> GET/POST  Выход из Системы 
 
-  // ==============================================
-  /**
-   * DEFAULT  Route 404
-   */
+  router.post('/auth/signup', controllers.auth.post.signup); //-> Регистрация
+
+  router.post('/auth/fogot', controllers.auth.post.fogot); //-> Восстановление пароля
+
+  // ALBUM ROUTES ==============================================
+  router.all('/albums', checkAuth);
+  router.all('/albums/*', checkAuth);
+
+  router.get('/albums', controllers.albums.albums);
+
+  // USERS ROUTES ==============================================
+  router.all('/users', checkAuth);
+  router.all('/users/*', checkAuth);
+
+  router.get('/users', controllers.users.users);
+  router.get('/users/:id', controllers.users.user);
+
+  // SEARCH ROUTES ==============================================
+
+  router.all('/search', checkAuth);
+  router.all('/search/*', checkAuth);
+
+  router.get('/search', controllers.search.search);
+
+  // DEFAULT  Route 404 ==============================================
   router.use(controllers.error.err_404);
 
-  // error handlers
+  // ERROR HANDLERS ==============================================
   router.use(controllers.error.err_all);
 
   return router;
 };
 
-module.exports = _router;
+module.exports.Router = _router;
