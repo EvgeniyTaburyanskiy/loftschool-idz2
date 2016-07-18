@@ -18,14 +18,14 @@ var err_all = function (err, req, res, next) {
   if (typeof  err === 'number') {
     err = new HttpError(err);
   }
-  
+
   if (err instanceof HttpError) {
     res.sendHttpError(err);
   }
   else {
     if (ENV === 'development') {
       logger.debug('%s %d %s', req.method, res.statusCode, err.message);
-      express.errorHandler()(err, req, res, next);
+      return next(err);
     } else {
       err = new HttpError(500);
       res.sendHttpError(err);

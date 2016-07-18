@@ -8,6 +8,7 @@ var AuthLocalStrategy = require('passport-local').Strategy;
 
 var AuthError = require('../db/schemas/User').AuthError;
 var HttpError = require('../utils/HttpError').HttpError;
+var ObjectID = require('mongodb').ObjectID;
 
 var User = require('../db/models/User').mUser;
 
@@ -21,28 +22,31 @@ module.exports = function (passport) {
   /**
    * Стратегия Локальной Авторизации.
    */
-  passport.use('local', new AuthLocalStrategy({
-        usernameField: 'email',
-        passwordField: 'password'
-      },
+  passport.use('local-signin', new AuthLocalStrategy(
       function (username, password, done) {
-        User.findOne({email: username}, function (err, user) {//-> Ищем пользователя в БД по email(он же логин)
+        logger.debug('Passport auth = ', username, password);
+
+        User.findOne({'username': username}, function (err, user) {//-> Ищем пользователя в БД по email(он же логин)
           if (err) {
             return done(err);
           }
 
           if (!user) {//-> пользователь по email не найден в БД
+            logger.debug('Не верное имя пользователя %s', username);
             return done(null, false, {message: 'Не верное имя пользователя'});
           }
 
           if (!user.checkPassword(password)) { //-> Проверяем пароль
+            logger.debug('Не верный Пароль %s для пользователя %s', password, username);
             return done(null, false, {message: 'Не верный Пароль'});
           }
-
+          // Пользователь существует и пароль верен, возврат пользователя из
+          // метода done, что будет означать успешную аутентификацию
           done(null, user); //-> Все ОК отдаем Passport(у) пользователя
         });
       }
   ));
+
 
   /*
    passport.use('facebook', new AuthFacebookStrategy({
@@ -97,8 +101,16 @@ module.exports = function (passport) {
   });
 
   passport.deserializeUser(function (user_id, done) {
-    User.findById(user_id, function (err, user) {
+    try {
+      var uid = new ObjectID(user_id);
+    }
+    catch (err) {
+      return done(err, null);
+    }
+
+    User.findById(uid).lean().exec(function (err, user) {
       done(err, user);
     });
   });
-};
+}
+;

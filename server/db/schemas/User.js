@@ -15,9 +15,9 @@ var schemaUser = new Schema({
   username:             {
     type:      String,
     maxlength: 254,
-    default:   '',
     trim:      true,
-    required:  false
+    unique:    true,
+    required:  true
   },
   hashedPassword:       {
     type:     String,
@@ -36,7 +36,10 @@ var schemaUser = new Schema({
     type:    Date,
     default: Date.now() + 3600000 // 1 hour
   },
-  userdata:             schemaUserData, // Данные пользователя будем хранить в этой же коллекции. Схема данных описана в UserData
+  userdata:             {
+    type:    schemaUserData,
+    default: schemaUserData
+  }, // Данные пользователя будем хранить в этой же коллекции. Схема данных описана в UserData
   created:              {
     type:    Date,
     default: Date.now
@@ -53,9 +56,16 @@ schemaUser.methods.checkPassword = function (password) {
 };
 
 // ================= Schema Statics Methods =============================
+
 schemaUser.statics.register = function (username, password, callback) {
   var User = this;
   async.waterfall([
+        function (callback) {
+          if (!username.toString().length || !password.toString().length) {
+            return callback(new AuthError('Имя пользователя и пароль должны быть указаны!')); //-> возвращаем  собственную ошибку
+          }
+          callback();
+        },
         function (callback) {
           User.findOne({username: username}, callback);//-> Ищем пользователя в БД по username(он же email)
         },
@@ -64,10 +74,16 @@ schemaUser.statics.register = function (username, password, callback) {
             callback(new AuthError('Пользователь с таким email уже существует')); //-> возвращаем собственную ошибку
           }
           else {//-> пользователь по email не найден в БД
-            var newUser = new User({username: username, password: password});
-            // Заполняем данными Поля пользователя.
+            var newUser = new User({
+              username: username,
+              password: password
+            });
+
+            // Дополняем данными объект пользователя
             newUser.userdata.email = username;
-            // Сохраняем нового пользователя в БД
+
+            // Сохраняем нового пользователя в БД.
+            // И передаем управление следующему обработчику
             newUser.save(function (err) {
               if (err) return callback(err);
               callback(null, newUser);

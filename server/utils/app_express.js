@@ -9,11 +9,11 @@ var express        = require('express'),
     bodyParser     = require('body-parser'),
     methodOverride = require('method-override'),
     sendHttpError  = require('../middleware/sendHttpError'),
-    loadUser       = require('../middleware/loadUser'),
     expressSession = require('express-session'),
     MongoStore     = require('connect-mongo')(expressSession),
     passport       = require('passport'),
-    helmet         = require('helmet');
+    helmet         = require('helmet'),
+    flash          = require('connect-flash');
 
 var
     config   = require('./nconf'),
@@ -36,7 +36,6 @@ var sessionOptions = {
 };
 
 
-
 /**
  * EXPRESS CONFIG
  */
@@ -55,22 +54,21 @@ if (app.get('env') === 'development') {
   app.use(morgan('dev'));
 }
 app.use(express.static(documentRoot));
-app.use(bodyParser.json()); // req.body
+app.use(bodyParser.json()); //-> req.body
 app.use(bodyParser.urlencoded({extended: false}));
-//app.use(methodOverride());
-app.use(cookieParser());    // req.cookies
+app.use(methodOverride());
+app.use(cookieParser());    //-> req.cookies
 app.use(expressSession(sessionOptions));
 
+app.use(flash());           //-> res.locals.messages
 app.use(sendHttpError);
 
-require('../config/passportAuthConf')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 /**
  * MAIN ROUTING MODULE
  * */
-app.use(router(app));
+app.use(router(app, passport));
 
 module.exports = app;

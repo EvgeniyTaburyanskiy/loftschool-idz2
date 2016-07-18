@@ -8,4 +8,4 @@ var mongoose = require('mongoose');
  */
 var schemaPhotoComments = require('../schemas/PhotoComment').sPhotoComment;
 
-module.exports.mPhotoComments = mongoose.model('PhotoComments', schemaPhotoComments);
+module.exports.mPhotoComments = mongoose.model('PhotoComment', schemaPhotoComments);

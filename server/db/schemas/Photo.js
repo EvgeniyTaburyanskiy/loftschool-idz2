@@ -30,6 +30,7 @@ var schemaPhoto = new Schema({
   },
   imgURL:     { //-> URL
     type:      String,
+    default:   '',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
     trim:      true,
     required:  true
@@ -47,7 +48,7 @@ var schemaPhoto = new Schema({
   },
   comments:   { //-> Комменты Храним в отдельной коллекции. В данной только ссылку на документ коменнтов к данной фотке.
     type:     Schema.Types.ObjectId,
-    ref:      'PhotoComments', //-> Указывает на имя Модели.
+    ref:      'PhotoComment', //-> Указывает на имя Модели.
     required: false
   },
   likes:      [{

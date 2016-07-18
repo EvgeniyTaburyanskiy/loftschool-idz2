@@ -15,7 +15,7 @@ var User = require('../db/models/User').mUser;
  * @private
  */
 var _login = function (req, res, next) {
-
+  res.redirect('/');
 };
 
 var _logout = function (req, res, next) {
@@ -28,9 +28,9 @@ var _logout = function (req, res, next) {
 var _register = function (req, res, next) {
   var
       password = req.body.password,
-      email    = req.body.email;
+      username = req.body.username;
 
-  User.register(email, password, function (err, user) {
+  User.register(username, password, function (err, user) {
     if (err) {//-> если в процессе регистрации была Ошибка, обрабатываем ее.
       if (err instanceof AuthError) { //-> Это наша ошибка из схемы Юзера
         return next(new HttpError(403, err.message)); //-> обрабатываем ее так как нам нужно. Например возвращаем 403
@@ -46,10 +46,7 @@ var _register = function (req, res, next) {
      **/
 
     req.login(user, function (err) {
-      if (err) {
-        return next(err);
-      }
-      return res.redirect('/');
+      return err ? next(err) : res.redirect('/');
     });
   });
 };
@@ -64,15 +61,19 @@ var _fogot = function (req, res, next) {
 };
 
 var getAuth = function (req, res, next) {
-  res.render('auth', {title: 'getAuth'});
+  res.render(
+      'auth',
+      {title: 'getAuth'}
+  );
 };
 
 
 module.exports.get = getAuth;
+
 module.exports.post = {
-  login:    _login,
-  logout:   _logout,
-  register: _register,
-  fogot:    _fogot
+  signin:  _login,
+  signout: _logout,
+  signup:  _register,
+  fogot:   _fogot
 };
 

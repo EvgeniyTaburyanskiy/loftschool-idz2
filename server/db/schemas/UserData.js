@@ -1,7 +1,7 @@
 /**
  * Вспомогательная схема для Коллекции пользвователей
  * Не создаем отдельную моель для нее. А просто используем как вложенный тип данных с заданной схемой.
- * 
+ *
  * http://mongoosejs.com/docs/subdocs.html
  */
 
@@ -46,10 +46,9 @@ var schemaUserData = new Schema({
   },
   email:   {
     type:      String,
-    default:   '',
     maxlength: 254, // http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690
     trim:     true,
-    required: false
+    required: true
   },
   fb:      {
     type:      String,
@@ -83,9 +82,9 @@ var schemaUserData = new Schema({
 
 // ================= UserData Validators =============================
 schemaUserData.path('email').validate(
-    function (email) {
-      var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-      return emailRegex.test(email.text); // Assuming email has a text attribute
+    function (email) { //-> http://emailregex.com/
+      var emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+      return emailRegex.test(email); // Assuming email has a text attribute
     },
     'Поле Email не может быть пустым'
 );
