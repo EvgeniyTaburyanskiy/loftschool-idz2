@@ -1,0 +1,14 @@
+extends ./_template
+
+block APP_content
+
+  h3.
+    "Данные Пользователя = #{user}"
+  // Пользователь авторизован. Данные о нем из БД получены
+  if (user)
+    a(href="#" onclick="$('<form method=POST action=/auth/logout>').submit();return false") Выйти
+  else
+    script.
+      console.debug('Вы не авторизованы.');
+      window.location.href = '/auth';
+
