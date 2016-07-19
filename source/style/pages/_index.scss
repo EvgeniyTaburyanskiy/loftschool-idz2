@@ -46,8 +46,10 @@ body {
     transform: rotateY(180deg);
 }
 .flip-cont,
+.flipper,
 .front,
-.back
+.back,
+.pass-recovery
 {
     display: flex;
     width: 550px;
@@ -62,7 +64,8 @@ body {
     transform-style: preserve-3d;
 }
 .front,
-.back
+.back,
+.pass-recovery
 {
     flex-direction: column;
     align-items: center;
@@ -85,7 +88,7 @@ body {
     @include type-setting(XL);
     font-family : 'Panton';
     font-weight : bold;
-    width: 360px;
+    width: 390px;
     
     color: #fff;
 }
@@ -99,6 +102,7 @@ body {
 .card {
     display: flex;
     flex-direction: column;
+    padding: 5px 0 0 0;
     width: 280px;
     
     border-radius: 15px;
@@ -111,6 +115,7 @@ body {
     height: 40px;
     margin: 0 0 1px 0;
     padding: 0 0 0 10px;
+    font-size: 14px;
     font-family: 'Proxima Nova';
     font-weight: normal;
     color: #9A9A9A;
@@ -128,12 +133,14 @@ body {
     background-color: rgba(55, 62, 66, 0.85);
 
 }
-.pass-tx {
+.pass-a-tx {
     padding: 0 0 0 20px;
     margin: 0 0 20px 0;
     font-size: 14px;
     text-decoration: none;
     color: #28bbf0;
+    font-family: 'Proxima Nova';
+    font-weight: bold;
     text-align: left;
 }
 .itx::-moz-placeholder
@@ -156,7 +163,15 @@ body {
     display: flex;
     font-size: 14px;
     font-family: 'Proxima Nova';
+    text-align: left;
 
+}
+.forget-pass-tx {
+    padding: 10px 0 0 20px;
+    font-size: 14px;
+    font-family: 'Proxima Nova';
+    font-weight: bold;
+    text-align: left;
 }
 .registration-a {
     padding: 0 0 0 10px;
@@ -168,4 +183,24 @@ body {
 .back
 {
     transform: rotateY(180deg);
+}
+.hidden {
+    display: none;
+}
+.mail:before {
+    
+}
+.name:before {
+
+}
+.pass:before {
+    
+}
+.footer {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    @include type-setting(N);
 }
