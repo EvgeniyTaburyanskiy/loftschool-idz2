@@ -6,7 +6,7 @@ block APP_content
         img.m-h__img(src="assets/img/jason.jpg" alt="jason")
       div.m-person
         p.m-person__n Джейсон Стэтхем
-        p.m-person__tx Я голливудский актер, мне уже лет 40. Люблю сниматься в боевиках и активный отдых.
+        p.m-person__tx Я голливудский актер, мне уже лет 50. Люблю сниматься в боевиках и активный отдых.
         div.person-soc
           +socIconVk
           +socIconFb
@@ -14,14 +14,15 @@ block APP_content
           +socIconGp
           +socIconEm
     div.m-controls
-      +btnEdit
-      +btnExit
+      div.controls-w
+        +btnEdit
+      div.controls-w
+        +btnExit
   main.m-main
-    section.main-search-w
-      div.main-search
-        div.search
-          input.search__input(type="search" name="search" id="search" placeholder="Исследовать мир")
-          +use('loupe','search__svg')
+    section.main-search
+      form.main-search__f(action="#")
+        input.main-search__input(type="search" name="search" id="search" placeholder="Исследовать мир")
+        +use('search','main-search__svg')
     section.main-new-w
       div.main-new
         h1.main-new__t Новое в мире

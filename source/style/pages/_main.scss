@@ -1,0 +1,145 @@
+@import "../helpers/mixins";
+@import "../helpers/functions";
+
+.m-h-w {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 0 0 rem(300px);
+  width: 100%;
+  //height: rem(240px);
+  background: linear-gradient(to right, rgba(#000,.5) 30%, transparent, rgba(#000,.3) 90%), url(../img/lake.jpg) no-repeat;
+  background-size: cover;
+}
+
+.m-h {
+  display: flex;
+  flex: 0 0 rem(240px);
+  align-items: center;
+  width: rem(1180px);
+  height: 100%;
+}
+
+.m-h__a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: rem(125px);
+  height: rem(125px);
+  @include rounded(50%);
+  border: 2px solid #fff;
+  overflow: hidden;
+  margin-right: rem(25px);
+  @include large() {
+    margin-right: rem(50px);
+  }
+}
+
+.m-h__img {
+  flex: 1 0 auto;
+  width: 100%;
+}
+
+.m-person {
+  display: flex;
+  min-height: 50%;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.m-person__n {
+  margin: 0 0 rem(20px);
+  font-family: 'Panton', sans-serif;
+  color: #fff;
+  font-size: rem(21px);
+}
+
+.m-person__tx {
+  margin: 0 0 rem(20px);
+  max-width: rem(500px);
+  font-family: 'Proxima Nova', sans-serif;
+  color: #fff;
+  font-size: rem(16px);
+  text-shadow: 1px 1px 1px rgba(#000, .8);
+  @include tablet() {
+    font-size: rem(14px);
+  }
+}
+
+.person-soc {
+  display: flex;
+  width: rem(140px);
+  justify-content: space-between;
+}
+
+.m-controls {
+  position: absolute;
+  top: rem(20px);
+  right: rem(40px);
+  max-width: rem(155px);
+}
+
+.controls-w {
+  width: auto;
+  float: right;
+  margin-bottom: rem(10px);
+  &::after, &::before {
+    display: block;
+    content: '';
+    clear: both;
+  }
+}
+
+/*___main___*/
+
+.m-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.main-search {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 rem(60px);
+  width: 100%;
+  background-color: rgba(#fff, .6);
+  margin-top: rem(-60px);
+}
+
+.main-search__f {
+  position: relative;
+  display: flex;
+  flex: 0 0 rem(40px);
+  justify-content: flex-end;
+  align-items: center;
+  width: rem(880px);
+  @include large() {
+    width: rem(1180px);
+  }
+}
+
+.main-search__input {
+  flex: 0 0 rem(380px);
+  height: rem(40px);
+  padding-left: rem(45px);
+  @include rounded(20px);
+  border: none;
+  outline: none;
+}
+
+.main-search__svg {
+  position: absolute;
+  top: rem(12px);
+  right: rem(345px);
+  width: rem(16px);
+  height: rem(16px);
+  fill: #c5c5c5;
+}
