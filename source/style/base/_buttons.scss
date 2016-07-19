@@ -360,4 +360,10 @@
   border-radius: 20px;
   color: #28bbf0;
   font:700 14px panton;
+  cursor: pointer;
+  transition: background .3s ,color .3s;
+  &:hover {
+    color: #fff;
+    background: #28bbf0;;
+  }
 }

@@ -47,6 +47,10 @@ mixin use(name, sname)
   - var svg = 'assets/img/icons/sprite.svg'
   svg(role='img' class=sname)
     use(xlink:href=svg+'#'+name)
+//кастомная кнопка
+mixin btnCustom(buttontext)
+  div.custom-block
+    button.custom-block__btn #{buttontext}
 //синяя кнопка Войти
 mixin btnEnter
   div.enter-block
