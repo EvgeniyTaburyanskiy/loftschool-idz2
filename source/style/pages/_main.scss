@@ -143,3 +143,100 @@
   height: rem(16px);
   fill: #c5c5c5;
 }
+
+.main-new-w {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+}
+
+.main-new {
+  display: flex;
+  flex-direction: column;
+  width: rem(1180px);
+  padding: rem(50px) 0;
+}
+
+.main-new__t, .main-albums__t {
+  margin: 0 0 rem(30px);
+  font-size: rem(42px);
+  font-family: 'Panton', sans-serif;
+}
+
+.new-photos, .albums-photos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.new-show {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: center;
+}
+
+.main-albums-w {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f6f6f6;
+}
+
+.main-albums {
+  display: flex;
+  flex-direction: column;
+  width: rem(1180px);
+  padding: rem(50px) 0;
+}
+
+.photo-tile {
+  &:nth-child(3n) {
+    margin: 0 0 rem(20px);
+  }
+  @include large() {
+    &:nth-child(3n) {
+      margin: 0 rem(20px) rem(20px) 0;
+    }
+    &:nth-child(4n) {
+      margin: 0 0 rem(20px);
+    }
+  }
+  @include laptop() {
+    &:nth-child(3n) {
+      margin: 0 rem(20px) rem(20px) 0;
+    }
+    &:nth-child(2n) {
+      margin: 0 0 rem(20px);
+    }
+  }
+}
+
+.photo-album {
+  &:nth-child(4n) {
+    margin: 0 0 rem(20px);
+  }
+  @include large() {
+    &:nth-child(4n) {
+      margin: 0 rem(20px) rem(20px) 0;
+    }
+    &:nth-child(5n) {
+      margin: 0 0 rem(20px);
+    }
+  }
+  @include laptop() {
+    &:nth-child(4n) {
+      margin: 0 rem(20px) rem(20px) 0;
+    }
+    &:nth-child(3n) {
+      margin: 0 0 rem(20px);
+    }
+  }
+}
+
+.albums-controls {
+  position: absolute;
+  top: rem(40px);
+  right: rem(20px);
+}
