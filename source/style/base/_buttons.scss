@@ -319,3 +319,23 @@
     color: #24b0e3;
   }
 }
+
+/* Button popup close*/
+.cancel-popup {
+  width: 27px;
+  height: 26px;
+  cursor: pointer;
+}
+.cancel-popup__btn {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.cancel-popup__svg {
+  width: 100%;
+  height: 100%;
+  fill: #a0a09f;
+  &:hover {
+    fill:#5e5e5e;
+  }
+}

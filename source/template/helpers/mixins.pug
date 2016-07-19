@@ -123,6 +123,11 @@ mixin btnCancel
   div.cancel-block
     btn.cancel-block__btn
       +use('close', 'cancel-block__svg')
+//кнопка закрытия попапа
+mixin btnCancelPop
+  div.cancel-popup
+    btn.cancel-popup__btn
+      +use('close', 'cancel-popup__svg')
 //две нижние кнопки форм добавления фото и альбома
 mixin formMenu
   div.form-menu
