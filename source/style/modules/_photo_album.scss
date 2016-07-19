@@ -119,6 +119,7 @@
   position: relative;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   flex: 0 0 rem(20px);
   width: rem(260px);
   @include large() {
@@ -151,5 +152,8 @@
   }
   &:active {
     transform: translateY(1px);
+  }
+  @include tablet() {
+    font-size: rem(14px);
   }
 }

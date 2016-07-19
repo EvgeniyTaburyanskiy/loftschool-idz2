@@ -1,0 +1,142 @@
+@import "../helpers/mixins";
+@import "../helpers/functions";
+
+.a-photo-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: rem(380px);
+  height: rem(300px);
+  box-shadow: 0 1px 1px 1px rgba(#000, .3);
+  font-family: 'Proxima Nova', sans-serif;
+  @include rounded(5px);
+  overflow: hidden;
+  @include laptop() {
+    width: rem(350px);
+    height: rem(280px);
+  }
+  @include tablet() {
+    width: rem(300px);
+    height: rem(250px);
+  }
+}
+
+.a-tile-top {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 0 0 rem(250px);
+  width: 100%;
+  overflow: hidden;
+  &:hover {
+    .a-tile-top__svg {
+      fill: #fff;
+    }
+    .top-mask {
+      background-color: rgba(#000, .3);
+    }
+  }
+  @include laptop() {
+    flex: 0 0 rem(230px);
+  }
+  @include tablet() {
+    flex: 0 0 rem(200px);
+  }
+}
+
+.a-tile-top__svg {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  width: rem(30px);
+  height: rem(30px);
+  fill: transparent;
+  transition: fill .2s;
+}
+
+.a-tile-top__img {
+  flex: 1 0 auto;
+  width: 100%;
+}
+
+.a-tile-stats {
+  position: absolute;
+  bottom: rem(20px);
+  left: rem(20px);
+  display: flex;
+  flex: 0 0 rem(20px);
+  max-height: rem(20px);
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.a-tile-stats__svg {
+  flex: 0 0 rem(20px);
+  margin-right: rem(10px);
+  fill: #fff;
+}
+
+.a-tile-stats__span {
+  color: rgba(#fff, .7);
+}
+
+.a-tile-stats__span-comments {
+  margin-right: rem(20px);
+}
+
+.a-tile-bot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 rem(50px);
+  width: 100%;
+  overflow: hidden;
+}
+
+.a-tile-menu {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 0 0 rem(20px);
+  width: rem(340px);
+  @include laptop() {
+    width: rem(310px);
+  }
+  @include tablet() {
+    width: rem(280px);
+  }
+}
+
+.a-tile-menu__svg {
+  flex: 0 0 rem(20px);
+  cursor: pointer;
+  fill: #d6d6d6;
+  &:hover {
+    fill: #a2a2a2;
+  }
+}
+
+.a-tile-menu__a {
+  text-decoration: none;
+  color: #000;
+  font-family: 'Panton', sans-serif;
+  font-size: rem(16px);
+  &:hover {
+    text-decoration: underline;
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+  @include tablet() {
+    font-size: rem(14px);
+  }
+}

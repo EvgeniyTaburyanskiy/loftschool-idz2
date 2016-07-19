@@ -202,12 +202,15 @@
   flex: 0 0 rem(20px);
   text-decoration: none;
   color: #000;
-  font-weight: bold;
+  font-family: 'Panton', sans-serif;
   white-space: nowrap;
   &:hover {
     text-decoration: underline;
   }
   &:active {
     transform: translateY(1px);
+  }
+  @include tablet() {
+    font-size: rem(14px);
   }
 }
