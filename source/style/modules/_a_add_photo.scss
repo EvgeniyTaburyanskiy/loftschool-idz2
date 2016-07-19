@@ -1,0 +1,153 @@
+@import "../helpers/mixins";
+@import "../helpers/functions";
+
+.add-photo {
+  width: 679px;
+  height: 594px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  overflow: hidden;
+  @include mediamax(1299px) {
+    width: 596px;
+  }
+  @include mediamax(596px) {
+    width: 300px;
+    height: auto;
+  }
+}
+
+.add-photo__h, .add-photo__f {
+  height: 67px;
+  background: #f1f1f1;
+  display: flex;
+  flex-shrink:0;
+}
+
+.add-photo__h {
+  padding-left: 17px;
+  padding-right: 20px;
+  width: 100%;
+  align-items: center;
+}
+
+.h__title {
+  margin-right: auto;
+  font: 700 21px panton;
+}
+
+.add-photo__f {
+  align-items: center;
+  padding: 0 20px;
+  margin-top: auto;
+  .delete-block {
+    margin-left: auto;
+  }
+  .delete-block__svg {
+    width: 12px;
+    height: 16px;
+  }
+  @include mediamax(596px) {
+    .delete-block {
+      width: 40px;
+      height: 40px;
+    }
+    .delete-block__tx {
+      display: none;
+    }
+    .delete-block__btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  @include mediamax(596px) {
+    padding: 0 10px;
+  }
+}
+
+.add-photo__b {
+  padding: 0 20px;
+  display: flex;
+  flex-direction:column;
+  height: 100%;
+  @include mediamax(1299px) {
+    padding-right: 20px;
+  }
+  @include mediamax(596px) {
+    padding: 0 10px;
+  }
+}
+.b__album-name {
+  display: flex;
+  width:100%;
+  height: 91px;
+  align-items:center;
+  .name {
+    margin-right: 20px;
+    font:700 16px proxima nova;
+  }
+  .title {
+    font: 400 16px proxima nova
+  }
+}
+.b__photo-container {
+  border-width: 3px;
+  border-color: rgb(241, 241, 241);
+  border-style: dashed;
+  background-color: rgb(249, 249, 249);
+  width: 100%;
+  height: 329px;
+  flex-shrink:0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+  margin-bottom: 40px;
+  .icon-camera {
+    width: 40px;
+    height: 32px;
+    fill: #323232;
+    opacity: .2;
+  }
+  .drag {
+    text-align: center;
+    opacity:.6;
+    font:400 16px/21px proxima nova;
+    color: #323232;
+    margin-top: 15px;
+    @include mediamax(596px) {
+      display: none;
+    }
+  }
+  .or {
+    text-align: center;
+    font:400 16px/21px proxima nova;
+    color: #323232;
+    @include mediamax(596px) {
+      display: none;
+    }
+  }
+  .file {
+    color: #28bbf0;
+    text-align: center;
+    opacity:.6;
+    font:700 16px/21px proxima nova;
+    @include mediamax(596px) {
+      text-transform: capitalize;
+      width: 138px;
+      height: 40px;
+      border: 1px solid #28bbf0;
+      display: flex;
+      justify-content:center;
+      align-items:center;
+      border-radius: 20px;
+      margin-top: 10px;
+    }
+  }
+  @include mediamax(596px) {
+    height: 285px;
+  }
+}
