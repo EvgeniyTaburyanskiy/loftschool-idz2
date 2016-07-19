@@ -320,22 +320,44 @@
   }
 }
 
-/* Button popup close*/
+//* Button popup close*/
 .cancel-popup {
   width: 27px;
-  height: 26px;
+  height: 27px;
   cursor: pointer;
+  @include mediamax(596px) {
+    width: 20px;
+    height: 20px;
+  }
 }
+
 .cancel-popup__btn {
   width: 100%;
   height: 100%;
   display: block;
 }
+
 .cancel-popup__svg {
   width: 100%;
   height: 100%;
   fill: #a0a09f;
   &:hover {
-    fill:#5e5e5e;
+    fill: #5e5e5e;
   }
+}
+
+/* Button load cover*/
+.load-cover {
+  width: 167px;
+  height: 40px;
+}
+
+.load-cover__btn {
+  background: #fff;
+  border: 1px solid #28bbf0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  color: #28bbf0;
+  font:700 14px panton;
 }
