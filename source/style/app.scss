@@ -7,6 +7,14 @@ https://operatino.github.io/MCSS/modules/shorthand_dictionary.html
   box-sizing: border-box;
 }
 
+html, body {
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  min-height: 100%;
+}
 /* ------------ BASE ------------ */
 // BASE
 @import "base/variables";
@@ -37,6 +45,7 @@ https://operatino.github.io/MCSS/modules/shorthand_dictionary.html
 
 // PAGES
 @import "pages/index";
+@import "pages/main";
 
 
 
