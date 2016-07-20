@@ -73,12 +73,12 @@ var api_signup = function (req, res, next) {
           else if (err.name === 'ValidationError') {//-> Это наша ошибка Валидации данных из Mongoose
             var errMsgList = [];
             if (err.errors.emailAddress) {
-              logger.info("Ошибка валидации Email пользователя. %s", err.errors.emailAddress);
+              logger.info("Ошибка валидации Email пользователя. %s", err.errors.emailAddress.message);
               errMsgList.push(err.errors.emailAddress.message);
             }
 
             if (err.errors.password) {
-              logger.info("Ошибка валидации пароля пользователя. %s", err.errors.password);
+              logger.info("Ошибка валидации пароля пользователя. %s", err.errors.password.message);
               errMsgList.push(err.errors.password.message);
             }
 

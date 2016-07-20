@@ -30,9 +30,7 @@ var schemaUser = new Schema({
     required: true
   },
   resetPasswordToken:     {
-    type:      String,
-    maxlength: 1024,
-    default:   ''
+    type: String
   },
   resetPasswordExpires:   {
     type: Date

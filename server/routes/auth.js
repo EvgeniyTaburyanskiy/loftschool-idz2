@@ -91,11 +91,14 @@ var postFogot = function (req, res, next) {
       var mailOptions = {
         to:      user.userdata.emailAddress,
         from:    config.get('nodemailer:mailOptions:from'),
-        subject: 'Loftogram: Восстановление пароля!',
-        text:    'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-                 'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+        subject: 'LOFTOGRAM: Восстановление пароля!',
+        text:    'Вы получили это письмо потому, что Вы (либо кто-то другой) отправил запрос на смену пароля для' +
+                 ' доступа к  Вашему аккаунту.\n\n' +
+                 'Пожалуйста перейдите по следующей сслыке, либо скопирйте и вставьте ее в адресную строку вашего' +
+                 ' браузера что бы завершить процесс смены пароля:\n\n' +
                  'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-                 'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+                 'Ссылка действительна в течение 1-го Часа. \n\n' +
+                 'Если Вы не отправляли подобный запрос, то не обращайте внимания на это письмо.\n'
       };
 
       mailTransporter.sendMail(mailOptions, function (err, info) {
@@ -146,59 +149,76 @@ var postReset = function (req, res) {
         // Ищем пользователя с токеном и меняем пароль
         function (done) {
           User.findOne({
-                resetPasswordToken:   req.params.token,
-                resetPasswordExpires: {$gt: Date.now()}
-              },
-              function (err, user) {
-                console.log(err);
-                if (!user) {
-                  // TODO: -Выдать сообщение что пароль не удалось сменить из-за не действительнго токена или истекшего срока его действия
-                  return res.redirect('back');
-                }
-                // Меняем пароль
-                user.password = req.body.password;
-                user.resetPasswordToken = undefined;
-                user.resetPasswordExpires = undefined;
-
-                user.save(function (err) {
-                  if (err) return done(err);
-                  //Сохранение прошло успешно. Есть Объект пользователя. Отдаем его в login фунцию которую навешивает
-                  // Passport
-                  req.login(user, {}, function (err) {
-                    //если в процессе логина поймали ошибку отдаем ее в наш обработчик
-                    if (err) {
-                      return done(err);
-                    }
-                    done(err, user);
-                  });
-                });
-              });
+            'resetPasswordToken':   String(req.params.token),
+            'resetPasswordExpires': {$gt: new Date}
+          }, done)
         },
-        // Если пролем со сменой пароля небыло , отпарвляем письмо подтверждение
+        // Пользователя нашли! Пытаемся установить пароль,
         function (user, done) {
-          var smtpTransport = nodemailer.createTransport('SMTP', {
-            service: 'SendGrid',
-            auth:    {
-              user: '!!! YOUR SENDGRID USERNAME !!!',
-              pass: '!!! YOUR SENDGRID PASSWORD !!!'
+          if (!user) {
+            // TODO: -Выдать сообщение что пароль не удалось сменить из-за не действительнго токена или истекшего срока его действия
+            req.flash('error', 'Пароль не удалось сменить из-за не действительнго токена или истекшего срока его действия');
+            return res.status(400).redirect('back');
+          }
+          // Меняем пароль
+          user.password = req.body.password;
+          user.resetPasswordToken = undefined;
+          user.resetPasswordExpires = undefined;
+
+          user.save(function (err) {
+            if (err) {
+              logger.debug('Ошибка при сохранении пользователя - ', err.message);
+              // В процессе сохранения данных была ошибка. Если Ошибка с Валидацией. Обработаем ее
+              if (err.name === 'ValidationError') {//-> Это наша ошибка Валидации данных из Mongoose
+                var errMsgList = [];
+
+                if (err.errors.emailAddress) {
+                  logger.info("Ошибка валидации Email пользователя: %s", err.errors.emailAddress.message);
+                  req.flash('error', err.errors.emailAddress.message);
+                  errMsgList.push(err.errors.emailAddress.message);
+                }
+
+                if (err.errors.password) {
+                  logger.info("Ошибка валидации пароля пользователя: %s", err.errors.password.message);
+                  req.flash('error', err.errors.password.message);
+                  errMsgList.push(err.errors.password.message);
+                }
+              }
+
+              return done(err);
             }
+            //Сохранение прошло успешно. Есть Объект пользователя. Отдаем его в login фунцию которую навешивает  Passport
+            req.login(user, function (err) {
+              //если в процессе логина поймали ошибку отдаем ее в наш обработчик
+              return done(err, user);
+            });
           });
+        },
+        // Если со сменой пароля небыло проблем , отпарвляем письмо подтверждение
+        function (user, done) {
+          var mailTransporter = nodemailer.createTransport(config.get('nodemailer:transport'));
+
+          // TODO:  -шаблон писема подтверждения сброса пароля https://github.com/nodemailer/nodemailer#using-templates
           var mailOptions = {
-            to:      user.email,
-            from:    'passwordreset@demo.com',
-            subject: 'Your password has been changed',
-            text:    'Hello,\n\n' +
-                     'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
+            to:      user.userdata.emailAddress,
+            from:    config.get('nodemailer:mailOptions:from'),
+            subject: 'LOFTOGRAM: Ваш Пароль был изменен!',
+            text:    'Здравствуйте,\n\n' +
+                     'Пароль вашего аккаунта с E-mail:' + user.userdata.emailAddress + ' был успешно изменен!'
           };
-          smtpTransport.sendMail(mailOptions, function (err) {
-            req.flash('success', 'Success! Your password has been changed.');
-            done(err);
+
+          mailTransporter.sendMail(mailOptions, function (err, info) {
+            if (err) return done(err);
+            // TODO:  - инфо о том что письмо отправлено на указанный емайл
+            req.flash('success', 'Ваш Пароль успешно изменен!.');
+            return done(err, 'Success');
           });
         }
       ],
       // Все ок. Отправляем на Главную
-      function (err) {
-        res.redirect('/');
+      function (err, result) {
+        if (err) return res.status(400).redirect('back');
+        res.status(200).redirect('/')
       });
 };
 

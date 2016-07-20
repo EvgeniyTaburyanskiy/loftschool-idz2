@@ -36,6 +36,16 @@ html.no-js(lang= "ru")
     | <p class="browserupgrade">Вы используете браузер <span class="b">устаревшей</span> версии. Пожалуйста <a href="http://browsehappy.com/">обновите ваш браузер</a> что бы насладиться всеми возможностями работы в Интернет.</p>
     | <![endif]-->
 
+    .container
+      if messages.error
+        .alert.alert-danger
+          div= messages.error
+      if messages.info
+        .alert.alert-info
+          div= messages.info
+      if messages.success
+        .alert.alert-success
+          div= messages.success
     //-Add your site or application content here
     block APP_content
 

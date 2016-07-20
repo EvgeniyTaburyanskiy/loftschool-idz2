@@ -54,11 +54,10 @@ var _router = function (app) {
 
   router.route('/reset')
   .get(csrfProtection, controllers.auth.getfogot)     //-> Отдаем страницу Восстановления пароля
-  .post(csrfProtection, controllers.auth.postfogot);  //-> Генерим токен и отправляем ссылку на указанный
-  // емайл
+  .post(csrfProtection, controllers.auth.postfogot);  //-> Генерим токен и отправляем ссылку на указанный емайл
 
   router.route('/reset/:token')
-  .get(csrfProtection, controllers.auth.getreset)     //-> Проверяем токен и выдаем форму смены пароля
+  .get(csrfProtection, controllers.auth.getreset)     //-> Проверяем токен и выдаем страницу смены пароля
   .post(csrfProtection, controllers.auth.postreset);  //-> Обновляем пароль
 
   // ALBUM ROUTES ==============================================
