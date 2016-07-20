@@ -1,54 +1,57 @@
 extends ../_template
 
 block APP_content
-  .main
+  .b-w
     div.parallax
       - var parallaxImgs = ["assets/img/01.png","assets/img/02.png","assets/img/03.png","assets/img/04.png","assets/img/05.png","assets/img/06.png"]
       each item, key in parallaxImgs
         div.parallax-layer(data-key=key)
           img.parallax-layer__img(src=item alt="parallax layer")
-    .flip-cont
-      .flipper
-        .front
-          .hello-tx Добро пожаловать
-          .dscr-tx Перед вами сервис, который поможет вам организовать свои фотографии в альбомы и поделиться ими со всем миром!
+    .flip-cnt-w
+      .flip-cnt
+        .flip-cnt__front
+          .flip-cnt__t Добро пожаловать
+          .flip-cnt__tx Перед вами сервис, который поможет вам организовать свои фотографии в альбомы и поделиться ими со всем миром!
           .card
-            .autorise_section
-              form.mail.f-itx(name="test" method="post" action="#")
-                input.itx(type="text" placeholder="Электронная почта" size="40")
-                input.pass.itx(type="text" placeholder="Пароль" size="40")
-            a.pass-a-tx(href="#") Забыли пароль?
-            .enter-btn
+            .card__auth-sect
+              form.card-form(name="test" method="post" action="#")
+                .card-input
+                  input.card__it(type="text" placeholder="Электронная почта" size="40")
+                .card-input
+                  input.card__it(type="text" placeholder="Пароль" size="40")
+            a.card-a(href="#") Забыли пароль?
+            .btn
               +btnEnter
-            .registration
-              .registration-tx Нет аккаунта?
-              a.registration-a(href="#") Зарегистрироваться
-        .back
-          .hello-tx Регистрация
+            .card__t Нет аккаунта?
+              a.card-a(href="#") Зарегистрироваться
+        .flip-cnt__back
+          .flip-cnt__t Регистрация
           .card
-            .autorise_section
-              form.name.f-itx(name="test" method="post" action="#")
-                input.itx(type="text" placeholder="Имя" size="40")
-                input.itx(type="text" placeholder="Электронная почта" size="40")
-                input.itx(type="text" placeholder="Пароль" size="40")
-              .registration
-                .registration-tx Ваши данные остаются строго конфиденциальны
-            .enter-btn
+            .card__auth-sect
+              form.card-form(name="test" method="post" action="#")
+                .card-input
+                  input.card__it(type="text" placeholder="Имя" size="40")
+                .card-input
+                  input.card__it(type="text" placeholder="Электронная почта" size="40")
+                .card-input
+                  input.card__it(type="text" placeholder="Пароль" size="40")
+              .reg
+                .card__tx Ваши данные остаются строго конфиденциальны
+            .btn
               +btnCreateAcc
-            .registration
-              .registration-tx Уже зарегистрированы?
-              a.registration-a(href="#") Войти
-      .pass-recovery.hidden
-        .hello-tx Восстановление пароля
+            .card__tx Уже зарегистрированы?
+              a.card-a(href="#") Войти
+      .pass-rec.hidden
+        .flip-cnt__t Восстановление пароля
         .card
-          .forget-pass-tx Забыли пароль?
-          .registration Ничего страшного, введите свой и мы вышлем вам инструкции по восстановлению пароля
-          .autorise_section
-            form.mail.f-itx(name="test" method="post" action="#")
-              input.itx(type="text" placeholder="Электронная почта" size="40")
-          .enter-btn
-            +btnCreateAcc
-          .registration
-            .registration-tx Вспомнили пароль?
-            a.registration-a(href="#") Войти
-    footer.footer Создано командой профессионалов на продвинутом курсе по вебразработке от Loftschool
+          .card__t.bold Забыли пароль?
+          .card__tx Ничего страшного, введите свой и мы вышлем вам инструкции по восстановлению пароля
+          .card__auth_sect
+            form.card-form(name="test" method="post" action="#")
+              .card-input.lined
+                input.card__it(type="text" placeholder="Электронная почта" size="40")
+          .btn
+            +btnRecreatePass
+          .card__tx Вспомнили пароль?
+            a.card-a(href="#") Войти
+    footer.f Создано командой профессионалов на продвинутом курсе по вебразработке от Loftschool
