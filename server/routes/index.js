@@ -1,6 +1,7 @@
 /**
+ * PUBLIC ROUTER
  * Промежуточный обработчик уровня маршрутизатора
- * Обрабатывает маршруты
+ * Обрабатывает маршруты Публичные
  */
 
 /**
@@ -9,6 +10,25 @@
 var logger = require('../utils/winston')(module);
 var checkAuth = require('../middleware/checkAuth');
 var loadUser = require('../middleware/loadUser');
+var config = require('../utils/nconf');
+var router = require('express').Router();
+var csrf = require('csurf');
+var route_params = require('./api/routeparams.js');
+var csrfProtection = csrf(config.get('csrf')); //-> add req.csrfToken() function
+
+/**
+ * ROUTING CONTROLLERS
+ */
+var controllers = {
+  main:         require('./main'),         //-> Обработчик Маршрута Гланая стр
+  auth:         require('./auth'),         //-> Обработчик Маршрута Авторизация/Регистрация/Восстановление пароля
+  album:        require('./albums'),       //-> Обработчик Маршрута Альбом
+  users:        require('./users'),        //-> Обработчик Маршрута Пользователь
+  search:       require('./search'),       //-> Обработчик Маршрута Поиска
+  error:        require('./error'),        //-> Обработчик Ошибочных запросов
+  route_params: require('./api/routeparams') //-> Обработчик Параметров
+};
+
 
 /**
  * Router
@@ -17,58 +37,67 @@ var loadUser = require('../middleware/loadUser');
  * @private
  */
 var _router = function (app) {
-  var router = require('express').Router();
-  /**
-   * ROUTING CONTROLLERS
-   */
-  var controllers = {
-    main:   require('./main'),         //-> Обработчик Маршрута Гланая стр
-    auth:   require('./auth'),         //-> Обработчик Маршрута Авторизация/Регистрация/Восстановление пароля
-    albums: require('./albums'),       //-> Обработчик Маршрута Альбом
-    users:  require('./users'),        //-> Обработчик Маршрута Пользователь
-    search: require('./search'),       //-> Обработчик Маршрута Поиска
-    error:  require('./error')         //-> Обработчик Ошибочных запросов
-  };
 
-  router.use(function Logger(req, res, next) {
-    next();
-  });
+ // router.param('user_id',route_params);          //->
 
   // HOME ROUTES ==============================================
-  router.all('/', checkAuth);
-  router.get('/', loadUser, controllers.main.home);
+  router.route('/')
+  .all(checkAuth, loadUser)
+  .get(controllers.main.getHome); //-> Выдаем Гл страницу
 
   // AUTH ROUTES ==============================
+  router.get('/auth', csrfProtection, controllers.auth.signin);//-> Отдаем страницу Авторизации/Регистрации/Восстановления пароля
+  router.all('/auth/signout', controllers.auth.signout);       //-> Любой метод =  Выход из Системы
 
-  router.get('/auth', controllers.auth.get); //-> Отдаем страницу Авторизации/Регистрации/Восстановления пароля
-
-  router.post('/auth/signin',  controllers.auth.post.signin); //-> Вход в Систему
-
-  router.all('/auth/signout', controllers.auth.post.signout);//-> GET/POST  Выход из Системы 
-
-  router.post('/auth/signup', controllers.auth.post.signup); //-> Регистрация
-
-  router.post('/auth/fogot', controllers.auth.post.fogot); //-> Восстановление пароля
+  // RESET PASSWORD ROUTES ==============================
+  router.route('/reset')
+  .get(controllers.auth.getfogot)     //-> Редирект на страницу Авторизации/Восстановления пароля
+  
+  router.route('/reset/:token')
+  .get(csrfProtection, controllers.auth.getreset)     //-> Проверяем токен(из письма) и выдаем страницу смены пароля
 
   // ALBUM ROUTES ==============================================
-  router.all('/albums', checkAuth);
-  router.all('/albums/*', checkAuth);
-
-  router.get('/albums', controllers.albums.albums);
+  router.route(['/albums', '/albums/*'])
+  .all(checkAuth, loadUser, csrfProtection);
+  /*
+   Поумолчанию Отдаем страницу альбомов текущего пользователя(собственные альбомы) редирект на страницу Пользователь
+   С параметром отдаем страницу с фотками конкретного альбома 
+   */
+  router.get('/albums', controllers.album.get);
+  router.get('/albums/:album_id', controllers.album.getById);      //-> Отдаем страницу альбом-детальная по его ID
 
   // USERS ROUTES ==============================================
-  router.all('/users', checkAuth);
-  router.all('/users/*', checkAuth);
+  router.route(['/users', '/users/*'])
+  .get(checkAuth, loadUser, csrfProtection);
 
-  router.get('/users', controllers.users.users);
-  router.get('/users/:id', controllers.users.user);
+  /*
+   Поумолчанию Отдаем страницу  Текущего  пользователя (список альбомов пользователя, ЛичКабинет)
+   Если задан в запросе req.query набор уточнений. то Ищем в нем UID и отдаем как /users/:user_id
+   (список альбомов пользователя + шапка с данными пользователя)
+   */
+  router.get('/users', controllers.users.get);
+  
+  /*
+   Отдаем Персональную страницу  пользователя по ID
+   (список альбомов пользователя + шапка с данными пользователя)
+   */
+  router.get('/users/:user_id', controllers.users.get);
 
   // SEARCH ROUTES ==============================================
+  router.route(['/search', '/search/*'])
+  .all(checkAuth, loadUser);
 
-  router.all('/search', checkAuth);
-  router.all('/search/*', checkAuth);
+  /*
+   Поумолчанию Отдаем пустую страницу поиска
+   Если задан в запросе req.query набор уточнений. то Ищем в нем "q" и отдаем с результатом поиска.
+   Так же как /search/:search_words
+   */
+  router
+  .get('/search', controllers.search.search)
+  .post('/search', controllers.search.search)
+  .get('/search/:search_words', controllers.search.search)
+  .post('/search/:search_words', controllers.search.search);
 
-  router.get('/search', controllers.search.search);
 
   // DEFAULT  Route 404 ==============================================
   router.use(controllers.error.err_404);

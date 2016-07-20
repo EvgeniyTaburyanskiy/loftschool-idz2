@@ -6,10 +6,9 @@ var ObjectID = require('mongodb').ObjectID;
 var User = require('../db/models/User').mUser;
 
 /**
- * Мидлвар Подгружает данные пользователя на каждом Хите.
- * Если в сессии есть id пользователя. (т.е. он авторизован)
+ * Мидлвар Подгружает данные пользователя на каждом Хите. в res.locals.user
  *
- * Чтобы он работал, ему нужна сессия.
+ * Чтобы он работал, ему нужна сессия. и Passport
  * т.е. Мидлвар должен быть после обработчика сессий.
  *
  * @param req
@@ -21,17 +20,6 @@ module.exports = function (req, res, next) {
   res.locals.user = null;
   if (!req.session.passport.user) return next();
 
-  try {
-    var uid = new ObjectID(req.session.passport.user);
-  }
-  catch (err) {
-    return next(err);
-  }
-
-  User.findById(uid, 'userdata').lean().exec(function (err, user) {
-    if (err) return next(err);
-
-    res.locals.user = user.userdata;
-    next();
-  });
+  res.locals.user = req.user;
+  next();
 };

@@ -1,3 +1,6 @@
+include ./helpers/variables.pug
+include ./helpers/mixins.pug
+
 doctype html
 | <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 | <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
@@ -14,8 +17,7 @@ html.no-js(lang= "ru")
     meta(name='description', content='')
     meta(name='viewport',content='width=device-width, initial-scale=1.0')
 
-    //- TODO : Place favicon.ico and icons png in the images/favicon directory
-    //+FavIcon
+    +FavIcon
 
     block head-css
       link(rel='stylesheet' href='/assets/css/foundation.css')
@@ -34,18 +36,30 @@ html.no-js(lang= "ru")
     | <p class="browserupgrade">Вы используете браузер <span class="b">устаревшей</span> версии. Пожалуйста <a href="http://browsehappy.com/">обновите ваш браузер</a> что бы насладиться всеми возможностями работы в Интернет.</p>
     | <![endif]-->
 
-    //-Add your site or application content here
-    - if (messages)
-      -if(messages.error)
-        .error= messages.error
-        -console.log(messages)
+    .container
+      if messages.error
+        .alert.alert-danger
+          div= messages.error
+      if messages.info
+        .alert.alert-info
+          div= messages.info
+      if messages.success
+        .alert.alert-success
+          div= messages.success
+    .container
+      if user
+        div= JSON.stringify(user)
+        br
 
+      if $user
+        div= JSON.stringify($user)
+    //-Add your site or application content here
     block APP_content
 
 
     block footer-scripts
-      script(src='/assets/js/foundation.js')
-      script(src='/assets/js/app.js')
+      script(src='/assets/js/foundation.js' defer)
+      script(src='/assets/js/app.js' defer)
 
     //- TODO: Change Google Analytics ID
     //- +GA(siteGoogleAnalyticsCode)

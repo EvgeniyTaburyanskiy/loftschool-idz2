@@ -15,14 +15,20 @@ var err_404 = function (req, res, next) {
 
 var err_all = function (err, req, res, next) {
 
+  // Все Http ошибки и просто с цифроыми кодами обрабатываем сами
   if (typeof  err === 'number') {
     err = new HttpError(err);
   }
+  // Проверяем на ошибку  проверки CSRF токена
+  if (err.code === 'EBADCSRFTOKEN') { //-> Ошибка проверки токена CSRF
+    err = new HttpError(400, 'EBADCSRFTOKEN', err.message);
+  }
+
   // Все ошибки нашего класса  обрабатываем собственным  middleware sendHttpError
   if (err instanceof HttpError) {
     res.sendHttpError(err);
   }
-  // Все остальные Ошибки если в продакшене то отдаем в sendHttpError ,либо если дев режиме то отдаем Express
+  // Все остальные Ошибки если в продакшене то отдаем в sendHttpError как 500 ,либо если дев режиме то отдаем Express
   else {
     if (ENV === 'development') {
       // В Dev смотрим что произошло и разрешаем Express(у) решать как дальше поступать.

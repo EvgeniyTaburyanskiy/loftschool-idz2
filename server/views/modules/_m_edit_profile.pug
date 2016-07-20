@@ -1,0 +1,54 @@
+include ../helpers/mixins.pug
+.edit-profile-wrap
+    .edit-profile
+        .edit-profile__h
+            h4.h__title Редактировать профиль
+            +btnCancelPop
+        .edit-profile__b
+            form.b__form
+                .profile__field.profile__field--direction
+                    .field__lbl
+                        label(for="name") Имя
+                    input#name.field__it.field__it--name(type="text" placeholder='Имя')
+                    input.field__it.field__it--surname(type="text" placeholder='Фамилия')
+                .profile__field.profile__field--direction
+                    .field__lbl.field__lbl-top
+                        label(for="descr") О себе
+                    textarea#descr.field__itx
+                .profile__field
+                    .field__cover.profile-av
+                        .avatar-cover
+                            img.avatar-cover__img(src='assets/img/jason.jpg' alt='avatar')
+                    .field__cover-info.profile-cover
+                        +btnCustom('Загрузить фотографию')
+                        .cover-info__text (файл должен быть размером не более&nbsp;
+                            span 1024 КБ)
+                .profile__field
+                    .field__cover.profile-av
+                        .avatar-cover
+                            img.avatar-cover__img(src='assets/img/jason.jpg' alt='avatar')
+                    .field__cover-info.profile-cover
+                        +btnCustom('Загрузить фон')
+                        .cover-info__text (файл должен быть размером не более&nbsp;
+                            span 1024 КБ)
+        .devider
+        .edit-profile__b
+            form.b__form
+                .profile__field.profile__field--direction
+                    .field__lbl
+                        label(for="vk") Вконтакте
+                    input#vk.field__it.field__it--social(type="text" placeholder='https://vk.com/')
+                .profile__field.profile__field--direction
+                    .field__lbl
+                        label(for="fb") Facebook
+                    input#fb.field__it.field__it--social(type="text" placeholder='https://www.facebook.com/')
+                .profile__field.profile__field--direction
+                    .field__lbl
+                        label(for="email") Email
+                    input#email.field__it.field__it--social(type="text" placeholder='info@domain.com')
+                .profile__field.profile__field--direction
+                    .field__lbl
+                        label(for="twit") Twitter
+                    input#twit.field__it.field__it--social(type="text" placeholder='https://twitter.com/')
+        .edit-profile__f
+            +formMenu

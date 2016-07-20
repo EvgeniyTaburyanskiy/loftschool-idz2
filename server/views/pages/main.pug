@@ -1,0 +1,43 @@
+extends ../_template
+block APP_content
+  header.m-h-w
+    div.m-h
+      a.m-h__a(href="#")
+        img.m-h__img(src="/assets/img/jason.jpg" alt="jason")
+      div.m-person
+        p.m-person__n Джейсон Стэтхем
+        p.m-person__tx Я голливудский актер, мне уже лет 50. Люблю сниматься в боевиках и активный отдых.
+        div.person-soc
+          +socIconVk
+          +socIconFb
+          +socIconTw
+          +socIconGp
+          +socIconEm
+    div.m-controls
+      div.controls-w
+        +btnEdit
+      div.controls-w
+        +btnExit
+  main.m-main
+    section.main-search
+      form.main-search__form(action="#")
+        input.main-search__input(type="search" name="search" id="search" placeholder="Исследовать мир")
+        +use('search','main-search__svg')
+    section.main-new-w
+      div.main-new
+        h1.main-new__t Новое в мире
+        div.new-photos
+          - var arr = [1,2,3,4,5,6]
+          for item in arr
+             include ../modules/_photo_tile.pug
+        div.new-show
+          +btnShow
+    section.main-albums-w
+      div.main-albums
+        h2.main-albums__t Мои альбомы
+        div.albums-photos
+          for item in arr
+            include ../modules/_photo_album.pug
+      div.albums-controls
+        +btnAdd
+  include ../modules/_footer.pug

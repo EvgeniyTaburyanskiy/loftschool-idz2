@@ -1,0 +1,39 @@
+extends ../_template
+block APP_content
+  h.a-h-w
+    div.a-h-mask
+    div.a-h
+      div.a-person
+        a.a-person__a(href="#")
+          img.a-person__img(src="/assets/img/jason.jpg" alt="jason")
+        p.a-person__n Джейсон Стэтхем
+      div.a-desc
+        h1.a-desc__t Лесные прогулки
+        p.a-desc__tx.
+          Фотографии природы леса, озера и гор. Как прекрасно созерцать дивные утренние
+          пейзажи в тени горного дерева, размышляя о вечном и главном. Запах озера и
+          свежих опилок навевает воспоминания.
+      div.a-controls
+        +btnHome
+        +btnEdit
+  main.a-main
+    section.a-info-w
+      div.a-info
+        div.info-photo
+          +use('cam','info-photo__svg')
+          span.info-photo__count 18
+          span.info-photo__span Фотографий
+        div.info-likes
+          +use('like','info-likes__svg')
+          span.info-likes__count 12
+          span.info-likes__span Лайков
+        div.info-comments
+          +use('comments','info-comments__svg')
+          span.info-comments__count 4
+          span.info-comments__span Комментария
+    section.a-photos-w
+      div.a-photos
+        - var arr = [1,2,3,4,5,6]
+        for item in arr
+          include ../modules/_a_photo_tile.pug
+  include ../modules/_footer.pug

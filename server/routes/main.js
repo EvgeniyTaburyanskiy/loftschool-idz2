@@ -4,13 +4,14 @@
 var logger = require('../utils/winston')(module);
 
 /* GET home page. */
-var home = function (req, res) {
-
-  res.render(
-      'index',
-      {title: 'home'}
+var getHome = function (req, res) {
+  res.render('main',
+      {
+        title: 'HOME'
+      }
   );
-
 };
 
-module.exports.home = home;
+exports = module.exports = {
+  getHome: getHome
+};

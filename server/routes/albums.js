@@ -2,16 +2,26 @@ var logger = require('../utils/winston')(module);
 var HttpError = require('../middleware/HttpError').HttpError;
 
 /* GET albums page. */
-var albums = function (req, res, next) {
-  res.render('index', {title: 'albums'});
+var get = function (req, res, next) {
+  // TODO: Обрабатывать reques там может быть задан ID альбома ?album_id=Num
+  res.render('person', {
+    title: 'person'
+  });
 };
 
 
 /* GET album by ID. */
-var album = function (req, res, next) {
-  res.render('index', {title: 'album'});
+var getById = function (req, res, next) {
+  var ID = req.params.id;
+
+  res.render('album', {
+    title: 'album By ID'
+  });
 };
 
 
-module.exports.albums = albums;
-module.exports.album = album;
+exports = module.exports = {
+  get:     get,
+  getById: getById
+};
+

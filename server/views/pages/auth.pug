@@ -1,10 +1,11 @@
-extends ./_template
+extends ../_template
 
 block APP_content
 
   h4 Register your account
-  form(action='/auth/signup' method='post')
+  form(action='/api/auth/signup' method='post')
     fieldset
+      input(type='hidden' name='_csrf' value= csrfToken)
       label(for='username') Email
       input(type='email' name='username' placeholder='Your Email')
       label(for='password') Password
@@ -13,8 +14,9 @@ block APP_content
 
   br
   h4 Login to your account
-  form(action='/auth/signin' method='post')
+  form(action='/api/auth/signin' method='post')
     fieldset
+      input(type='hidden' name='_csrf' value= csrfToken)
       label(for='username') Email
       input(type='email' name='username' placeholder='Your Email')
       label(for='password') Password
@@ -23,12 +25,12 @@ block APP_content
 
   br
   h4 Forgot Password
-  form(action='/auth/fogot' method='POST')
+  form(action='/api/auth/fogot' method='POST')
     fieldset
+      input(type='hidden' name='_csrf' value= csrfToken)
       label(for='username') Email
-      input(type='text' name='username' placeholder='Your Email' autofocus)
+      input(type='email' name='email' placeholder='Your Email' autofocus)
       button(type='submit') Reset Password
-
   br
   h4 LOGOUT
     br
