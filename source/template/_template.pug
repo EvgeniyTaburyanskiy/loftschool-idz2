@@ -38,58 +38,9 @@ html.no-js(lang= "ru")
 
     //-Add your site or application content here
     block APP_content
+// <<<<<<< HEAD
     
-    .main
-      div.parallax
-        - var parallaxImgs = ["assets/img/01.png","assets/img/02.png","assets/img/03.png","assets/img/04.png","assets/img/05.png","assets/img/06.png"]
-        each item, key in parallaxImgs
-          div.parallax-layer(data-key=key)
-            img.parallax-layer__img(src=item alt="parallax layer")
-      .flip-cont
-        .flipper
-          .front
-            .hello-tx Добро пожаловать
-            .dscr-tx Перед вами сервис, который поможет вам организовать свои фотографии в альбомы и поделиться ими со всем миром!
-            .card
-              .autorise_section
-                form.mail.f-itx(name="test" method="post" action="#")
-                  input.itx(type="text" placeholder="Электронная почта" size="40")
-                  input.pass.itx(type="text" placeholder="Пароль" size="40")
-              a.pass-a-tx(href="#") Забыли пароль?
-              .enter-btn
-                +btnEnter
-              .registration
-                .registration-tx Нет аккаунта?
-                a.registration-a(href="#") Зарегистрироваться
-          .back
-            .hello-tx Регистрация
-            .card
-              .autorise_section
-                form.name.f-itx(name="test" method="post" action="#")
-                  input.itx(type="text" placeholder="Имя" size="40")
-                  input.itx(type="text" placeholder="Электронная почта" size="40")
-                  input.itx(type="text" placeholder="Пароль" size="40")
-                .registration
-                  .registration-tx Ваши данные остаются строго конфиденциальны
-              .enter-btn
-                +btnCreateAcc
-              .registration
-                .registration-tx Уже зарегистрированы?
-                a.registration-a(href="#") Войти
-        .pass-recovery.hidden
-          .hello-tx Восстановление пароля
-          .card
-            .forget-pass-tx Забыли пароль?
-            .registration Ничего страшного, введите свой и мы вышлем вам инструкции по восстановлению пароля
-            .autorise_section
-              form.mail.f-itx(name="test" method="post" action="#")
-                input.itx(type="text" placeholder="Электронная почта" size="40")
-            .enter-btn
-              +btnCreateAcc
-            .registration
-              .registration-tx Вспомнили пароль?
-              a.registration-a(href="#") Войти
-      footer.footer Создано командой профессионалов на продвинутом курсе по вебразработке от Loftschool
+// >>>>>>> afabe6d2b07364f0a07c206563cc4d5d596f21fb
     block footer-scripts
       script(src='/assets/js/foundation.js' defer)
       script(src='/assets/js/app.js' defer)
