@@ -83,6 +83,12 @@ mixin btnExit
     button.exit-block__btn
       +use('off', 'exit-block__svg')
       span.exit-block__tx Выйти
+//выдвижная кнопка Домой
+mixin btnHome
+  div.exit-block
+    button.exit-block__btn.home-block__btn
+      +use('home', 'exit-block__svg')
+      span.exit-block__tx Домой
 //выдвижная кнопка Добавить
 mixin btnAdd
   div.add-block
