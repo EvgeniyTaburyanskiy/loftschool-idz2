@@ -41,30 +41,6 @@
   align-items: center;
   padding: 0 20px;
   margin-top: auto;
-  .delete-block {
-    margin-left: auto;
-  }
-  .delete-block__svg {
-    width: 12px;
-    height: 16px;
-  }
-  @include mediamax(596px) {
-    .delete-block {
-      width: 40px;
-      height: 40px;
-    }
-    .delete-block__tx {
-      display: none;
-    }
-    .delete-block__btn {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  }
-  @include mediamax(596px) {
-    padding: 0 10px;
-  }
 }
 
 .add-photo__b {

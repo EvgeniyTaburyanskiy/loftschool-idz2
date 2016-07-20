@@ -1,18 +1,19 @@
 include ../helpers/mixins.pug
-.photo-edit
-    .photo-edit__h
-        h4.h__title Редактировать фотографию
-        +btnCancelPop
-    .photo-edit__b
-        form.b__form
-            .form__field.form__field--direction
-                .field__lbl
-                    label(for="name") Название
-                input#name.field__it(type="text")
-            .form__field.form__field--direction
-                .field__lbl.field__lbl-top
-                    label(for="descr") Описание
-                textarea#descr.field__itx
-    .photo-edit__f
-        +formMenu
-        +btnDelete
+.photo-edit-wrap
+    .photo-edit
+        .photo-edit__h
+            h4.h__title Редактировать фотографию
+            +btnCancelPop
+        .photo-edit__b
+            form.b__form
+                .form__field.form__field--direction
+                    .field__lbl
+                        label(for="name") Название
+                    input#name.field__it(type="text")
+                .form__field.form__field--direction
+                    .field__lbl.field__lbl-top
+                        label(for="descr") Описание
+                    textarea#descr.field__itx
+        .photo-edit__f
+            +formMenu
+            +btnDelete
