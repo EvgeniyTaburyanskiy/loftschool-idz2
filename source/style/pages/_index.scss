@@ -85,7 +85,7 @@ body {
 }
 .hello-tx {
     margin: 0 0 20px 0;
-    @include type-setting(XL);
+    font-size: 2.5625rem;
     font-family : 'Panton';
     font-weight : bold;
     width: 100%;
@@ -146,15 +146,15 @@ body {
 }
 .itx::-moz-placeholder
 {
-    color: #ccc;
+    color: #666;
 }
 .itx:-moz-placeholder
 {
-    color: #ccc;
+    color: #666;
 }
 .itx::-webkit-input-placeholder
 {
-    color: #ccc;
+    color: #666;
 }
 .enter-btn {
     margin: auto;

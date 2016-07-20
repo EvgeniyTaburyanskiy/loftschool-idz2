@@ -7,7 +7,7 @@ block APP_content
       each item, key in parallaxImgs
         div.parallax-layer(data-key=key)
           img.parallax-layer__img(src=item alt="parallax layer")
-    .flip-cont.hover
+    .flip-cont
       .flipper
         .front
           .hello-tx Добро пожаловать
@@ -16,7 +16,6 @@ block APP_content
             .autorise_section
               form.mail.f-itx(name="test" method="post" action="#")
                 input.itx(type="text" placeholder="Электронная почта" size="40")
-              form.f-itx(name="test" method="post" action="#")
                 input.pass.itx(type="text" placeholder="Пароль" size="40")
             a.pass-a-tx(href="#") Забыли пароль?
             .enter-btn
@@ -30,9 +29,7 @@ block APP_content
             .autorise_section
               form.name.f-itx(name="test" method="post" action="#")
                 input.itx(type="text" placeholder="Имя" size="40")
-              form.mail.f-itx(name="test" method="post" action="#")
                 input.itx(type="text" placeholder="Электронная почта" size="40")
-              form.pass.f-itx(name="test" method="post" action="#")
                 input.itx(type="text" placeholder="Пароль" size="40")
               .registration
                 .registration-tx Ваши данные остаются строго конфиденциальны
