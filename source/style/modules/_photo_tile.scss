@@ -17,6 +17,7 @@
     height: rem(360px);
   }
   @include tablet() {
+    margin: 0 0 rem(10px);
     width: rem(300px);
     height: rem(310px);
   }

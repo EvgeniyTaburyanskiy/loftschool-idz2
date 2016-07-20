@@ -10,7 +10,7 @@
   flex: 0 0 rem(300px);
   width: 100%;
   //height: rem(240px);
-  background: linear-gradient(to right, rgba(#000,.5) 30%, transparent, rgba(#000,.3) 90%), url(../img/lake.jpg) no-repeat;
+  background: linear-gradient(to right, rgba(#000,.5) 30%, transparent), url(../img/lake.jpg) no-repeat;
   background-size: cover;
 }
 
@@ -20,6 +20,17 @@
   align-items: center;
   width: rem(1180px);
   height: 100%;
+  @include large() {
+    width: rem(1580px);
+  }
+  @include laptop() {
+    width: rem(720px);
+  }
+  @include tablet() {
+    width: rem(300px);
+    overflow: hidden; /* св-во для временного адаптива хедера */
+    flex-direction: column;
+  }
 }
 
 .m-h__a {
@@ -36,6 +47,16 @@
   @include large() {
     margin-right: rem(50px);
   }
+  @include laptop() {
+    width: rem(105px);
+    height: rem(105px);
+  }
+  @include tablet() {
+    margin-right: 0;
+    margin-top: rem(20px);
+    width: rem(55px);
+    height: rem(55px);
+  }
 }
 
 .m-h__img {
@@ -48,6 +69,9 @@
   min-height: 50%;
   flex-direction: column;
   justify-content: center;
+  @include tablet() {
+    align-items: center;
+  }
 }
 
 .m-person__n {
@@ -66,6 +90,7 @@
   text-shadow: 1px 1px 1px rgba(#000, .8);
   @include tablet() {
     font-size: rem(14px);
+    text-align: center;
   }
 }
 
@@ -80,6 +105,13 @@
   top: rem(20px);
   right: rem(40px);
   max-width: rem(155px);
+  @include tablet() { /* временный костыль для адаптива */
+    right: 50%;
+    display: flex;
+    justify-content: space-between;
+    margin-right: rem(-120px);
+    max-width: rem(500px);
+  }
 }
 
 .controls-w {
@@ -90,6 +122,12 @@
     display: block;
     content: '';
     clear: both;
+  }
+  @include tablet() { /* временный костыль для адаптива */
+    margin-left: rem(50px);
+    &:first-child {
+      order: 1;
+    }
   }
 }
 
@@ -114,7 +152,7 @@
   margin-top: rem(-60px);
 }
 
-.main-search__f {
+.main-search__form {
   position: relative;
   display: flex;
   flex: 0 0 rem(40px);
@@ -124,15 +162,29 @@
   @include large() {
     width: rem(1180px);
   }
+  @include laptop() {
+    width: rem(620px);
+  }
+  @include tablet() {
+    justify-content: center;
+    width: rem(300px);
+  }
 }
 
 .main-search__input {
   flex: 0 0 rem(380px);
   height: rem(40px);
-  padding-left: rem(45px);
+  padding: 0 rem(20px) 0 rem(45px);
   @include rounded(20px);
   border: none;
   outline: none;
+  @include laptop() {
+    flex: 0 0 rem(350px);
+  }
+  @include tablet() {
+    flex: 0 0 rem(300px);
+    font-size: rem(14px);
+  }
 }
 
 .main-search__svg {
@@ -142,6 +194,12 @@
   width: rem(16px);
   height: rem(16px);
   fill: #c5c5c5;
+  @include laptop() {
+    right: rem(315px);
+  }
+  @include tablet() {
+    right: rem(265px);
+  }
 }
 
 .main-new-w {
@@ -156,12 +214,27 @@
   flex-direction: column;
   width: rem(1180px);
   padding: rem(50px) 0;
+  @include large() {
+    width: rem(1580px);
+  }
+  @include laptop() {
+    width: rem(720px);
+  }
+  @include tablet() {
+    width: rem(300px);
+    padding: rem(30px) 0;
+  }
 }
 
 .main-new__t, .main-albums__t {
   margin: 0 0 rem(30px);
   font-size: rem(42px);
   font-family: 'Panton', sans-serif;
+  @include tablet() {
+    margin: 0 0 rem(22px);
+    font-size: rem(30px);
+    text-align: center;
+  }
 }
 
 .new-photos, .albums-photos {
@@ -189,6 +262,16 @@
   flex-direction: column;
   width: rem(1180px);
   padding: rem(50px) 0;
+  @include large() {
+    width: rem(1580px);
+  }
+  @include laptop() {
+    width: rem(720px);
+  }
+  @include tablet() {
+    width: rem(300px);
+    padding: rem(30px) 0;
+  }
 }
 
 .photo-tile {
@@ -209,6 +292,15 @@
     }
     &:nth-child(2n) {
       margin: 0 0 rem(20px);
+    }
+  }
+  @include tablet() {
+    margin: 0 0rem(10px);
+    &:nth-child(3n) {
+      margin: 0 0rem(10px);
+    }
+    &:nth-child(2n) {
+      margin: 0 0rem(10px);
     }
   }
 }
@@ -233,10 +325,23 @@
       margin: 0 0 rem(20px);
     }
   }
+  @include tablet() {
+    margin: 0 0rem(10px);
+    &:nth-child(4n) {
+      margin: 0 0rem(10px);
+    }
+    &:nth-child(3n) {
+      margin: 0 0rem(10px);
+    }
+  }
 }
 
 .albums-controls {
   position: absolute;
   top: rem(40px);
   right: rem(20px);
+  @include tablet() {
+    top: rem(25px);
+    right: rem(10px);
+  }
 }

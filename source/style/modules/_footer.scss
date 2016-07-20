@@ -2,6 +2,7 @@
 @import "../helpers/functions";
 
 .f-w {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex: 0 0 rem(80px);
@@ -9,7 +10,8 @@
   align-items: center;
   width: 100%;
   height: rem(80px);
-  background-color: rgba(#000, .7);
+  background: url(../img/lake.jpg) no-repeat center 100%;
+  background-size: cover;
   @include laptop() {
     flex: 0 0 rem(120px);
     height: rem(120px);
@@ -20,7 +22,18 @@
   }
 }
 
+.f-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(#000, .7);
+}
+
 .f {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex: 0 0 auto;
   max-height: rem(50px);
