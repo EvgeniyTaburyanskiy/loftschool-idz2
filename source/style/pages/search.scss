@@ -1,0 +1,102 @@
+@import "../helpers/mixins";
+@import "../helpers/functions";
+
+.s-h {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 rem(150px);
+  width: 100%;
+}
+
+.s-h__t {
+  font-family: 'Panton', sans-serif;
+  font-size: rem(42px);
+  @include tablet() {
+    padding-top: rem(20px);
+    font-size: rem(30px);
+  }
+}
+
+.s-return {
+  position: absolute;
+  top: rem(20px);
+  right: rem(40px);
+  @include tablet() {
+    top: rem(10px);
+    right: rem(10px);
+  }
+}
+
+.s-main-search {
+  flex-direction: row;
+  background-color: #f6f6f6;
+  justify-content: center;
+  @include tablet() {
+    flex: 0 0 rem(90px);
+    flex-direction: column;
+    justify-content: space-around;
+  }
+}
+
+.person-w {
+  display: flex;
+  flex: 0 0 rem(350px);
+  width: rem(350px);
+  margin-left: rem(20px);
+  @include tablet() {
+    display: none;
+  }
+}
+
+.a-person__n_black {
+  font-family: 'Panton', sans-serif;
+  font-size: rem(16px);
+  color: #323232;
+  @include tablet() {
+    font-size: rem(14px);
+  }
+}
+
+.show-new {
+  display: flex;
+  width: rem(450px);
+  justify-content: flex-start;
+  align-items: center;
+  @include laptop() {
+    width: rem(300px);
+  }
+  @include tablet() {
+    width: auto;
+  }
+}
+
+.show-new__btn {
+  height: rem(60px);
+  margin-left: rem(20px);
+  border: none;
+  background: none;
+  outline: none;
+  font-family: 'Panton', sans-serif;
+  font-size: rem(16px);
+  color: #28bbf0;
+  transition: color .2s;
+  cursor: pointer;
+  &:hover {
+    color: #24b0e3;
+  }
+  &:active {
+    transform: translateY(2px);
+  }
+  @include tablet() {
+    height: rem(30px);
+  }
+}
+
+.s-results__tx {
+  margin: 0 0 rem(30px);
+  font-family: 'Panton', sans-serif;
+  font-size: rem(21px);
+  color: #323232;
+}
