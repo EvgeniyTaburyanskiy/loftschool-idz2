@@ -52,7 +52,7 @@ body {
 .pass-recovery
 {
     display: flex;
-    width: 550px;
+    width: 100%;
     height: 350px;
 }
 .flipper
@@ -88,14 +88,15 @@ body {
     @include type-setting(XL);
     font-family : 'Panton';
     font-weight : bold;
-    width: 390px;
+    width: 100%;
     
     color: #fff;
 }
 .dscr-tx {
     margin: 0 0 25px 0;
+    padding: 0 10px;
     font-size: 1rem;
-    width: 550px;
+    width: 100%;
     @include type-setting(N);
     color: #fff;
 }
@@ -198,6 +199,7 @@ body {
 }
 .footer {
     position: absolute;
+    padding: 0 10px 0 10px;
     bottom: 10px;
     width: 100%;
     color: #fff;
