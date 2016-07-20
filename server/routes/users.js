@@ -4,32 +4,37 @@ var HttpError = require('../middleware/HttpError').HttpError;
 var ObjectID = require('mongodb').ObjectID;
 
 /* GET users page. */
-var getUsers = function (req, res, next) {
+var getUsersList = function (req, res, next) {
   User.find({}, 'userdata').lean().exec(function (err, users) {
     if (err) return next(err);
-
     res.json(users);
   });
 
   //res.render('index', {title: 'albums'});
 };
 
-/* GET user by ID. */
-var getUserById = function (req, res, next) {
-  try {
-    var uid = new ObjectID(req.params.id);
+var getUserPage = function (req, res, next) {
+
+  if (req.query.user_id) {
+    try {
+      var uid = new ObjectID(req.query.user_id);
+    }
+    catch (e) {
+      return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE'));
+    }
+    User.findById(uid, 'userdata').lean().exec(function (err, user) {
+      if (err) return next(err);
+      res.json(user.userdata);
+    });
   }
-  catch (e) {
-    return next(404);
+  else{
+    res.json(req.user.userdata);
   }
 
-  User.findById(uid, 'userdata').lean().exec(function (err, user) {
-    if (err) return next(err);
-
-    res.json(user.userdata);
-  });
 };
 
+exports = module.exports = {
+  list: getUsersList,
+  get:  getUserPage
+};
 
-module.exports.users = getUsers;
-module.exports.user = getUserById;

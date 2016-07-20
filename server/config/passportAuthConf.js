@@ -35,17 +35,16 @@ module.exports = function (passport) {
 
   /*
    * Стратегия Локальной Регистрации
-   */  
-   passport.use('local-signup', new AuthLocalStrategy(
-       {
-         usernameField: 'username',
-         passwordField: 'password'
-       },
-       function (username, password, done) {
-         return User.register(username, password, done);
-       }
-   )   );
-   
+   */
+  passport.use('local-signup', new AuthLocalStrategy(
+      {
+        usernameField: 'username',
+        passwordField: 'password'
+      },
+      function (username, password, done) {
+        return User.register(username, password, done);
+      }
+  ));
 
 
   /*
@@ -118,6 +117,6 @@ module.exports = function (passport) {
     User.findById(uid).lean().exec(function (err, user) {
       done(err, user);
     });
-  }); //-> Достаем
+  }); //-> Достаем в req.user
 }
 ;

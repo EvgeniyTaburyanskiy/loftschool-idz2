@@ -40,14 +40,14 @@ var schemaUserData = new Schema({
   },
   avatar:       {
     type:      String,
-    default:   '/images/no-avatar.png',
+    default:   '/img/no-avatar.png',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
     trim:      true,
     required:  true
   },
   imgURL:       {
     type:      String,
-    default:   '/images/no-user-bg.png',
+    default:   '/img/no-user-bg.png',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
     trim:      true,
     required:  true

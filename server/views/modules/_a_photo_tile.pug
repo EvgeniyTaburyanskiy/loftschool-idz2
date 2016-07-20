@@ -1,0 +1,15 @@
+include ../helpers/mixins.pug
+div.a-photo-tile
+  a.a-tile-top(href="#")
+    +use('loupe','a-tile-top__svg')
+    img.a-tile-top__img(src="assets/img/lake.jpg" alt="lake")
+    div.top-mask
+    div.a-tile-stats
+      +use('comments','a-tile-stats__svg')
+      span.a-tile-stats__span.a-tile-stats__span-comments 6
+      +use('like','a-tile-stats__svg')
+      span.a-tile-stats__span.a-tile-stats__span-likes 19
+  div.a-tile-bot
+    div.a-tile-menu
+      +use('edit','a-tile-menu__svg')
+      a.a-tile-menu__a(href="#") Прогулки по воде

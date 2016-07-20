@@ -1,0 +1,16 @@
+include ../helpers/mixins.pug
+.add-photo-wrap
+    .add-photo
+        .add-photo__h
+            h4.h__title Добавить фотографии
+            +btnCancelPop
+        .add-photo__b
+            .b__album-name
+                .name Название
+                .title {{some just created album name}}
+            .b__photo-container
+                +use('cam','icon-camera')
+                span.drag Перетащите фото сюда
+                span.file <span class="or">или</span> выберите файл
+        .add-photo__f
+            +formMenu

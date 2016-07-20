@@ -24,10 +24,11 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-server.listen(port);
-server.on('listening', function () {
-  logger.info('Express server listening on port ' + app.get('port'));
-  logger.info('Pokemon GO!');
+server.listen(port, '127.0.0.1');
+server.on('listening', function (err) {
+  var address = server.address();
+  logger.info('Express server listening on http://%s:%d', address.address, address.port);
+  logger.info('Loftogram GO!');
 });
 
 /**

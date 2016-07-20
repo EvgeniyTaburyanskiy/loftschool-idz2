@@ -35,8 +35,7 @@ var schemaUser = new Schema({
     default:   ''
   },
   resetPasswordExpires:   {
-    type:    Date,
-    default: Date.now() + 3600000 // 1 hour
+    type: Date
   },
   emailConfirmationToken: {
     type:    String,
@@ -66,22 +65,22 @@ schemaUser.methods.checkPassword = function (password) {
 schemaUser.statics.authorize = function (username, password, next) {
   var User = this;
   async.waterfall([
-        function (cb) {
-          User.findOne({'username': username.toLowerCase()}, cb);//-> Ищем пользователя в БД по username(он же email)
+        function (done) {
+          User.findOne({'username': username.toLowerCase()}, done);//-> Ищем пользователя в БД по username(он же email)
         },
-        function (user, cb) {// ошибок не возникло возвращен результат из пред функции
+        function (user, done) {// ошибок не возникло возвращен результат из пред функции
           if (!user) {//-> пользователь не найден в БД
             logger.debug('Такого пользователя не существует %s', username);
-            return cb(new AuthError('Такого пользователя не существует'), false);
+            return done(new AuthError('Такого пользователя не существует'), false);
           }
 
           if (!user.checkPassword(password)) { //-> Проверяем пароль
             logger.debug('Введен неверный пароль для пользователя %s', username);
-            return cb(new AuthError('Вы ввели неверный пароль'), false);
+            return done(new AuthError('Вы ввели неверный пароль'), false);
           }
           // Пользователь существует и пароль верен, возврат пользователя из
           // метода done, что будет означать успешную аутентификацию
-          cb(null, user);
+          done(null, user);
         }
       ],
       next //-> Все ОК отдаем Passport(у) результат
@@ -91,12 +90,12 @@ schemaUser.statics.authorize = function (username, password, next) {
 schemaUser.statics.register = function (username, password, next) {
   var User = this;
   async.waterfall([
-        function (cb) {
-          User.findOne({'username': username.toLowerCase()}, cb);//-> Ищем пользователя в БД по username(он же email)
+        function (done) {
+          User.findOne({'username': username.toLowerCase()}, done);//-> Ищем пользователя в БД по username(он же email)
         },
-        function (user, cb) {// ошибок не возникло возвращен результат из пред функции
+        function (user, done) {// ошибок не возникло возвращен результат из пред функции
           if (user) {//-> если пользователь найден
-            return cb(new AuthError('Имя пользователя уже занято'), false); //-> возвращаем собственную ошибку
+            return done(new AuthError('Имя пользователя уже занято'), false); //-> возвращаем собственную ошибку
           }
           else {//-> пользователь по email не найден в БД
             var newUser = new User({
@@ -114,8 +113,8 @@ schemaUser.statics.register = function (username, password, next) {
               // err is our ValidationError object
               // err.errors.emailAddress is a ValidatorError object
               // err.errors.password is a ValidatorError object
-              if (err) return cb(err, false);
-              cb(null, newUser);
+              if (err) return done(err, false);
+              done(null, newUser);
             });
           }
         }
@@ -167,9 +166,10 @@ AuthError.prototype.name = 'AuthError';
 
 // ================= Exports =============================
 //var modelUser = mongoose.model('User', schemaUser);
-
-module.exports.sUser = schemaUser;
-module.exports.AuthError = AuthError;
+exports = module.exports = {
+  sUser:     schemaUser,
+  AuthError: AuthError
+};
 
 
 

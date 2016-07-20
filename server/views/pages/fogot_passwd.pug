@@ -1,0 +1,9 @@
+extends ../_template
+block APP_content
+  form(method='POST')
+    legend Forgot Password
+    .form-group
+      input(type='hidden' name='_csrf' value= csrfToken)
+      label(for='email') Email
+      input.form-control(type='text', name='email', autofocus)
+    button.btn.btn-primary(type='submit') Reset Password

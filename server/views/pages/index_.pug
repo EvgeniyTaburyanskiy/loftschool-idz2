@@ -1,4 +1,4 @@
-extends ./_template
+extends ../_template
 
 block APP_content
 
@@ -6,7 +6,7 @@ block APP_content
   ul
     each val, index in user
       li
-        pre= index + ': ' + val
+        pre= index_ + ': ' + val
 
 
   // Пользователь авторизован. Данные о нем из БД получены

@@ -17,7 +17,7 @@ var ENV = process.env.NODE_ENV;
  "error_user_msg":   "Этот параметр указывает, что сообщение необходимо показать пользователю"
  }
  */
-var errorsList = {
+var apiErrorsList = {
   400: {
     "DEFAULT":             {
       "message":          "Некорректный запрос",
@@ -87,11 +87,43 @@ var errorsList = {
     },
   }
 };
+/**
+ * MiddleWare Обрабатывает ошибки Http котрые мы генерим по коду приложения с помощью собственного объекта ошибки
+ * HttpError.
+ * Предназначен ля вывода ошибок ПУБЛИЧНЫХ маршрутов
+ * Рендерит 404 на все ошибки кроме 500.
+ */
+var sendHttpError = function (req, res, next) {
+  res.sendHttpError = function (error) {
+    if (500 === parseInt(error.status)) {
+      res
+      .status(500)
+      .render('error',
+          {
+            message: error.message
+          }
+      );
+    }
+    else {
+      res
+      .status(404)
+      .render('error',
+          {
+            message: error.message
+          }
+      );
+    }
+
+    logger.debug('PUBLIC ERR- %s %d %s', req.method, res.statusCode, error.message + ' [' + req.url + ']');
+  };
+  next();
+};
 
 /**
  * MiddleWare Обрабатывает ошибки Http котрые мы генерим по коду приложения с помощью собственного объекта ошибки
  * HttpError.
- * На AJAX запросы отдает инфо об ошибке в виде JSON  иначе в виде рендера страницы Ошибки.
+ * Предназначен ля вывода ошибок API маршрутов
+ * На AJAX запросы отдает инфо об ошибке в виде JSON  иначе в виде XML страницы Ошибки.
  *
  * https://tech.yandex.ru/webmaster/doc/dg/reference/errors-docpage/
  * https://developers.facebook.com/docs/graph-api/using-graph-api/#errors
@@ -101,14 +133,15 @@ var errorsList = {
  * @param res
  * @param next
  */
-var sendHttpError = function (req, res, next) {
-  res.sendHttpError = function (error) {
+var sendAPIHttpError = function (req, res, next) {
+  res.sendAPIHttpError = function (error) {
     res.status(error.status);
     // Формируем ответ по кодам ошибок
-    var errData = errorsList[500]["DEFAULT"];
+    var errData = apiErrorsList[500]["DEFAULT"];
 
-    if ('undefined' !== errorsList[error.status]) {
-      var majorErr = errorsList[error.status];
+    // Находим ошибку в листинге наших ошибок
+    if ('undefined' !== apiErrorsList[error.status]) {
+      var majorErr = apiErrorsList[error.status];
       res.status(error.status);
       errData = majorErr["DEFAULT"];
       if (error.subcode in majorErr) {
@@ -119,7 +152,7 @@ var sendHttpError = function (req, res, next) {
     errData.message = error.message || errData.message; //-> Заменяем стандартное сообщение из списка кодов на "всплывшее" из приложения
 
     // Если запрос был по AJAX то ответ отдаем через Json req.xhr
-    if (res.req.headers['x-requested-with'] == 'XMLHttpRequest') {
+    if (req.xhr || res.req.headers['x-requested-with'] == 'XMLHttpRequest') {
       res.json(errData);
     }
     // все что не 404 отдаем в XML так удобно читать
@@ -137,10 +170,10 @@ var sendHttpError = function (req, res, next) {
       );
     }
 
-    logger.debug('%s %d %s', req.method, res.statusCode, error.message + ' [' + req.url + ']');
+    logger.debug('API ERR- %s %d %s', req.method, res.statusCode, error.message + ' [' + req.url + ']');
   };
   next();
-}
+};
 
 
 /**
@@ -153,16 +186,16 @@ var HttpError = function (status, subcode, message) {
   Error.apply(this, arguments); //-> обрабатываем поступившие параметры в контексте нашего объекта ошибки.
   // Стандартным обработчиком ошибок
   if (Error.captureStackTrace) {
-    Error.captureStackTrace(this, HttpError);//-> Забираем весь стек сообщений и данных получившихся после стандарной обработки
+    Error.captureStackTrace(this, HttpError); //-> Забираем весь стек сообщений и данных получившихся после стандарной обработки
   } else {
     this.stack = (new Error()).stack;
   }
 
-  this.status = status; //-> устанавливаем наш статус код (401,500,403,....)
+  this.status = status;   //-> устанавливаем наш статус код (401,500,403,....)
   this.subcode = subcode; //-> Устанавливаем наш Под Код. (см sendHttpError)
   /*
    * применяем сообщение либо по коду пытаемся
-   * получить стандартное описание http ошибки по ее коду , либо на крайий случай просто отдаем текст Error
+   * получить стандартное описание http ошибки , либо на крайий случай просто отдаем текст Error
    * */
   this.message = message || http.STATUS_CODES[status] || 'Error'; //->
 }
@@ -173,5 +206,8 @@ HttpError.prototype.name = 'HttpError';
  return { }
  };*/
 
-module.exports.HttpError = HttpError;
-module.exports.sendHttpError = sendHttpError;
+exports = module.exports = {
+  HttpError:        HttpError,
+  sendHttpError:    sendHttpError,
+  sendAPIHttpError: sendAPIHttpError
+};

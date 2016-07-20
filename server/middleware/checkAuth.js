@@ -11,5 +11,9 @@ module.exports = function (req, res, next) {
   if (req.isAuthenticated()) {//-> Метод добавляется модулем passport. не документированный метод.
     return next();
   }
-  next(new HttpError(401));
+  
+  // Неавторизованных отправляем на авторизацию!
+  res
+  .status(401)
+  .redirect('/auth');
 };
