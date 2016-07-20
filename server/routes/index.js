@@ -38,9 +38,7 @@ var controllers = {
  */
 var _router = function (app) {
 
-  router.param('album_id', route_params.album_id);        //->
-  // router.param('user_id', route_params.user_id);          //->
-  router.param('search_words', route_params.search_words);//->
+ // router.param('user_id',route_params);          //->
 
   // HOME ROUTES ==============================================
   router.route('/')
@@ -51,14 +49,12 @@ var _router = function (app) {
   router.get('/auth', csrfProtection, controllers.auth.signin);//-> Отдаем страницу Авторизации/Регистрации/Восстановления пароля
   router.all('/auth/signout', controllers.auth.signout);       //-> Любой метод =  Выход из Системы
 
-
+  // RESET PASSWORD ROUTES ==============================
   router.route('/reset')
-  .get(csrfProtection, controllers.auth.getfogot)     //-> Отдаем страницу Восстановления пароля
-  .post(csrfProtection, controllers.auth.postfogot);  //-> Генерим токен и отправляем ссылку на указанный емайл
-
+  .get(controllers.auth.getfogot)     //-> Редирект на страницу Авторизации/Восстановления пароля
+  
   router.route('/reset/:token')
-  .get(csrfProtection, controllers.auth.getreset)     //-> Проверяем токен и выдаем страницу смены пароля
-  .post(csrfProtection, controllers.auth.postreset);  //-> Обновляем пароль
+  .get(csrfProtection, controllers.auth.getreset)     //-> Проверяем токен(из письма) и выдаем страницу смены пароля
 
   // ALBUM ROUTES ==============================================
   router.route(['/albums', '/albums/*'])
@@ -72,19 +68,20 @@ var _router = function (app) {
 
   // USERS ROUTES ==============================================
   router.route(['/users', '/users/*'])
-  .all(checkAuth, loadUser, csrfProtection);
+  .get(checkAuth, loadUser, csrfProtection);
 
   /*
    Поумолчанию Отдаем страницу  Текущего  пользователя (список альбомов пользователя, ЛичКабинет)
    Если задан в запросе req.query набор уточнений. то Ищем в нем UID и отдаем как /users/:user_id
    (список альбомов пользователя + шапка с данными пользователя)
    */
-  router.all('/users', controllers.users.get);
+  router.get('/users', controllers.users.get);
+  
   /*
    Отдаем Персональную страницу  пользователя по ID
    (список альбомов пользователя + шапка с данными пользователя)
    */
-  router.all('/users/:user_id', controllers.users.get);
+  router.get('/users/:user_id', controllers.users.get);
 
   // SEARCH ROUTES ==============================================
   router.route(['/search', '/search/*'])

@@ -2,39 +2,45 @@ var logger = require('../utils/winston')(module);
 var User = require('../db/models/User').mUser;
 var HttpError = require('../middleware/HttpError').HttpError;
 var ObjectID = require('mongodb').ObjectID;
+var async = require('async');
 
-/* GET users page. */
-var getUsersList = function (req, res, next) {
-  User.find({}, 'userdata').lean().exec(function (err, users) {
-    if (err) return next(err);
-    res.json(users);
-  });
-
-  //res.render('index', {title: 'albums'});
-};
-
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {*}
+ */
 var getUserPage = function (req, res, next) {
+  var user_;
+  var uid = req.query.user_id || req.params.user_id || null;
 
-  if (req.query.user_id) {
+  if (uid) {
     try {
-      var uid = new ObjectID(req.query.user_id);
+      var oUid = new ObjectID(uid);
     }
     catch (e) {
       return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE'));
     }
-    User.findById(uid, 'userdata').lean().exec(function (err, user) {
+
+    User.findById(oUid).lean().exec(function (err, user) {
       if (err) return next(err);
-      res.json(user.userdata);
+      res.render('person', {
+        title: 'person',
+        $user: user
+      });
     });
   }
-  else{
-    res.json(req.user.userdata);
+  else {
+    res.render('person', {
+      title: 'person',
+      $user: req.user
+    });
   }
 
 };
 
 exports = module.exports = {
-  list: getUsersList,
-  get:  getUserPage
+  get: getUserPage
 };
 

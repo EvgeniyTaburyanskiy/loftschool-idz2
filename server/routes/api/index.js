@@ -10,6 +10,7 @@
 var logger = require('../../utils/winston')(module);
 var checkAuth = require('../../middleware/checkAuth');
 var loadUser = require('../../middleware/loadUser');
+var HttpError = require('../../middleware/HttpError').HttpError;
 var config = require('../../utils/nconf');
 var router = require('express').Router();
 var csrf = require('csurf');
@@ -42,8 +43,9 @@ var _router = function (app) {
   // HOME ROUTES ==============================================
   router.get('/api', controllers.main.api_home); //-> Редиректим на авторизацию публички
 
-  // AUTH ROUTES ==============================
 
+
+  // AUTH ROUTES ==============================
   router.route('/api/auth/signin')
   .post(csrfProtection, controllers.auth.api_signin);//-> Вход в Систему
 
@@ -54,12 +56,17 @@ var _router = function (app) {
   .post(csrfProtection, controllers.auth.api_signup);//-> Регистрация
 
   router.route('/api/auth/fogot')
-  .post(csrfProtection, controllers.auth.api_postfogot); //-> Восстановление пароля
+  .post(csrfProtection, controllers.auth.api_postfogot); //-> Восстановление пароля(отправка письма с токеном)
+  
+  router.route('/api/auth/reset')
+  .all(csrfProtection, controllers.auth.api_passwdreset); //-> Смена пароля(применение нового пароля)
 
   // ALBUM ROUTES ==============================================
   router.route(['/api/albums', '/api/albums/*'])
   .all(checkAuth, loadUser)
   .get(controllers.albums.albums);
+
+
 
   // USERS ROUTES ==============================================
   router.route(['/api/users', '/api/users/*'])
@@ -75,13 +82,18 @@ var _router = function (app) {
   .delete(controllers.users.delete);  //->
 
 
+
   // SEARCH ROUTES ==============================================
   router.route(['/api/search', '/api/search/*'])
   .all(checkAuth, loadUser)
   .get(controllers.search.search);
 
+
+
   // DEFAULT  Route 404 ==============================================
   router.use('/api', controllers.error.err_404);
+
+
 
   // ERROR HANDLERS ==============================================
   router.use('/api', controllers.error.err_all);

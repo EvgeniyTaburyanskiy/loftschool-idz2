@@ -18,6 +18,17 @@ var ENV = process.env.NODE_ENV;
  }
  */
 var apiErrorsList = {
+  200: {
+    "DEFAULT": {
+      "message":          "Success",
+      "type":             "",
+      "code":             "200",
+      "error_subcode":    "",
+      "error_user_title": "Ok",
+      "error_user_msg":   "Запрос успешно принят и обработан",
+      "data":             {}
+    }
+  },
   400: {
     "DEFAULT":             {
       "message":          "Некорректный запрос",
@@ -25,7 +36,9 @@ var apiErrorsList = {
       "code":             "400",
       "error_subcode":    "",
       "error_user_title": "",
-      "error_user_msg":   "Некорректный запрос"
+      "error_user_msg":   "Некорректный запрос",
+      "data":             {}
+
     },
     "ILLEGAL_PARAM_VALUE": {
       "message":          "Неверное значение передаваемого параметра",
@@ -33,7 +46,8 @@ var apiErrorsList = {
       "code":             "400",
       "error_subcode":    "",
       "error_user_title": "",
-      "error_user_msg":   "Некорректный запрос"
+      "error_user_msg":   "Некорректный запрос",
+      "data":             {}
     }
   },
   401: {
@@ -43,7 +57,8 @@ var apiErrorsList = {
       "code":             "401",
       "error_subcode":    "",
       "error_user_title": "",
-      "error_user_msg":   "Необходима Авторизация"
+      "error_user_msg":   "Необходима Авторизация",
+      "data":             {}
     },
     //Имя пользователя уже занято
   },
@@ -54,7 +69,8 @@ var apiErrorsList = {
       "code":             "403",
       "error_subcode":    "",
       "error_user_title": "",
-      "error_user_msg":   ""
+      "error_user_msg":   "",
+      "data":             {}
     },
 
   },
@@ -65,16 +81,9 @@ var apiErrorsList = {
       "code":             "404",
       "error_subcode":    "",
       "error_user_title": "",
-      "error_user_msg":   "Запрошеный ресурс не найден"
+      "error_user_msg":   "Запрошеный ресурс не найден",
+      "data":             {}
     },
-    'REQUIRED_PARAM_MISSED': {
-      "message":          "отсутствует обязательный параметр",
-      "type":             "",
-      "code":             "",
-      "error_subcode":    "",
-      "error_user_title": "",
-      "error_user_msg":   ""
-    }
   },
   500: { //-> Внутренняя ошибка сервера.
     "DEFAULT": {
@@ -83,7 +92,8 @@ var apiErrorsList = {
       "code":             "500",
       "error_subcode":    "",
       "error_user_title": "",
-      "error_user_msg":   ""
+      "error_user_msg":   "",
+      "data":             {}
     },
   }
 };
@@ -135,10 +145,11 @@ var sendHttpError = function (req, res, next) {
  */
 var sendAPIHttpError = function (req, res, next) {
   res.sendAPIHttpError = function (error) {
-    res.status(error.status);
-    // Формируем ответ по кодам ошибок
-    var errData = apiErrorsList[500]["DEFAULT"];
 
+    // По умолчанию всем отвечаем что все Отлично! :)
+    res.status(200);
+    var errData = apiErrorsList[200]["DEFAULT"];
+    // Формируем ответ по кодам ошибок
     // Находим ошибку в листинге наших ошибок
     if ('undefined' !== apiErrorsList[error.status]) {
       var majorErr = apiErrorsList[error.status];
@@ -149,25 +160,17 @@ var sendAPIHttpError = function (req, res, next) {
       }
     }
     errData.stacktrace = (ENV === 'development') ? error.stack : ''; //-> Дополняем трассировкой ошибки для режима DEv
-    errData.message = error.message || errData.message; //-> Заменяем стандартное сообщение из списка кодов на "всплывшее" из приложения
+    errData.message = error.message || errData.message;              //-> Заменяем стандартное сообщение из списка кодов на "всплывшее" из приложения
+    errData.data = error.data || errData.data;                       //-> Отдаем "вплывшие" данные из приложения
 
     // Если запрос был по AJAX то ответ отдаем через Json req.xhr
     if (req.xhr || res.req.headers['x-requested-with'] == 'XMLHttpRequest') {
       res.json(errData);
     }
-    // все что не 404 отдаем в XML так удобно читать
-    else if (404 !== parseInt(errData.code)) {
+    // все остальне отдаем в XML так удобно читать
+    else {
       res.set('Content-Type', 'text/xml');
       res.send(js2xmlparser("error", errData));
-    }
-    // Если стстаус 404 рендерим страницу ошибки и отдаем данные как объект res.locals
-    else {
-      res.render('error',
-          {
-            message: errData.message,
-            error:   JSON.stringify(errData)
-          }
-      );
     }
 
     logger.debug('API ERR- %s %d %s', req.method, res.statusCode, error.message + ' [' + req.url + ']');
@@ -182,7 +185,7 @@ var sendAPIHttpError = function (req, res, next) {
  * @param message *Optional
  * @constructor
  */
-var HttpError = function (status, subcode, message) {
+var HttpError = function (status, subcode, message, data) {
   Error.apply(this, arguments); //-> обрабатываем поступившие параметры в контексте нашего объекта ошибки.
   // Стандартным обработчиком ошибок
   if (Error.captureStackTrace) {
@@ -191,13 +194,18 @@ var HttpError = function (status, subcode, message) {
     this.stack = (new Error()).stack;
   }
 
-  this.status = status;   //-> устанавливаем наш статус код (401,500,403,....)
+  this.status = status;   //-> устанавливаем наш статус код (200,300,401,500,..)
   this.subcode = subcode; //-> Устанавливаем наш Под Код. (см sendHttpError)
   /*
    * применяем сообщение либо по коду пытаемся
    * получить стандартное описание http ошибки , либо на крайий случай просто отдаем текст Error
    * */
   this.message = message || http.STATUS_CODES[status] || 'Error'; //->
+  /*
+   Если нужно передать обработчику данные то отдаем их через data.
+   Например с кодом 200 отдаем данные пользователя в API
+   */
+  this.data = data || {};//->
 }
 
 util.inherits(HttpError, Error);

@@ -46,6 +46,13 @@ html.no-js(lang= "ru")
       if messages.success
         .alert.alert-success
           div= messages.success
+    .container
+      if user
+        div= JSON.stringify(user)
+        br
+
+      if $user
+        div= JSON.stringify($user)
     //-Add your site or application content here
     block APP_content
 

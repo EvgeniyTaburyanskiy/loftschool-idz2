@@ -117,6 +117,6 @@ module.exports = function (passport) {
     User.findById(uid).lean().exec(function (err, user) {
       done(err, user);
     });
-  }); //-> Достаем в req.user
+  }); //-> Достаем данные из БД и кладем в в req.user
 }
 ;

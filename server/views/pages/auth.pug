@@ -29,9 +29,8 @@ block APP_content
     fieldset
       input(type='hidden' name='_csrf' value= csrfToken)
       label(for='username') Email
-      input(type='text' name='username' placeholder='Your Email' autofocus)
+      input(type='email' name='email' placeholder='Your Email' autofocus)
       button(type='submit') Reset Password
-
   br
   h4 LOGOUT
     br

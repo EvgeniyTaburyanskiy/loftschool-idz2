@@ -138,6 +138,7 @@ var api_signout = function (req, res, next) {
   ); //-> Отдаем ответ о результате!
 };
 
+
 /**
  * Обрабатывает форму запроса на смену пароля.
  * @param req
@@ -187,23 +188,21 @@ var api_postfogot = function (req, res, next) {
 
       mailTransporter.sendMail(mailOptions, function (err, info) {
         if (err) return done(err);
-        // TODO: API -JSON инфо о том что письмо отправлено на указанный емайл
-        console.log('Message sent: ' + info.response);
-        return done(err, 'done');
+        return done(err, 'Succeess');
       });
     }
   ], function (err, result) {
     if (err) return next(err);
     //Все Ок. Токен сгенерен, письмо отправлено.
-    // TODO: API -Сформировать объект ответа JSON по Восстановлению пароля
-    res.json(
-        {
-          status: 200
-        }
-    );
+    // TODO: API- Сформировать объект ответа JSON по Восстановлению пароля
+    next(new HttpError(200, null, 'На Ваш e-mail было отправлено письмо с инструкциями!', null));
   });
-}
+};
+
+
 /**
+ * Обрабатывает форму смены пароля и Меняет пароль для пользователя с правильным Токеном
+ * После успешной смены пароля высылаает уведомление на емайл.
  *
  * @param req
  * @param res
@@ -212,7 +211,80 @@ var api_postfogot = function (req, res, next) {
  */
 var api_passwdReset = function (req, res, next) {
 
+  async.waterfall([
+        // Ищем пользователя с токеном и меняем пароль
+        function (done) {
+          User.findOne({
+            'resetPasswordToken':   String(req.body.token),
+            'resetPasswordExpires': {$gt: new Date}
+          }, done)
+        },
+        // Пользователя нашли! Пытаемся установить пароль,
+        function (user, done) {
+          if (!user) {
+            return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE', 'Пароль не удалось сменить из-за не действительнго токена или истекшего срока его действия'));
+          }
+          // Меняем пароль
+          user.password = req.body.password;
+          user.resetPasswordToken = undefined;
+          user.resetPasswordExpires = undefined;
+
+          user.save(function (err) {
+            if (err) {
+              logger.debug('Ошибка при сохранении пользователя - ', err.message);
+              // В процессе сохранения данных была ошибка. Если Ошибка с Валидацией. Обработаем ее
+              if (err.name === 'ValidationError') {//-> Это наша ошибка Валидации данных из Mongoose
+                var errMsgList = [];
+
+                if (err.errors.emailAddress) {
+                  logger.info("Ошибка валидации Email пользователя: %s", err.errors.emailAddress.message);
+                  errMsgList.push(err.errors.emailAddress.message);
+                }
+
+                if (err.errors.password) {
+                  logger.info("Ошибка валидации пароля пользователя: %s", err.errors.password.message);
+                  errMsgList.push(err.errors.password.message);
+                }
+              }
+
+              return errMsgList.length ?
+                  new HttpError(400, 'ILLEGAL_PARAM_VALUE', errMsgList) :
+                  done(err);
+            }
+            //Сохранение прошло успешно. Есть Объект пользователя. Отдаем его в login фунцию которую навешивает  Passport
+            req.login(user, function (err) {
+              //если в процессе логина поймали ошибку отдаем ее в наш обработчик
+              return done(err, user);
+            });
+          });
+        },
+        // Если со сменой пароля небыло проблем , отпарвляем письмо подтверждение
+        function (user, done) {
+          var mailTransporter = nodemailer.createTransport(config.get('nodemailer:transport'));
+
+          // TODO:  -шаблон писема подтверждения сброса пароля https://github.com/nodemailer/nodemailer#using-templates
+          var mailOptions = {
+            to:      user.userdata.emailAddress,
+            from:    config.get('nodemailer:mailOptions:from'),
+            subject: 'LOFTOGRAM: Ваш Пароль был изменен!',
+            text:    'Здравствуйте,\n\n' +
+                     'Пароль вашего аккаунта с E-mail: ' + user.userdata.emailAddress + ' был успешно изменен!'
+          };
+
+          mailTransporter.sendMail(mailOptions, function (err, info) {
+            if (err) return done(err);
+            return done(err, 'Success');
+          });
+        }
+      ],
+      // Все ок. Отправляем на Главную
+      // Все не ОК  Возвращаем на туде страницу с ошибками
+      function (err, result) {
+        if (err) return next(err);
+        next(new HttpError(200, null, 'Ваш Пароль успешно изменен!', null));
+      });
 };
+
 
 /**
  *
@@ -228,9 +300,10 @@ var getAuth = function (req, res, next) {
 };
 
 exports = module.exports = {
-  api_signin:    api_signin,
-  api_signout:   api_signout,
-  api_signup:    api_signup,
-  api_postfogot: api_postfogot
+  api_signin:      api_signin,
+  api_signout:     api_signout,
+  api_signup:      api_signup,
+  api_postfogot:   api_postfogot,
+  api_passwdreset: api_passwdReset
 };
 

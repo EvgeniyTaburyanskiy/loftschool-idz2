@@ -20,8 +20,6 @@ module.exports = function (req, res, next) {
   res.locals.user = null;
   if (!req.session.passport.user) return next();
 
-  res.locals.user = req.user.userdata;
-  res.locals.user._id = req.user._id;
+  res.locals.user = req.user;
   next();
-
 };

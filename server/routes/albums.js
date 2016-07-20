@@ -3,9 +3,9 @@ var HttpError = require('../middleware/HttpError').HttpError;
 
 /* GET albums page. */
 var get = function (req, res, next) {
-  // 
-  res.render('album', {
-    title: 'albums'
+  // TODO: Обрабатывать reques там может быть задан ID альбома ?album_id=Num
+  res.render('person', {
+    title: 'person'
   });
 };
 
@@ -13,9 +13,9 @@ var get = function (req, res, next) {
 /* GET album by ID. */
 var getById = function (req, res, next) {
   var ID = req.params.id;
-  
+
   res.render('album', {
-    title: 'album'
+    title: 'album By ID'
   });
 };
 
