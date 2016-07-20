@@ -138,7 +138,71 @@ var api_signout = function (req, res, next) {
   ); //-> Отдаем ответ о результате!
 };
 
+/**
+ * Обрабатывает форму запроса на смену пароля.
+ * @param req
+ * @param res
+ * @param next
+ */
+var api_postfogot = function (req, res, next) {
+  var email = req.body.email;
 
+  async.waterfall([
+    function (done) {
+      crypto.randomBytes(20, function (err, buf) {
+        var token = buf.toString('hex');
+        done(err, token);
+      });
+    },
+    function (token, done) {
+      User.findOne({'userdata.emailAddress': email}, function (err, user) {
+        if (!user) {
+          return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE', 'Пользователь с указанным Email не существует'));
+        }
+
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+        user.save(function (err) {
+          done(err, token, user);
+        });
+      });
+    },
+    function (token, user, done) {
+      var mailTransporter = nodemailer.createTransport(config.get('nodemailer:transport'));
+      // TODO: API -текст письма нужно на русском
+      // TODO: API -шаблоны писем https://github.com/nodemailer/nodemailer#using-templates
+      var mailOptions = {
+        to:      user.userdata.emailAddress,
+        from:    config.get('nodemailer:mailOptions:from'),
+        subject: 'LOFTOGRAM: Восстановление пароля!',
+        text:    'Вы получили это письмо потому, что Вы (либо кто-то другой) отправил запрос на смену пароля для' +
+                 ' доступа к  Вашему аккаунту.\n\n' +
+                 'Пожалуйста перейдите по следующей сслыке, либо скопирйте и вставьте ее в адресную строку вашего' +
+                 ' браузера что бы завершить процесс смены пароля:\n\n' +
+                 'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+                 'Ссылка действительна в течение 1-го Часа. \n\n' +
+                 'Если Вы не отправляли подобный запрос, то не обращайте внимания на это письмо.\n'
+      };
+
+      mailTransporter.sendMail(mailOptions, function (err, info) {
+        if (err) return done(err);
+        // TODO: API -JSON инфо о том что письмо отправлено на указанный емайл
+        console.log('Message sent: ' + info.response);
+        return done(err, 'done');
+      });
+    }
+  ], function (err, result) {
+    if (err) return next(err);
+    //Все Ок. Токен сгенерен, письмо отправлено.
+    // TODO: API -Сформировать объект ответа JSON по Восстановлению пароля
+    res.json(
+        {
+          status: 200
+        }
+    );
+  });
+}
 /**
  *
  * @param req
@@ -146,7 +210,7 @@ var api_signout = function (req, res, next) {
  * @param next
  * @private
  */
-var api_fogot = function (req, res, next) {
+var api_passwdReset = function (req, res, next) {
 
 };
 
@@ -164,9 +228,9 @@ var getAuth = function (req, res, next) {
 };
 
 exports = module.exports = {
-  api_signin:  api_signin,
-  api_signout: api_signout,
-  api_signup:  api_signup,
-  api_fogot:   api_fogot
+  api_signin:    api_signin,
+  api_signout:   api_signout,
+  api_signup:    api_signup,
+  api_postfogot: api_postfogot
 };
 

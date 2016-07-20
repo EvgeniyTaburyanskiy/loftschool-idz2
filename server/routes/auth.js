@@ -59,7 +59,12 @@ var getFogot = function (req, res) {
   );
 };
 
-
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 var postFogot = function (req, res, next) {
   var email = req.body.email;
 
@@ -73,21 +78,21 @@ var postFogot = function (req, res, next) {
     function (token, done) {
       User.findOne({'userdata.emailAddress': email}, function (err, user) {
         if (!user) {
-          return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE', 'Пользователь с указанным Email не существует'));
+          req.flash('error', 'Пользователь с указанным E-mail не существует');
+          return done(new HttpError(400, 'ILLEGAL_PARAM_VALUE', 'Пользователь с указанным E-mail не существует'));
         }
 
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
         user.save(function (err) {
-          done(err, token, user);
+          return done(err, token, user);
         });
       });
     },
     function (token, user, done) {
       var mailTransporter = nodemailer.createTransport(config.get('nodemailer:transport'));
-      // TODO: API -текст письма нужно на русском
-      // TODO: API -шаблоны писем https://github.com/nodemailer/nodemailer#using-templates
+      // TODO:  -шаблоны писем https://github.com/nodemailer/nodemailer#using-templates
       var mailOptions = {
         to:      user.userdata.emailAddress,
         from:    config.get('nodemailer:mailOptions:from'),
@@ -102,21 +107,15 @@ var postFogot = function (req, res, next) {
       };
 
       mailTransporter.sendMail(mailOptions, function (err, info) {
-        if (err) return done(err);
-        // TODO: API -JSON инфо о том что письмо отправлено на указанный емайл
-        console.log('Message sent: ' + info.response);
-        return done(err, 'done');
+        return done(err, 'Success');
       });
     }
   ], function (err, result) {
-    if (err) return next(err);
+    if (err) return res.status(400).redirect('back');
     //Все Ок. Токен сгенерен, письмо отправлено.
-    // TODO: API -Сформировать объект ответа JSON по Восстановлению пароля
-    res.json(
-        {
-          status: 200
-        }
-    );
+    // TODO:  -Выдавать ошибки и Сообщения через отдельный модуль.по Кодам
+    req.flash('success', 'На ваш E-mail было отправлено письмо с инструкциями!.');
+    res.status(200).redirect('back')
   });
 };
 
@@ -204,7 +203,7 @@ var postReset = function (req, res) {
             from:    config.get('nodemailer:mailOptions:from'),
             subject: 'LOFTOGRAM: Ваш Пароль был изменен!',
             text:    'Здравствуйте,\n\n' +
-                     'Пароль вашего аккаунта с E-mail:' + user.userdata.emailAddress + ' был успешно изменен!'
+                     'Пароль вашего аккаунта с E-mail: ' + user.userdata.emailAddress + ' был успешно изменен!'
           };
 
           mailTransporter.sendMail(mailOptions, function (err, info) {
@@ -216,7 +215,9 @@ var postReset = function (req, res) {
         }
       ],
       // Все ок. Отправляем на Главную
+      // Все не ОК  Возвращаем на туде страницу с ошибками
       function (err, result) {
+        // TODO:  -Выдавать ошибки и Сообщения через отдельный модуль.по Кодам
         if (err) return res.status(400).redirect('back');
         res.status(200).redirect('/')
       });

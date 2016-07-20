@@ -40,22 +40,21 @@ var _router = function (app) {
   //router.all('*', chkApiKey);
 
   // HOME ROUTES ==============================================
-  router.get('/api', controllers.main.api_home);
+  router.get('/api', controllers.main.api_home); //-> Редиректим на авторизацию публички
 
   // AUTH ROUTES ==============================
 
-  router.route('/api/auth/signin')//-> Вход в Систему
-  .post(csrfProtection)
-  .post(controllers.auth.api_signin);
+  router.route('/api/auth/signin')
+  .post(csrfProtection, controllers.auth.api_signin);//-> Вход в Систему
 
-  router.route('/api/auth/signout')//-> GET/POST  Выход из Системы
-  .all(controllers.auth.api_signout);
+  router.route('/api/auth/signout')
+  .all(controllers.auth.api_signout);//-> Выход из Системы
 
-  router.route('/api/auth/signup')//-> Регистрация
-  .post(controllers.auth.api_signup);
+  router.route('/api/auth/signup')
+  .post(csrfProtection, controllers.auth.api_signup);//-> Регистрация
 
   router.route('/api/auth/fogot')
-  .post(controllers.auth.api_fogot); //-> Восстановление пароля
+  .post(csrfProtection, controllers.auth.api_postfogot); //-> Восстановление пароля
 
   // ALBUM ROUTES ==============================================
   router.route(['/api/albums', '/api/albums/*'])
