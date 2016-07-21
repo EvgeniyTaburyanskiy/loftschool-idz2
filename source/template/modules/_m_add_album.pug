@@ -22,5 +22,6 @@ include ../helpers/mixins.pug
                         +btnLoad
                         .cover-info__text (файл должен быть размером не более&nbsp;
                             span 1024 КБ)
+                input(type="hidden", name="_csrf", value="#{csrf}")
         .album__f
             +formMenu

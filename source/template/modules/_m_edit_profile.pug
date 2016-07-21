@@ -31,9 +31,6 @@ include ../helpers/mixins.pug
                         +btnCustom('Загрузить фон')
                         .cover-info__text (файл должен быть размером не более&nbsp;
                             span 1024 КБ)
-        .devider
-        .edit-profile__b
-            form.b__form
                 .profile__field.profile__field--direction
                     .field__lbl
                         label(for="vk") Вконтакте
@@ -50,5 +47,6 @@ include ../helpers/mixins.pug
                     .field__lbl
                         label(for="twit") Twitter
                     input#twit.field__it.field__it--social(type="text" placeholder='https://twitter.com/')
+                input(type="hidden", name="_csrf", value="#{csrf}")
         .edit-profile__f
             +formMenu

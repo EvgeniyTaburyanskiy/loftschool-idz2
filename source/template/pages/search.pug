@@ -14,6 +14,7 @@ block APP_content
       form.main-search__form(action="#")
         input.main-search__input(type="search" name="search" id="search" placeholder="Исследовать мир")
         +use('search','main-search__svg')
+        input(type="hidden", name="_csrf", value="#{csrf}")
       div.show-new
         button.show-new__btn Показать новые
     section.main-new-w

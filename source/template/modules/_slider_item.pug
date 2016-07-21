@@ -37,6 +37,7 @@ div.slider-item
           div.close-block
             button.close-block__btn.add-comments__btn Добавить
             //add-comments__btn класс для привязки сабмита аякса
+          input(type="hidden", name="_csrf", value="#{csrf}")
       div.read-comments
         ul.read-comments__lst
           li.read-comments__i

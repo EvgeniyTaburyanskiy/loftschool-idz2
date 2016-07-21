@@ -1,6 +1,10 @@
 @import "../helpers/mixins";
 @import "../helpers/functions";
 
+button {
+  outline:none;
+}
+
 .enter-block, .close-block, .edit-block, .exit-block,
 .show-block, .add-block, .delete-block, .like-block,
 .cancel-block {

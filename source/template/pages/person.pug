@@ -23,6 +23,7 @@ block APP_content
       form.main-search__form(action="#")
         input.main-search__input(type="search" name="search" id="search" placeholder="Исследовать мир")
         +use('search','main-search__svg')
+        input(type="hidden", name="_csrf", value="#{csrf}")
     section.main-albums-w
       div.main-albums
         h2.main-albums__t Альбомы

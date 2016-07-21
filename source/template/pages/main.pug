@@ -23,6 +23,7 @@ block APP_content
       form.main-search__form(action="#")
         input.main-search__input(type="search" name="search" id="search" placeholder="Исследовать мир")
         +use('search','main-search__svg')
+        input(type="hidden", name="_csrf", value="#{csrf}")
     section.main-new-w
       div.main-new
         h1.main-new__t Новое в мире
