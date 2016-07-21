@@ -6,6 +6,7 @@ var upload = multer({dest: '/public/uploads/files/_tmp'});
 
 var Album = require('../../db/models/Album').mAlbum;
 var Photo = require('../../db/models/Photo').mPhoto;
+var PhotoComment = require('../../db/models/PhotoComment').mPhotoComments;
 
 /**
  *
@@ -19,10 +20,11 @@ var API_getAlbumByID = function (req, res, next) {
   // Получаем Инфо об Альбоме
   // Получаем список Фоток Альбома
   // Получаем данные Владельца Альбома
-  async.waterfall([
+  async.parallel([
     function (done) {
       Album
       .findById(album_id)
+      .lean()
       .populate('_user_id')
       .populate('_album_bg')
       .exec(function (err, album) {
@@ -40,13 +42,31 @@ var API_getAlbumByID = function (req, res, next) {
         };
         return done(err, result);
       });
+    },
+    function (done) {
+      Photo
+      .find({_album_id: album_id}, 'name descr imgURL thumbURL album_bg comments likes')
+      .lean()
+      .populate('comments')
+      .exec(function (err, photos) {
+        if (err) return done(err);
+        var result = {};
+        return done(err, photos);
+      });
     }
   ], function (err, result) {
     if (err) return next(err);
 
-    next(new HttpError(200, null, '', result));
+    next(new HttpError(200, null, '',
+        {
+          album:  result[0],
+          photos: result[1]
+
+        })
+    );
   });
 };
+
 
 /**
  *

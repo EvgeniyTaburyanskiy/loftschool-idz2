@@ -7,10 +7,11 @@
 
   var _ajaxCall = function (url, method, data) {
     var method_ = method || "GET";
-    var serviceUrl = url || serviceUrl;
+    var serviceUrl_ = url || serviceUrl;
+
     $.ajax({
       type:    method_,
-      url:     serviceUrl,
+      url:     serviceUrl_,
       data:    data,
       success: function (msg) {
         console.log(msg);
@@ -22,8 +23,9 @@
 
   var getAlbum = function (id) {
     var id_ = id || 0;
-    _ajaxCall(null, null, {album_id: id_});
+    _ajaxCall(undefined, undefined, {album_id: id_});
   };
+
 
   var getAlbums = function () {
     _ajaxCall("/api/albums/useralbums");
@@ -35,7 +37,7 @@
       album_name:  name,
       album_descr: descr
     };
-    _ajaxCall(null, "POST", data)
+    _ajaxCall(undefined, "POST", data)
   };
 
   window.ajaxCall = {
