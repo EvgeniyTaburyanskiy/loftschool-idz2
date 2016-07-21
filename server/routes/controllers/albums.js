@@ -1,5 +1,5 @@
-var logger = require('../utils/winston')(module);
-var HttpError = require('../middleware/HttpError').HttpError;
+var logger = require('../../utils/winston')(module);
+var HttpError = require('../../middleware/HttpError').HttpError;
 
 /* GET albums page. */
 var get = function (req, res, next) {

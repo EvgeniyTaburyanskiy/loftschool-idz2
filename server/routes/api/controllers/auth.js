@@ -1,15 +1,15 @@
-var logger = require('../../utils/winston')(module);
-var config = require('../../utils/nconf');
-var HttpError = require('../../middleware/HttpError').HttpError;
-var AuthError = require('../../db/schemas/User').AuthError;
+var logger = require('../../../utils/winston')(module);
+var config = require('../../../utils/nconf');
+var HttpError = require('../../../middleware/HttpError').HttpError;
+var AuthError = require('../../../db/schemas/User').AuthError;
 var nodemailer = require('nodemailer');
 var async = require('async');
 var crypto = require('crypto');
 var passport = require('passport');
 //Конфигурируем стратегии Passport
-require('../../config/passportAuthConf')(passport);
+require('../../../config/passportAuthConf')(passport);
 
-var User = require('../../db/models/User').mUser;
+var User = require('../../../db/models/User').mUser;
 
 /*--------------------------------------------------------*/
 /**

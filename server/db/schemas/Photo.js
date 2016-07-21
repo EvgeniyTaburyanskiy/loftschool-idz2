@@ -64,5 +64,15 @@ var schemaPhoto = new Schema({
   }
 });
 
+// ================= Event Func =============================
+
+schemaPhoto.pre('remove', function(next){
+  // Перед Удалением Фотки, удаляем все Комменты к нему
+  this.model('PhotoComment').remove(
+      {_photo_id: this._id},
+      {multi: true},
+      next
+  );
+});
 
 module.exports.sPhoto = schemaPhoto;
