@@ -3,7 +3,6 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var schemaLike = require('./Like').sLike;
 
 /**
  * Схема Фотки

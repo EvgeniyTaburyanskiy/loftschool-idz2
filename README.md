@@ -71,7 +71,7 @@ passport-local      | плагин для passport реализующий стр
 nodemailer          | пакет для отправки писем с сервера nodejs
 express-validator   | пакет для валидации данных на стророне сервера
 serve-favicon       | пакет для express устанавливающий favicon (по умолчанию)
-multer              | пакет для обработки данных  типа multipart/form-data (файлы)
+multer              | пакет для обработки данных  типа multipart/form-data (файлы) основан на busboy пакете
 express-sessions    | пакет для работы с сессиями в express
 connect-mongo       | пакет который реализует интерфейс 'модуля' пригодный для хранения сессий в MongoDB
 morgan              | пакет логинга HTTP запросов для express

@@ -107,11 +107,7 @@ var api_signup = function (req, res, next) {
           }
           // TODO: API- статус ответа в API для успешной регистрации
           // Все ок. Отправляем Ответ со статусом
-          res.json(
-              {
-                staus: 200
-              }
-          )
+          next( new HttpError(200) )
         });
       }
   )(req, res, next);

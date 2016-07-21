@@ -2,8 +2,14 @@ var logger = require('../utils/winston')(module);
 var HttpError = require('../middleware/HttpError').HttpError;
 
 /* GET search page. */
-var search = function (req, res, next) {
-  res.render('index_', {title: 'search'});
+var getSearch = function (req, res, next) {
+  res.render('search',
+      {
+        title: 'search'
+      }
+  );
 };
 
-module.exports.search = search;
+exports = module.exports = {
+  search: getSearch
+};

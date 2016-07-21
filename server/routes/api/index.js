@@ -64,8 +64,8 @@ var _router = function (app) {
   // ALBUM ROUTES ==============================================
   router.route(['/api/albums', '/api/albums/*'])
   .all(checkAuth, loadUser)
-  .get(controllers.albums.albums);
-
+  .get(controllers.albums.api_getalbum)
+  .post(controllers.albums.api_addalbum);
 
 
   // USERS ROUTES ==============================================
