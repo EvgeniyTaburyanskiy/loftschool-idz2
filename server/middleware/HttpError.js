@@ -20,7 +20,7 @@ var ENV = process.env.NODE_ENV;
 var apiErrorsList = {
   200: {
     "DEFAULT": {
-      "message":          "Success",
+      "message":          "Запрос успешно принят и обработан",
       "type":             "",
       "code":             "200",
       "error_subcode":    "",
@@ -160,7 +160,7 @@ var sendAPIHttpError = function (req, res, next) {
       }
     }
     errData.stacktrace = (ENV === 'development') ? error.stack : ''; //-> Дополняем трассировкой ошибки для режима DEv
-    errData.message = error.message || errData.message;              //-> Заменяем стандартное сообщение из списка кодов на "всплывшее" из приложения
+    errData.error_user_msg = error.message || errData.message;       //-> Заменяем стандартное сообщение из списка кодов на "всплывшее" из приложения
     errData.data = error.data || errData.data;                       //-> Отдаем "вплывшие" данные из приложения
 
     // Если запрос был по AJAX то ответ отдаем через Json req.xhr

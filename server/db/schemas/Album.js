@@ -12,6 +12,10 @@ var schemaAlbum = new Schema({
     type: Schema.Types.ObjectId,
     ref:  'User'
   },
+  _album_bg:  {
+    type: Schema.Types.ObjectId,
+    ref:  'Photo'
+  },
   name:       {
     type:      String,
     default:   "Альбом без названия!",
@@ -31,6 +35,19 @@ var schemaAlbum = new Schema({
     type:    Date,
     default: Date.now
   }
+});
+
+
+// ================= Event Func =============================
+schemaAlbum.pre('remove', function (next) {
+  // Перед Удалением Альбома удаляем все Фотки с ним связанные.
+  this.model('Photo').remove(
+      {
+        _album_id: this._id,
+        multi:     true
+      },
+      next
+  );
 });
 
 //var modelAlbum = mongoose.model('Album', schemaAlbum);

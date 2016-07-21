@@ -3,10 +3,14 @@ block APP_content
   header.m-h-w
     div.m-h
       a.m-h__a(href="#")
-        img.m-h__img(src="/assets/img/jason.jpg" alt="jason")
+        img.m-h__img(src= user.userdata.avatar, alt= user.userdata.firstName + " " +  user.userdata.lastName)
       div.m-person
-        p.m-person__n Джейсон Стэтхем
-        p.m-person__tx Я голливудский актер, мне уже лет 50. Люблю сниматься в боевиках и активный отдых.
+        p.m-person__n
+          if (user)
+            = user.userdata.firstName + " " +  user.userdata.lastName
+        p.m-person__tx
+          if (user)
+           = user.userdata.message
         div.person-soc
           +socIconVk
           +socIconFb
@@ -20,8 +24,8 @@ block APP_content
         +btnExit
   main.m-main
     section.main-search
-      form.main-search__form(action="#")
-        input.main-search__input(type="search" name="search" id="search" placeholder="Исследовать мир")
+      form.main-search__form(action="/search")
+        input.main-search__input(type="search" name="q" id="q" placeholder="Исследовать мир")
         +use('search','main-search__svg')
     section.main-new-w
       div.main-new
