@@ -178,20 +178,116 @@ var API_addAlbum = function (req, res, next) {
 
 
 /**
- * Обновляет данные Альбома по его IDю
+ * Обновляет данные Альбома по его ID
  * @param req
  * @param res
  * @param next
  * @constructor
  */
 var API_updateAlbum = function (req, res, next) {
+  var album_bg;
   var album_id = req.body.album_id;
-  var album_name = req.body.album_name;
-  var album_descr = req.body.album_descr;
-  var album_bg = req.files;
-  // TODO: API- Валидация данных перед добавлением нового альбома
-  // TODO: API- Реализовать обновление Альбома
+  var album_name = req.body.album_name || 'Альбом без названия!';
+  var album_descr = req.body.album_descr || '';
+  console.log('files', req.files);
+  //var album_bg = (req.files !== 'undefined') ? req.files['album_bg'] : '' || req.body.album_bg; // ожидаем либо файл либо ID фотки из БД
+  // TODO: API- Валидация данных перед обновлением  альбома
 
+  if (!album_id) {
+    next(new HttpError(400, null, 'ID альбома указано не верно!'));
+  }
+
+  async.waterfall([
+    //Проверяем что альбом принадлежит текущему пользователю
+    function (done) {
+      Album.findOne({'_user_id': req.user._id, '_id': album_id})
+      .populate('_album_bg')
+      .exec(function (err, album) {
+        // TODO: API -Код ошибки отказа в обновлении чужого альбома
+        if (!album) return done(new HttpError(400, null, 'Альбом не существует либо Вы не являетесь его владельцем!'));
+        return done(err, album);
+      });
+    },
+    //Обрабатываем загруженный файл фотки Imagick и сохраняем в FS и в БД
+    function (album, done) {
+      //Если новую фотку не загрузили файлом или ID новой и старой совпадают, движемся дальше
+      if (
+          !album_bg ||
+          album_bg.toString() === album._album_bg._id.toString()
+      ) {
+        // изменений фотки небыло
+        return done(null, album, null);
+      }
+
+      // TODO: API- Реализовать Обработку фото в IMAGICK
+
+      var photofiles = {
+        img:         {},
+        img_resized: {}
+      };
+
+      // Создаем новую фотку .
+      var newPhoto = new Photo({
+        '_album_id': album._album_bg._id,
+        'album_bg':  true,
+        'imgURL':    photofiles.img,
+        'thumbURL':  photofiles.img_resized
+      });
+
+      // Новую фотку  сохраненяем в БД
+      newPhoto.save(function (err) {
+        if (err) return done(err);
+      });
+
+      return done(null, album, newPhoto);
+    },
+    // Снимаем со старой фотки флаг того что она Фоновая картинка альбома, если есть новая фотка
+    function (album, newPhoto, done) {
+      console.log('newPhoto', newPhoto);
+      if (newPhoto) {
+        // Находим фотку текущего фона
+        Photo.findById(album._album_bg._id, function (err, oldPhoto) {
+          // Снимаем у старой фотки флаг того что она бекграунд.
+          if (oldPhoto) {
+            oldPhoto.album_bg = false;
+
+            oldPhoto.save(function (err) {
+              if (err) return done(err);
+            })
+          }
+        });
+      }
+
+      return done(null, album, newPhoto);
+    },
+    //Вносим изменения в Альбом с указанием ссылки на новый Фон
+    function (album, newPhoto, done) {
+      album.name = album_name;
+      album.descr = album_descr;
+      if (newPhoto) {
+        album._album_bg = newPhoto._id;
+      }
+
+      album
+      .save()
+      .then(done(null, album), done);
+    }
+
+  ], function (err, album) {
+    if (err) return next(err);
+    // TODO: API- Код ошибки об успешном удалении альбома и всех фото из него
+    var result = {
+      id:        album.id,
+      name:      album.name,
+      descr:     album.descr,
+      _album_bg: {
+        _id:      album._album_bg._id,
+        imgURL:   album._album_bg.imgURL,
+        thumbURL: album._album_bg.thumbURL
+      }
+    };
+    next(new HttpError(200, null, 'Альбом успешно изменен!', result));
+  });
 };
 
 
@@ -205,9 +301,9 @@ var API_updateAlbum = function (req, res, next) {
 var API_deleteAlbum = function (req, res, next) {
   var album_id = req.body.album_id;
   var isConfirmed = req.body.confirmed;
-  console.log(req.user._id, album_id, isConfirmed);
+
   // TODO: API- Валидация данных перед удалением альбома
-  // TODO: API- Реализовать удаление Альбома
+
   if (
       isConfirmed.toLowerCase() != "y" &&
       isConfirmed.toLowerCase() != "true"
@@ -220,7 +316,7 @@ var API_deleteAlbum = function (req, res, next) {
     function (done) {
       Album.findOne({'_user_id': req.user._id, '_id': album_id}, done);
     },
-    //Удалеяем все фотки альбома
+    //Удалеяем все фотки альбома если запрос от владельца альбома
     function (album, done) {
       // TODO: API -Код ошибки отказа в удалении чужого альбома
       if (!album) return done(new HttpError(400, null, 'Альбом не существует либо Вы не являетесь его владельцем!'));

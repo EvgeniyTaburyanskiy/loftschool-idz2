@@ -57,11 +57,22 @@
     _ajaxCall('/api/albums/delete', "POST", data);
   };
 
+  var updateAlbum = function (id, name, descr) {
+
+    var data = {
+      album_id:    id || undefined,
+      album_name:  name || undefined,
+      album_descr: descr || undefined,
+      album_bg:    ''
+    };
+    _ajaxCall('/api/albums/update', "POST", data);
+  };
   window.ajaxCall = {
-    getAlbums: getAlbums,
-    getAlbum:  getAlbum,
-    addAlbum:  addAlbum,
-    delAlbum:  delAlbum
+    getAlbums:   getAlbums,
+    getAlbum:    getAlbum,
+    addAlbum:    addAlbum,
+    updateAlbum: updateAlbum,
+    delAlbum:    delAlbum
   };
 })();
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EiLCJmaWxlIjoiYXBwLmpzIiwic291cmNlc0NvbnRlbnQiOlsiJ3VzZSBzdHJpY3QnO1xyXG5cclxuKGZ1bmN0aW9uKCkge1xyXG5cclxuXHJcbn0pKCk7Il0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9
