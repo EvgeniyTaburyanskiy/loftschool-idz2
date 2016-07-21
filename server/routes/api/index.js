@@ -44,37 +44,49 @@ var _router = function (app) {
   router.get('/api', controllers.main.api_home); //-> Редиректим на авторизацию публички
 
 
-
   // AUTH ROUTES ==============================
   router.route('/api/auth/signin')
-  .post(csrfProtection, controllers.auth.api_signin);//-> Вход в Систему
+  .post(csrfProtection, controllers.auth.api_signin);     //-> Вход в Систему
 
   router.route('/api/auth/signout')
-  .all(controllers.auth.api_signout);//-> Выход из Системы
+  .all(controllers.auth.api_signout);                     //-> Выход из Системы
 
   router.route('/api/auth/signup')
-  .post(csrfProtection, controllers.auth.api_signup);//-> Регистрация
+  .post(csrfProtection, controllers.auth.api_signup);     //-> Регистрация
 
   router.route('/api/auth/fogot')
-  .post(csrfProtection, controllers.auth.api_postfogot); //-> Восстановление пароля(отправка письма с токеном)
-  
+  .post(csrfProtection, controllers.auth.api_postfogot);  //-> Восстановление пароля(отправка письма с токеном)
+
   router.route('/api/auth/reset')
   .all(csrfProtection, controllers.auth.api_passwdreset); //-> Смена пароля(применение нового пароля)
 
   // ALBUM ROUTES ==============================================
+  /*
+   *  TODO: API-ROUTE - C Добавление нового альбома(имя, описние, фотка-фон)
+   *  TODO: API-ROUTE - R Выдать список альбомов пользователя (ID пользователя)
+   *  TODO: API-ROUTE - U Изменение Альбома (ID альбома, Имя, Описание, Фон)
+   *  TODO: API-ROUTE - D Удалить Альбом и все его фотки
+   * */
   router.route(['/api/albums'])
   .get(controllers.albums.api_getalbum)
   .post(controllers.albums.api_addalbum);
 
   router.route(['/api/albums/useralbums'])
   .get(controllers.albums.api_getuseralbums);
-  
+
   // USERS ROUTES ==============================================
+  /*
+   *  TODO: API-ROUTE - R Данные пользователя по ID
+   *  TODO: API-ROUTE - U Изменить список социалок пользователя
+   *  TODO: API-ROUTE - U Изменить карточку пользоватея(ФИ+Описание+Фотка+Фон)
+   *
+   * */
   router.route(['/api/users', '/api/users/*'])
   .all(checkAuth);
 
   router.route('/api/users')
   .get(controllers.users.list);       //->
+
 
   router.route('/api/users/:user_id')
   .get(controllers.users.get)         //->
@@ -83,6 +95,22 @@ var _router = function (app) {
   .delete(controllers.users.delete);  //->
 
 
+  // PHOTO ROUTES ==============================================
+  /*
+   *  TODO: API-ROUTE - С Добавление Фото (Id альбома,фалы фоток)
+   *  TODO: API-ROUTE - R Список Фоток Альбома (Id албьома)
+   *  TODO: API-ROUTE - R Список новых фоток (Кол-во, Номер с которого)
+   *  (https://stackoverflow.com/questions/12542620/how-to-make-pagination-with-mongoose)
+   *  (https://stackoverflow.com/questions/5539955/how-to-paginate-with-mongoose-in-node-js)
+   *  TODO: API-ROUTE - R Поиск Фоток по ключевому слову описанию и/или имени (ключевое слово)
+   *  TODO: API-ROUTE - R Детальная Инфо о фотографии (Id фото)
+   *  TODO: API-ROUTE - U Изменение Фото по ID ( Id фото,Имя,Описание)
+   *  TODO: API-ROUTE - U Добавить Like фотке (Id фото)
+   *  TODO: API-ROUTE - U Добавление коментария  (Id фото, Текст Коментария)
+   *  TODO: API-ROUTE - U Перенос Фотки в другой альбом (Список ID фото, Id нового альбома)
+   *  TODO: API-ROUTE - D Удаление Альбома (ID Альбома,Флаг подтверждения)
+   * */
+
 
   // SEARCH ROUTES ==============================================
   router.route(['/api/search', '/api/search/*'])
@@ -90,10 +118,8 @@ var _router = function (app) {
   .get(controllers.search.search);
 
 
-
   // DEFAULT  Route 404 ==============================================
   router.use('/api', controllers.error.err_404);
-
 
 
   // ERROR HANDLERS ==============================================
