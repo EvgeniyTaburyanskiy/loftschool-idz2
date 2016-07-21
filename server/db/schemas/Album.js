@@ -8,11 +8,15 @@ var Schema = mongoose.Schema;
  * Схема Альбома
  */
 var schemaAlbum = new Schema({
-  _user_id:   {
+  _user_id:  {
     type: Schema.Types.ObjectId,
     ref:  'User'
   },
-  name:       {
+  _album_bg: {
+    type: Schema.Types.ObjectId,
+    ref:  'Photo'
+  },
+  name:      {
     type:      String,
     default:   "Альбом без названия!",
     minlength: 1,
@@ -20,13 +24,14 @@ var schemaAlbum = new Schema({
     trim:      true,
     required:  true
   },
-  descr:      {
+  descr:     {
     type:      String,
     default:   "",
     maxlength: 254,
     trim:      true,
     required:  false
   },
+
   created_at: {
     type:    Date,
     default: Date.now

@@ -33,7 +33,9 @@ var err_all = function (err, req, res, next) {
     if (ENV === 'development') {
       // В Dev смотрим что произошло и разрешаем Express(у) решать как дальше поступать.
       logger.debug('%s %d %s', req.method, res.statusCode, err.message);
-      return next(err);
+      err = new HttpError(500, null, err.message); //-> Все ошибки которые мы не обработали ранее помечаем как 500 и отдаем клиенту.
+      res.sendAPIHttpError(err);
+      //return next(err);
     } else {
       // Что бы сервак в продакшене не падал . Обрабатываем все ошибки как 500.
       err = new HttpError(500); //-> Все ошибки которые мы не обработали ранее помечаем как 500 и отдаем клиенту.

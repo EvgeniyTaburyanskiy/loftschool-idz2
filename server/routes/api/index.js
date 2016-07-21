@@ -62,15 +62,16 @@ var _router = function (app) {
   .all(csrfProtection, controllers.auth.api_passwdreset); //-> Смена пароля(применение нового пароля)
 
   // ALBUM ROUTES ==============================================
-  router.route(['/api/albums', '/api/albums/*'])
-  .all(checkAuth, loadUser)
+  router.route(['/api/albums'])
   .get(controllers.albums.api_getalbum)
   .post(controllers.albums.api_addalbum);
 
-
+  router.route(['/api/albums/useralbums'])
+  .get(controllers.albums.api_getuseralbums);
+  
   // USERS ROUTES ==============================================
   router.route(['/api/users', '/api/users/*'])
-  .all(checkAuth, loadUser);
+  .all(checkAuth);
 
   router.route('/api/users')
   .get(controllers.users.list);       //->
@@ -85,7 +86,7 @@ var _router = function (app) {
 
   // SEARCH ROUTES ==============================================
   router.route(['/api/search', '/api/search/*'])
-  .all(checkAuth, loadUser)
+  .all(checkAuth)
   .get(controllers.search.search);
 
 

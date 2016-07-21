@@ -9,7 +9,7 @@
  */
 var logger = require('../utils/winston')(module);
 var checkAuth = require('../middleware/checkAuth');
-var loadUser = require('../middleware/loadUser');
+
 var config = require('../utils/nconf');
 var router = require('express').Router();
 var csrf = require('csurf');
@@ -42,7 +42,7 @@ var _router = function (app) {
 
   // HOME ROUTES ==============================================
   router.route('/')
-  .all(checkAuth, loadUser)
+  .all(checkAuth)
   .get(controllers.main.getHome); //-> Выдаем Гл страницу
 
   // AUTH ROUTES ==============================
@@ -58,7 +58,7 @@ var _router = function (app) {
 
   // ALBUM ROUTES ==============================================
   router.route(['/albums', '/albums/*'])
-  .all(checkAuth, loadUser, csrfProtection);
+  .all(checkAuth, csrfProtection);
   /*
    Поумолчанию Отдаем страницу альбомов текущего пользователя(собственные альбомы) редирект на страницу Пользователь
    С параметром отдаем страницу с фотками конкретного альбома 
@@ -68,7 +68,7 @@ var _router = function (app) {
 
   // USERS ROUTES ==============================================
   router.route(['/users', '/users/*'])
-  .get(checkAuth, loadUser, csrfProtection);
+  .get(checkAuth, csrfProtection);
 
   /*
    Поумолчанию Отдаем страницу  Текущего  пользователя (список альбомов пользователя, ЛичКабинет)
@@ -85,7 +85,7 @@ var _router = function (app) {
 
   // SEARCH ROUTES ==============================================
   router.route(['/search', '/search/*'])
-  .all(checkAuth, loadUser);
+  .all(checkAuth);
 
   /*
    Поумолчанию Отдаем пустую страницу поиска

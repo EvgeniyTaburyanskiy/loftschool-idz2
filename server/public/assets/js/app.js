@@ -5,9 +5,9 @@
   var data = {};
 
 
-  var _ajaxCall = function (method, data) {
+  var _ajaxCall = function (url, method, data) {
     var method_ = method || "GET";
-
+    var serviceUrl = url || serviceUrl;
     $.ajax({
       type:    method_,
       url:     serviceUrl,
@@ -20,15 +20,27 @@
     });
   };
 
-  var getAlbums = function () {
-    _ajaxCall();
+  var getAlbum = function (id) {
+    var id_ = id || 0;
+    _ajaxCall(null, null, {album_id: id_});
   };
 
-  var addAlbum = function (data) {
-    _ajaxCall("POST", data)
+  var getAlbums = function () {
+    _ajaxCall("/api/albums/useralbums");
   };
+
+
+  var addAlbum = function (name, descr) {
+    var data = {
+      album_name:  name,
+      album_descr: descr
+    };
+    _ajaxCall(null, "POST", data)
+  };
+
   window.ajaxCall = {
     getAlbums: getAlbums,
+    getAlbum:  getAlbum,
     addAlbum:  addAlbum
   };
 })();

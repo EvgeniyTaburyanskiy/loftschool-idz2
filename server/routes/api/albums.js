@@ -15,7 +15,7 @@ var Photo = require('../../db/models/Photo').mPhoto;
  */
 var API_getAlbumByID = function (req, res, next) {
   var album_id = req.query.album_id || req.params.album_id || req.body.album_id;
-
+  console.log(album_id);
   // Получаем Инфо об Альбоме
   // Получаем список Фоток Альбома
   // Получаем данные Владельца Альбома
@@ -24,17 +24,60 @@ var API_getAlbumByID = function (req, res, next) {
       Album
       .findById(album_id)
       .populate('_user_id')
+      .populate('_album_bg')
       .exec(function (err, album) {
-        return done(err, album);
+        if (err) return done(err);
+
+        var result = {
+          id:        album.id,
+          name:      album.name,
+          descr:     album.descr,
+          _album_bg: {
+            imgURL:   album._album_bg.imgURL,
+            thumbURL: album._album_bg.thumbURL
+          }
+
+        };
+        return done(err, result);
       });
     }
   ], function (err, result) {
     if (err) return next(err);
-    //Все Ок. Токен сгенерен, письмо отправлено.
-    // TODO: API- Сформировать объект ответа JSON по Восстановлению пароля
+
     next(new HttpError(200, null, '', result));
   });
 };
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @constructor
+ */
+var API_getUserAlbums = function (req, res, next) {
+  var user_id = req.query.user_id || req.params.user_id || req.user._id;
+
+  // Получаем Инфо об Альбомах
+  async.waterfall([
+    function (done) {
+      Album
+      .find({_user_id: user_id}, 'id name descr _album_bg')
+      .lean()
+      .populate('_album_bg', 'imgURL thumbURL')
+      .exec(function (err, albums) {
+        if (err) return done(err);
+        return done(err, albums);
+      });
+    }
+  ], function (err, albums) {
+    if (err) return next(err);
+
+    next(new HttpError(200, null, '', albums));
+  });
+
+};
+
 
 /**
  *
@@ -78,10 +121,32 @@ var API_addAlbum = function (req, res, next) {
         return done(null, album, newPhoto);
       });
     },
+    // Устанавливаем обратную ссылку альбому на Фотку(фон)
+    function (album, photo, done) {
+
+      album._album_bg = photo._id;
+
+      album.save(function (err) {
+        if (err) return done(err);
+        // TODO: API- Обработка ошибок валидации Сохранения Альбома
+        return done(null, album, photo);
+      });
+    },
     // Получаем фотки и обрабатываем их. Сохраняем в FS и обновляем документ Фотки.
     function (album, photo, done) {
+      var result;
       // TODO: API- Обработка Загруженой фотки с валидацией
-      return done(null, 'Success');
+
+      result = {
+        id:        album.id,
+        name:      album.name,
+        descr:     album.descr,
+        _album_bg: {
+          imgURL:   photo.imgURL,
+          thumbURL: photo.thumbURL
+        }
+      };
+      return done(null, result);
     }
   ], function (err, result) {
     if (err) return next(err);
@@ -93,6 +158,7 @@ var API_addAlbum = function (req, res, next) {
 
 
 exports = module.exports = {
-  api_getalbum: API_getAlbumByID,
-  api_addalbum: API_addAlbum
+  api_getalbum:      API_getAlbumByID,
+  api_getuseralbums: API_getUserAlbums,
+  api_addalbum:      API_addAlbum
 };

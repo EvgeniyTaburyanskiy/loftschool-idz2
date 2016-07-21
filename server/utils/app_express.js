@@ -10,6 +10,7 @@ var express          = require('express'),
     methodOverride   = require('method-override'),
     sendHttpError    = require('../middleware/HttpError').sendHttpError,
     sendAPIHttpError = require('../middleware/HttpError').sendAPIHttpError,
+    loadUser         = require('../middleware/loadUser'),
     expressSession   = require('express-session'),
     MongoStore       = require('connect-mongo')(expressSession),
     passport         = require('passport'),
@@ -62,10 +63,8 @@ app.use(cookieParser());    //-> req.cookies
 app.use(expressSession(sessionOptions));
 
 app.use(flash());           //-> res.locals.messages
-
-app.use(sendAPIHttpError);  //->  Обработчик ошибок API интерфейса
-app.use(sendHttpError);     //-> Обработчик ошибок публичного интерфейса
-
+app.use(sendAPIHttpError);  //->  добавляем Обработчик ошибок API интерфейса (res.sendAPIHttpError)
+app.use(sendHttpError);     //-> добавляем Обработчик ошибок публичного интерфейса (res.sendHttpError)
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -74,5 +73,7 @@ app.use(passport.session());
  * */
 app.use(apiRouter(app));
 app.use(publicRouter(app));
+app.use(loadUser);
+
 
 module.exports = app;

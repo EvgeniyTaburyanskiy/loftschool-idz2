@@ -29,14 +29,14 @@ var schemaPhoto = new Schema({
   },
   imgURL:     { //-> URL
     type:      String,
-    default:   '',
+    default:   '/assets/img/no_photo.jpg',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
     trim:      true,
     required:  true
   },
   thumbURL:   {//-> URL
     type:      String,
-    default:   '',
+    default:   '/assets/img/no_photo.jpg',
     maxlength: 2000,
     trim:      true,
     required:  false
@@ -52,8 +52,9 @@ var schemaPhoto = new Schema({
   },
   likes:      [{
     _user_id: { //-> 
-      type: Schema.Types.ObjectId,
-      ref:  'User'
+      type:     Schema.Types.ObjectId,
+      ref:      'User',
+      required: false
     }
   }], //-> Лайки храним как вложенный объект
   created_at: {
