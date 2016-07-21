@@ -108,3 +108,4 @@ gm                  | обертка для imagemagick
 * <img src="https://avatars1.githubusercontent.com/u/7585251?v=3&s=460" width="64">[Евгений Табурянский](https://github.com/EvgeniyTaburyanskiy)
 * <img src="https://avatars2.githubusercontent.com/u/16744815?v=3&s=460" width="64">[Олег Богданов](https://github.com/obogdanov)
 
+
