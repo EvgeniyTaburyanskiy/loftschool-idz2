@@ -41,7 +41,7 @@ body {
 {
     margin: auto;
 
-    perspective: 1000px;
+    perspective: 1500px;
 }
 .flip-cnt-w.hover .flip-cnt
 {
@@ -54,8 +54,9 @@ body {
 .pass-rec
 {
     display: flex;
-    width: 100%;
+    width: 95%;
     height: 350px;
+    margin: auto;
 }
 .flip-cnt
 {
@@ -108,7 +109,7 @@ body {
     flex-direction: column;
     padding: 5px 0 0 0;
     width: 280px;
-    
+    margin: auto;
     border-radius: 20px;
     background-color: #fff;
 }
@@ -192,14 +193,11 @@ body {
 }
 .card__tx {
     padding: 0 0 0 20px;
-    margin: 0 0 20px 0;
+    margin: 0 0 10px 0;
     display: flex;
     font-size: 14px;
     font-family: 'Proxima Nova';
     text-align: left;
-}
-.card__tx:last-child {
-    margin: 0;
 }
 .card__t {
     padding: 10px 0 0 20px;
@@ -217,7 +215,7 @@ body {
 .hidden {
     display: none;
 }
-.f {
+.index-f {
     position: absolute;
     padding: 0 10px 0 10px;
     bottom: 10px;
@@ -242,7 +240,7 @@ body {
     }
     .b-w {
         justify-content: flex-start;
-        padding: 50px 0 0;
+        padding: 20px 0 0;
     }
     .flip-cnt-w
 {
