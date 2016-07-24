@@ -25,14 +25,15 @@ body {
     position: absolute;
     width: 100%;
     height: 100%;
+    trasition: all 0.2s line;
    
 }
 
 .parallax-layer__img {
     display: block;
     position: absolute;
-    min-width: 100%;
-    
+    min-width: 105%;
+    min-height: 105%;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -46,6 +47,10 @@ body {
 .flip-cnt-w.hover .flip-cnt
 {
     transform: rotateY(180deg);
+
+}
+.flip-cnt-w {
+    overflow: hidden;
 }
 .flip-cnt-w,
 .flip-cnt,
@@ -54,8 +59,9 @@ body {
 .pass-rec
 {
     display: flex;
-    width: 95%;
-    height: 350px;
+    justify-content: flex-start;
+    width: 100%;
+    height: 450px;
     margin: auto;
 }
 .flip-cnt
@@ -71,6 +77,7 @@ body {
 .pass-rec
 {
     flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     position: absolute;
     top: 0;
@@ -109,15 +116,14 @@ body {
     flex-direction: column;
     padding: 5px 0 0 0;
     width: 280px;
-    margin: auto;
-    border-radius: 20px;
+    margin: 10px auto;
+    @include rounded (20px)
     background-color: #fff;
 }
 .card__it
 {
     width: 200px;
     height: 35px;
-    margin: 0 0 1px 0;
     padding: 0 0 0 10px;
     font-size: 16px;
     font-family: 'Proxima Nova';
@@ -128,7 +134,7 @@ body {
 }
 .card-a {
     padding: 0 0 0 20px;
-    margin: 0 0 10px 0;
+    margin: 10px 0 0 0;
     font-size: 14px;
     text-decoration: none;
     color: #28bbf0;
@@ -148,16 +154,16 @@ body {
 {
     color: #666;
 }
-.card__it:last-child {
-    margin: 0 0 15px 0;
-}
 .card-input {
+    display: flex;
     position: relative;
+    padding: 5px 0 5px 20px;
+    align-items: center;
 }
 .card-input:after {
     display: block;
     position: absolute;
-    bottom: 8px;
+    bottom: 0;
     left: 0;
 
     width: 100%;
@@ -186,34 +192,45 @@ body {
     z-index: 100;
 }
 .btn {
-    margin: 0 0 10px 0;
+    margin: 10px 0 10px 0;
     width: 100%;
     justify-content: space-around;
     display: flex;
 }
 .card__tx {
-    padding: 0 0 0 20px;
-    margin: 0 0 10px 0;
+    padding: 10px 0 10px 20px;
     display: flex;
+    align-items: center;
     font-size: 14px;
     font-family: 'Proxima Nova';
     text-align: left;
 }
 .card__t {
-    padding: 10px 0 0 20px;
-    margin: 0 0 10px 0;
+    padding: 10px 0 10px 20px;
     font-size: 14px;
     font-family: 'Proxima Nova';
     text-align: left;
 }
 .bold {
     font-weight : bold;
+    padding: 10px 0 0 20px;
+}
+.input-ic {
+    width: 17px;
+    height: 17px;
+    fill: #cdcdcd;
 }
 .flip-cnt__back {
     transform: rotateY(180deg);
 }
+.pass-rec {
+    opacity: 1;
+    transition: .6s;
+    
+}
 .hidden {
-    display: none;
+    opacity: 0;
+    z-index: -1;
 }
 .index-f {
     position: absolute;

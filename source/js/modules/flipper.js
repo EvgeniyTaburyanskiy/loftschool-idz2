@@ -1,6 +1,6 @@
 jQuery(document).ready(function(){
 
-        jQuery('.card-a').on('click', function(event) {
+        jQuery('#reg').on('click', function(event) {
              jQuery('.flip-cnt-w').addClass('hover')
              event.stopPropagation();
         });
@@ -10,9 +10,10 @@ jQuery(document).ready(function(){
              	 jQuery('.flip-cnt-w').removeClass('hover');	
         });
 
-        jQuery('.card__a').on('click', function(event) {
-             //jQuery('.flip-cnt-w').addClass('hidden')
-             jQuery('.pass-rec').removeClass('hidden')
+        jQuery('#pass').on('click', function(event) {
+             if ($(event.target).closest(".hidden").length) return;
+                 jQuery('.pass-rec').removeClass('hidden');
+             jQuery('.flip-cnt').addClass('hidden')
              event.stopPropagation();
         });
        
