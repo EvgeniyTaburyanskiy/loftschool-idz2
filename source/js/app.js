@@ -3,6 +3,6 @@ var $ = require("jquery");
 
 
 exports = module.exports = (function() {
-$("<div class='test'/>").text("Hallo word").appendTo('body')
+  $("<div class='test'/>").text("Hallo word").appendTo('body')
 
 })();
