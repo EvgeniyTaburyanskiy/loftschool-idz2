@@ -67,6 +67,7 @@
     };
     _ajaxCall('/api/albums/update', "POST", data);
   };
+  
   window.ajaxCall = {
     getAlbums:   getAlbums,
     getAlbum:    getAlbum,
