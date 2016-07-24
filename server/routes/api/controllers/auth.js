@@ -1,15 +1,15 @@
-var logger = require('../../utils/winston')(module);
-var config = require('../../utils/nconf');
-var HttpError = require('../../middleware/HttpError').HttpError;
-var AuthError = require('../../db/schemas/User').AuthError;
+var logger = require('../../../utils/winston')(module);
+var config = require('../../../utils/nconf');
+var HttpError = require('../../../middleware/HttpError').HttpError;
+var AuthError = require('../../../db/schemas/User').AuthError;
 var nodemailer = require('nodemailer');
 var async = require('async');
 var crypto = require('crypto');
 var passport = require('passport');
 //Конфигурируем стратегии Passport
-require('../../config/passportAuthConf')(passport);
+require('../../../config/passportAuthConf')(passport);
 
-var User = require('../../db/models/User').mUser;
+var User = require('../../../db/models/User').mUser;
 
 /*--------------------------------------------------------*/
 /**
@@ -107,11 +107,7 @@ var api_signup = function (req, res, next) {
           }
           // TODO: API- статус ответа в API для успешной регистрации
           // Все ок. Отправляем Ответ со статусом
-          res.json(
-              {
-                staus: 200
-              }
-          )
+          next( new HttpError(200) )
         });
       }
   )(req, res, next);

@@ -1,15 +1,8 @@
 /**
- * Промежуточный обработчик уровня приложения
- * Проверяет статус авторизации пользователя
- */
-var ObjectID = require('mongodb').ObjectID;
-var User = require('../db/models/User').mUser;
-
-/**
  * Мидлвар Подгружает данные пользователя на каждом Хите. в res.locals.user
  *
  * Чтобы он работал, ему нужна сессия. и Passport
- * т.е. Мидлвар должен быть после обработчика сессий.
+ * т.е. Мидлвар должен быть после обработчика сессий. и после Passport
  *
  * @param req
  * @param res
@@ -21,5 +14,6 @@ module.exports = function (req, res, next) {
   if (!req.session.passport.user) return next();
 
   res.locals.user = req.user;
+
   next();
 };

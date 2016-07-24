@@ -9,24 +9,24 @@
  */
 var logger = require('../utils/winston')(module);
 var checkAuth = require('../middleware/checkAuth');
-var loadUser = require('../middleware/loadUser');
+
 var config = require('../utils/nconf');
 var router = require('express').Router();
 var csrf = require('csurf');
-var route_params = require('./api/routeparams.js');
+var route_params = require('./api/controllers/routeparams.js');
 var csrfProtection = csrf(config.get('csrf')); //-> add req.csrfToken() function
 
 /**
  * ROUTING CONTROLLERS
  */
 var controllers = {
-  main:         require('./main'),         //-> Обработчик Маршрута Гланая стр
-  auth:         require('./auth'),         //-> Обработчик Маршрута Авторизация/Регистрация/Восстановление пароля
-  album:        require('./albums'),       //-> Обработчик Маршрута Альбом
-  users:        require('./users'),        //-> Обработчик Маршрута Пользователь
-  search:       require('./search'),       //-> Обработчик Маршрута Поиска
-  error:        require('./error'),        //-> Обработчик Ошибочных запросов
-  route_params: require('./api/routeparams') //-> Обработчик Параметров
+  main:         require('./controllers/main'),         //-> Обработчик Маршрута Гланая стр
+  auth:         require('./controllers/auth'),         //-> Обработчик Маршрута Авторизация/Регистрация/Восстановление пароля
+  album:        require('./controllers/albums'),       //-> Обработчик Маршрута Альбом
+  users:        require('./controllers/users'),        //-> Обработчик Маршрута Пользователь
+  search:       require('./controllers/search'),       //-> Обработчик Маршрута Поиска
+  error:        require('./controllers/error'),        //-> Обработчик Ошибочных запросов
+  route_params: require('./api/controllers/routeparams') //-> Обработчик Параметров
 };
 
 
@@ -42,7 +42,7 @@ var _router = function (app) {
 
   // HOME ROUTES ==============================================
   router.route('/')
-  .all(checkAuth, loadUser)
+  .all(checkAuth)
   .get(controllers.main.getHome); //-> Выдаем Гл страницу
 
   // AUTH ROUTES ==============================
@@ -58,7 +58,7 @@ var _router = function (app) {
 
   // ALBUM ROUTES ==============================================
   router.route(['/albums', '/albums/*'])
-  .all(checkAuth, loadUser, csrfProtection);
+  .all(checkAuth, csrfProtection);
   /*
    Поумолчанию Отдаем страницу альбомов текущего пользователя(собственные альбомы) редирект на страницу Пользователь
    С параметром отдаем страницу с фотками конкретного альбома 
@@ -68,7 +68,7 @@ var _router = function (app) {
 
   // USERS ROUTES ==============================================
   router.route(['/users', '/users/*'])
-  .get(checkAuth, loadUser, csrfProtection);
+  .get(checkAuth, csrfProtection);
 
   /*
    Поумолчанию Отдаем страницу  Текущего  пользователя (список альбомов пользователя, ЛичКабинет)
@@ -85,7 +85,7 @@ var _router = function (app) {
 
   // SEARCH ROUTES ==============================================
   router.route(['/search', '/search/*'])
-  .all(checkAuth, loadUser);
+  .all(checkAuth);
 
   /*
    Поумолчанию Отдаем пустую страницу поиска

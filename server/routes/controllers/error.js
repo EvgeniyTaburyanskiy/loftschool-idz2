@@ -1,9 +1,9 @@
 /**
  * Module dependencies.
  */
-var logger = require('../utils/winston')(module);
+var logger = require('../../utils/winston')(module);
 var ENV = process.env.NODE_ENV;
-var HttpError = require('../middleware/HttpError').HttpError;
+var HttpError = require('../../middleware/HttpError').HttpError;
 var express = require('express');
 
 

@@ -1,6 +1,8 @@
 'use strict';
+var $ = require("jquery");
 
-(function() {
 
+exports = module.exports = (function() {
+  $("<div class='test'/>").text("Hallo word").appendTo('body')
 
 })();
