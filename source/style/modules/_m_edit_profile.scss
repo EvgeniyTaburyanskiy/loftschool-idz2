@@ -1,6 +1,15 @@
 @import "../helpers/mixins";
 @import "../helpers/functions";
-
+.edit-profile-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(#000,0.7);
+  z-index: 5555;
+  display: none;
+}
 .edit-profile {
   width: 679px;
   background: #fff;
@@ -8,6 +17,10 @@
   flex-direction: column;
   border-radius: 5px;
   overflow: hidden;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
   @include mediamax(1299px) {
     width: 596px;
   }
