@@ -1,6 +1,30 @@
 @import "../helpers/mixins";
 @import "../helpers/functions";
-
+@keyframes photoSlideDown {
+  from {
+    bottom: 100%;
+    transform: translate(-50%,0);
+  }
+  to {
+    bottom: 50%;
+    transform: translate(-50%,50%);
+  }
+}
+.photoSlideDown {
+  animation-name: photoSlideDown;
+  animation-duration: .3s;
+  animation-fill-mode: both;
+}
+.photo-edit-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(#000,0.7);
+  z-index: 5555;
+  display: none;
+}
 .photo-edit {
   width: 679px;
   height: 452px;
@@ -9,6 +33,10 @@
   flex-direction: column;
   border-radius: 5px;
   overflow: hidden;
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translate(-50%,0);
   @include mediamax(1299px) {
     width: 596px;
   }

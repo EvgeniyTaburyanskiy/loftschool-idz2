@@ -2,12 +2,12 @@
 
 var profile = $('.edit-profile-wrap'),
     profileCard = $('.edit-profile'),
-    editBtn = $('.edit-block__btn'),
+    editProfile = $('.m-controls .edit-block__btn'),
     closeBtn = $('.cancel-popup__btn'),
     indexClick = 0;
 
 $ ( function() {
-    editBtn.on('click',( function(e) {
+    editProfile.on('click',( function(e) {
         if (indexClick === 0) {
             profile.fadeIn(100);
             profileCard.addClass('profileSlideDown');
