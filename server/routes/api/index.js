@@ -84,6 +84,7 @@ var _router = function (app) {
   router.route(['/api/albums'])
   .get(controllers.albums.API_getAlbumByID)     // R Список Фоток Альбома (Id альбома)
   .post(
+      csrfProtection,
       Upload.single('album_bg'),
       controllers.albums.API_addAlbum           // C Добавление нового альбома(имя, описние, фотка-фон)
   );
@@ -93,6 +94,7 @@ var _router = function (app) {
 
 
   router.route(['/api/albums/update'])
+
   .post(
       Upload.single('album_bg'),
       controllers.albums.API_updateAlbum        // U Изменение Альбома (ID альбома, Имя, Описание, Фон)

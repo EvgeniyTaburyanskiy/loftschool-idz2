@@ -1,6 +1,8 @@
 var logger = require('../../../utils/winston')(module);
 var HttpError = require('../../../middleware/HttpError').HttpError;
 var async = require('async');
+var PhotoResizer = require('../../../utils/PhotoResizer');
+
 
 var Album = require('../../../db/models/Album').mAlbum;
 var Photo = require('../../../db/models/Photo').mPhoto;
@@ -185,12 +187,13 @@ var API_addAlbum = function (req, res, next) {
  * @constructor
  */
 var API_updateAlbum = function (req, res, next) {
-  var album_bg;
+
   var album_id = req.body.album_id;
   var album_name = req.body.album_name || 'Альбом без названия!';
   var album_descr = req.body.album_descr || '';
-  console.log('files', req.files);
-  //var album_bg = (req.files !== 'undefined') ? req.files['album_bg'] : '' || req.body.album_bg; // ожидаем либо файл либо ID фотки из БД
+  var album_bg = (req.file !== 'undefined') ? req.file : '' || req.body.album_bg; // ожидаем либо файл либо ID фотки из БД
+  logger.debug(album_bg);
+
   // TODO: API- Валидация данных перед обновлением  альбома
 
   if (!album_id) {
@@ -219,31 +222,30 @@ var API_updateAlbum = function (req, res, next) {
         return done(null, album, null);
       }
 
-      // TODO: API- Реализовать Обработку фото в IMAGICK
+      // TODO: API- Реализовать Обработку фото в IMAGEMAGICK
+      var resizer = new PhotoResizer(album_bg, function (err, newImageInfo) {
+        if (err) return done(new HttpError(400, null, 'Ошибка в процессе обработки файла!', err.message));
 
-      var photofiles = {
-        img:         {},
-        img_resized: {}
-      };
+        logger.debug('Resized info - ', newImageInfo);
+        // Создаем 'экземпляр новой фотки.
+        var newPhoto = new Photo({
+          '_album_id': album._album_bg._id,
+          'album_bg':  true,
+          'imgURL':    newImageInfo.imgPath,
+          'thumbURL':  newImageInfo.thumbPath
+        });
 
-      // Создаем новую фотку .
-      var newPhoto = new Photo({
-        '_album_id': album._album_bg._id,
-        'album_bg':  true,
-        'imgURL':    photofiles.img,
-        'thumbURL':  photofiles.img_resized
+        // Новую фотку  сохраненяем в БД
+        newPhoto.save(function (err) {
+          if (err) return done(err);
+          return done(null, album, newPhoto);
+        });
+
       });
-
-      // Новую фотку  сохраненяем в БД
-      newPhoto.save(function (err) {
-        if (err) return done(err);
-      });
-
-      return done(null, album, newPhoto);
     },
     // Снимаем со старой фотки флаг того что она Фоновая картинка альбома, если есть новая фотка
     function (album, newPhoto, done) {
-      console.log('newPhoto', newPhoto);
+
       if (newPhoto) {
         // Находим фотку текущего фона
         Photo.findById(album._album_bg._id, function (err, oldPhoto) {
