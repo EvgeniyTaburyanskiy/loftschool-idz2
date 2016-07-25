@@ -50,12 +50,8 @@ html.no-js(lang= "ru")
       if user
         div= JSON.stringify(user)
         br
-
-      if $user
-        div= JSON.stringify($user)
     //-Add your site or application content here
     block APP_content
-
 
     block footer-scripts
       script(src='/assets/js/foundation.js' defer)

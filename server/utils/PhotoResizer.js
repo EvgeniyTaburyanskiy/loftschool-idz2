@@ -5,6 +5,7 @@ var async = require('async');
 var path = require('path');
 var config = require('./nconf');
 var logger = require('./winston')(module);
+
 /**
  *
  * @param img

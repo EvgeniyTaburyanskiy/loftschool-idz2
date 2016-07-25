@@ -16,7 +16,7 @@ var PhotoComment = require('../../../db/models/PhotoComment').mPhotoComments;
  * @param res
  * @param next
  */
-var API_getAlbumByID = function (req, res, next) {
+var API_getAlbumById = function (req, res, next) {
   var album_id = req.query.album_id || req.params.album_id || req.body.album_id;
 // TODO: API- Валидация ID Альбома
 
@@ -363,7 +363,7 @@ var API_deleteAlbum = function (req, res, next) {
 
 
 exports = module.exports = {
-  API_getAlbumByID:    API_getAlbumByID,
+  API_getAlbumById:    API_getAlbumById,
   API_getAlbumsByUser: API_getAlbumsByUser,
   API_addAlbum:        API_addAlbum,
   API_updateAlbum:     API_updateAlbum,

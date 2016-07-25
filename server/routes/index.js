@@ -40,7 +40,7 @@ var _router = function (app) {
 
   router.use(function (req, res, next) {
     var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    logger.info('Remote IP = %s', ip);
+    logger.info('PUBLIC Remote req IP = %s', ip);
     next();
   });          //->
 
@@ -58,7 +58,7 @@ var _router = function (app) {
   .get(controllers.auth.getfogot)     //-> Редирект на страницу Авторизации/Восстановления пароля
 
   router.route('/reset/:token')
-  .get(csrfProtection, controllers.auth.getreset)     //-> Проверяем токен(из письма) и выдаем страницу смены пароля
+  .get(csrfProtection, controllers.auth.getreset);     //-> Проверяем токен(из письма) и выдаем страницу смены пароля
 
   // ALBUM ROUTES ==============================================
   router.route(['/albums', '/albums/*'])

@@ -4,7 +4,7 @@ var HttpError = require('../../../middleware/HttpError').HttpError;
 var ObjectID = require('mongodb').ObjectID;
 
 /* GET users page. */
-var getUsersList = function (req, res, next) {
+var API_getUsersList = function (req, res, next) {
   User.find({}, 'userdata').lean().exec(function (err, users) {
     if (err) return next(err);
 
@@ -14,8 +14,9 @@ var getUsersList = function (req, res, next) {
   //res.render('index', {title: 'albums'});
 };
 
+
 /* GET user by ID. */
-var getUserById = function (req, res, next) {
+var API_getUserById = function (req, res, next) {
   try {
     var uid = new ObjectID(req.params.id);
   }
@@ -30,23 +31,42 @@ var getUserById = function (req, res, next) {
   });
 };
 
-var addUser = function (req, res, next) {
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+var API_addUser = function (req, res, next) {
   res.redirect('/auth');
 };
 
-var updateUser = function (req, res, next) {
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+var API_updateUser = function (req, res, next) {
 
 };
 
-var delUser = function (req, res, next) {
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+var API_deleteUser = function (req, res, next) {
 
 };
+
 
 exports = module.exports = {
-  list:   getUsersList,
-  get:    getUserById,
-  add:    addUser,
-  update: updateUser,
-  delete: delUser
+  API_getUsersList: API_getUsersList,
+  API_getUserById:  API_getUserById,
+  API_addUser:      API_addUser,
+  API_updateUser:   API_updateUser,
+  API_deleteUser:   API_deleteUser
 };
 

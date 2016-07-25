@@ -139,11 +139,7 @@ var api_signout = function (req, res, next) {
   //(согласно доке passport удаляет свои данные из сессии, но объект сессии нет.)
   req.session.destroy(); //-> Удаляем сессию пользователя
   // TODO: API- статус ответа в API для успешного разлогона
-  res.json(
-      {
-        staus: 200
-      }
-  ); //-> Отдаем ответ о результате!
+  next(new HttpError(200, null, 'Досвидания!'));  //-> Отдаем ответ о результате!
 };
 
 
@@ -153,7 +149,7 @@ var api_signout = function (req, res, next) {
  * @param res
  * @param next
  */
-var api_postfogot = function (req, res, next) {
+var api_fogotPasswd = function (req, res, next) {
   var email = req.body.email;
 
   async.waterfall([
@@ -213,7 +209,7 @@ var api_postfogot = function (req, res, next) {
  * @param next
  * @private
  */
-var api_passwdReset = function (req, res, next) {
+var api_resetPasswd = function (req, res, next) {
 
   async.waterfall([
         // Ищем пользователя с токеном и меняем пароль
@@ -267,7 +263,7 @@ var api_passwdReset = function (req, res, next) {
 
           var mailOptions = {
             to:      user.userdata.emailAddress,
-            subject: 'LOFTOGRAM: Ваш Пароль был изменен!',
+            subject: 'Ваш Пароль был изменен!',
             text:    'Здравствуйте,\n\n' +
                      'Пароль вашего аккаунта с E-mail: ' + user.userdata.emailAddress + ' был успешно изменен!'
           };
@@ -287,24 +283,13 @@ var api_passwdReset = function (req, res, next) {
 };
 
 
-/**
- *
- * @param req
- * @param res
- * @param next
- */
-var getAuth = function (req, res, next) {
-  res.render(
-      'auth',
-      {title: 'getAuth'}
-  );
-};
+
 
 exports = module.exports = {
   api_signin:      api_signin,
   api_signout:     api_signout,
   api_signup:      api_signup,
-  api_postfogot:   api_postfogot,
-  api_passwdreset: api_passwdReset
+  api_fogotPasswd: api_fogotPasswd,
+  api_resetPasswd: api_resetPasswd
 };
 

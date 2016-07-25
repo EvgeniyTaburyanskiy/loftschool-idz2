@@ -1,7 +1,7 @@
 extends ../_template
 block APP_content
 
-  form(method='POST' action="/api/auth/reset")
+  form(method='POST' action="/api/method/auth.resetPasswd")
     input(type='hidden' name='_csrf' value= csrfToken)
     input(type='hidden' name='token' value= token)
     legend Reset Password
