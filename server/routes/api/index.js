@@ -41,6 +41,11 @@ var _router = function (app) {
    * TODO: - api_key Валидацию через мидлвар в app.param (http://expressjs.com/ru/api.html#app.param)
    * */
   //router.all('*', chkApiKey);
+  router.use(function (req, res, next) {
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    logger.info('Remote req IP = %s', ip);
+    next();
+  });          //->
 
   // HOME ROUTES ==============================================
   router.get('/api', controllers.main.api_home); //-> Редиректим на авторизацию публички
