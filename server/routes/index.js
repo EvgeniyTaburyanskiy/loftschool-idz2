@@ -55,10 +55,13 @@ var _router = function (app) {
 
   // RESET PASSWORD ROUTES ==============================
   router.route('/reset')
-  .get(controllers.auth.getfogot)     //-> Редирект на страницу Авторизации/Восстановления пароля
+  .get(controllers.auth.getFogot)     //-> Редирект на страницу Авторизации/Восстановления пароля
 
   router.route('/reset/:token')
-  .get(csrfProtection, controllers.auth.getreset);     //-> Проверяем токен(из письма) и выдаем страницу смены пароля
+  .get(csrfProtection, controllers.auth.getReset);     //-> Проверяем токен(из письма) и выдаем страницу смены пароля
+
+  router.route('/email.confirm/:token')
+  .get(controllers.auth.confirmEmail);     //-> Проверяем токен(из письма) и подтверждаем E-mail
 
   // ALBUM ROUTES ==============================================
   router.route(['/albums', '/albums/*'])

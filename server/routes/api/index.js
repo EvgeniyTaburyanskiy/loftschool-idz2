@@ -67,11 +67,10 @@ var _router = function (app) {
   router.route('/api/method/auth.resetPasswd')
   .all(csrfProtection, controllers.auth.api_resetPasswd); //-> Смена пароля(применение нового пароля)
 
-
-
+  
+  
   // USERS ROUTES ==============================================
   /*
-   *  TODO: API-ROUTE - R Выдача Данных пользователя по ID
    *  TODO: API-ROUTE - U Изменить список социалок пользователя
    *  TODO: API-ROUTE - U Изменить карточку пользоватея(ФИ+Описание+Фотка+Фон)
    *
@@ -90,13 +89,16 @@ var _router = function (app) {
 
   router.route('/api/method/users.updateUser')
   .post(csrfProtection, controllers.users.API_updateUser);       //->
-
+  
+  router.route('/api/method/users.updateUserSocials')
+  .post(csrfProtection, controllers.users.API_updateUserSocials); //->
+  
   router.route('/api/method/users.deleteUser')
   .post(csrfProtection, controllers.users.API_deleteUser);       //->
 
 
-
-
+  
+  
   // ALBUM ROUTES ==============================================
   router.route(['/api/method/albums.getAlbumByID'])// R Список Фоток Альбома (Id альбома)
   .get(controllers.albums.API_getAlbumById);
@@ -120,8 +122,8 @@ var _router = function (app) {
   router.route(['/api/method/albums.deleteAlbum'])    // D Удаление Альбома и всех его фоткок
   .post(controllers.albums.API_deleteAlbum);
 
-
-
+  
+  
   // PHOTO ROUTES ==============================================
   /*
    *  TODO: API-ROUTE - С Добавление Фото (Id альбома,фалы фоток)

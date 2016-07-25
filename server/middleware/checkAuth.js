@@ -12,7 +12,13 @@ module.exports = function (req, res, next) {
     return next();
   }
   // Неавторизованных отправляем на авторизацию!
-  res
-  .status(401)
-  .redirect('/auth');
+  if (req.xhr || res.req.headers['x-requested-with'] == 'XMLHttpRequest') {
+    return next(new HttpError(401));
+  }
+  else {
+    res
+    .status(401)
+    .redirect('/auth');
+  }
+
 };

@@ -93,21 +93,22 @@ var api_signup = function (req, res, next) {
          *  TODO: - Создание письма и отправка пользователю для подтверждения регстрации
          *  TODO: - Логику обработки результата подтверждения
          */
-        // Отправляем велком письмо
+
         var mailOptions = {
           to:      user.userdata.emailAddress,
-          subject: 'Добро пожаловать!',
+          subject: 'Подтверждение E-mail!',
           text:    'Мы очень рады, что Вы решили попробовать Loftogram!\n\n' +
-                   'Теперь Вы можете воспользоваться всеми преимуществами нашего сервиса.\n\n' +
-                   'Предлагаем вам заполнить карточку пользователя и начать делиться впечатлениями. \n\n' +
-                   'Не отвечайте на это сообщение.\n' +
-                   'Приятного обмена впчатлениями!'
+                   'Прежде чем Вы сможете начать обмениваться впечатлениями. Мы просим Вас подтвердить ваш E-mail\n\n' +
+                   'Для этого Вам всего лишь нужно перейти по указанной ссылке: \n\n' +
+                   'http://' + req.headers.host + '/email.confirm/' + user.emailConfirmationToken + '\n\n'+
+                   'Не отвечайте на это сообщение.\n' 
+                   
         };
 
         mail(mailOptions, function (err, info) {
           if (err) return next(err);
         });
-
+        
         /*
          * Выполняем автологон для только что сгенерированного пользователя, редиректим на главную
          * метод req.login() добавляется  модулем passport. http://passportjs.org/docs/login
@@ -139,7 +140,7 @@ var api_signout = function (req, res, next) {
   //(согласно доке passport удаляет свои данные из сессии, но объект сессии нет.)
   req.session.destroy(); //-> Удаляем сессию пользователя
   // TODO: API- статус ответа в API для успешного разлогона
-  next(new HttpError(200, null, 'Досвидания!'));  //-> Отдаем ответ о результате!
+  next(new HttpError(200, null, ''));//-> Отдаем ответ о результате!
 };
 
 
@@ -160,18 +161,20 @@ var api_fogotPasswd = function (req, res, next) {
       });
     },
     function (token, done) {
-      User.findOne({'userdata.emailAddress': email}, function (err, user) {
-        if (!user) {
-          return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE', 'Пользователь с указанным Email не существует'));
-        }
+      User
+      .findOne({'userdata.emailAddress': email},
+          function (err, user) {
+            if (!user) {
+              return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE', 'Пользователь с указанным Email не существует'));
+            }
 
-        user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+            user.resetPasswordToken = token;
+            user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
-        user.save(function (err) {
-          done(err, token, user);
-        });
-      });
+            user.save(function (err) {
+              done(err, token, user);
+            });
+          });
     },
     function (token, user, done) {
       var mailOptions = {
@@ -214,7 +217,8 @@ var api_resetPasswd = function (req, res, next) {
   async.waterfall([
         // Ищем пользователя с токеном и меняем пароль
         function (done) {
-          User.findOne({
+          User
+          .findOne({
             'resetPasswordToken':   String(req.body.token),
             'resetPasswordExpires': {$gt: new Date}
           }, done)
@@ -281,8 +285,6 @@ var api_resetPasswd = function (req, res, next) {
         next(new HttpError(200, null, 'Ваш Пароль успешно изменен!', null));
       });
 };
-
-
 
 
 exports = module.exports = {

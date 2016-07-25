@@ -24,6 +24,7 @@ var API_getAlbumById = function (req, res, next) {
   // Получаем список Фоток Альбома
   // Получаем данные Владельца Альбома
   async.parallel([
+    // Выборка данных альбома
     function (done) {
       Album
       .findById(album_id)
@@ -46,6 +47,7 @@ var API_getAlbumById = function (req, res, next) {
         return done(err, result);
       });
     },
+    //ВЫборка всех фоток альбома
     function (done) {
       Photo
       .find({_album_id: album_id}, 'name descr imgURL thumbURL album_bg comments likes')
@@ -61,11 +63,11 @@ var API_getAlbumById = function (req, res, next) {
     if (err) return next(err);
 
     next(new HttpError(200, null, '',
-        {
+        [{
           album:  result[0],
           photos: result[1]
 
-        })
+        }])
     );
   });
 };
@@ -233,7 +235,6 @@ var API_updateAlbum = function (req, res, next) {
           album_bg.saveto = config.get('photoresizer:savefolder');
           album_bg.destfilename = newPhoto._id;
 
-          // TODO: API- Реализовать Обработку фото в GraphicsMagick 
           PhotoResizer.resize(album_bg, function (err, newImageInfo) {
             if (err) {
               // если при ресайзе что-то пошло не так, удаляем из БД болванку для фотки

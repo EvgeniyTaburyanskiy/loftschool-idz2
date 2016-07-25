@@ -101,7 +101,80 @@
     });
   };
 
-  window.modPhoto = {
-    
+  window.modPhoto = {};
+})();
+
+
+/**
+ * USERS
+ */
+(function () {
+  var serviceUrl = "/api/method/users";
+  var data = {};
+
+  var _ajaxCall = function (url, method, data) {
+    var method_ = method || "GET";
+    var serviceUrl_ = url || serviceUrl;
+
+    $.ajax({
+      type:    method_,
+      url:     serviceUrl_,
+      data:    data,
+      success: function (msg) {
+        console.log(msg);
+      },
+      error:   function (err) {
+      }
+    });
+  };
+
+  var getUsersList = function () {
+    _ajaxCall(serviceUrl + ".getUsersList", undefined, {});
+  };
+
+  var getUserById = function (user_id) {
+    var id_ = user_id || undefined;
+
+    _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
+  };
+
+  var addUser = function (user_id) {
+    var id_ = user_id || undefined;
+
+    _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
+  };
+
+  var updateUser = function (user_id, profile, socials) {
+
+    var newProfile = {
+      user_id:      user_id || undefined,
+      avatar:       "/img/no-avatar.png",
+      imgURL:       "/img/no-user-bg.png",
+      firstName:    "Без",
+      lastName:     "Имени",
+      emailAddress: "admin@loftogram.ru",
+      fb:           "",
+      g:            "",
+      message:      "",
+      tw:           "",
+      vk:           ""
+    };
+
+
+    _ajaxCall(serviceUrl + ".updateUser", "POST", newProfile);
+  };
+
+  var deleteUser = function (user_id) {
+    var id_ = user_id || undefined;
+
+    _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
+  };
+
+  window.modUser = {
+    getUsersList: getUsersList,
+    getUserById:  getUserById,
+    addUser:      addUser,
+    updateUser:   updateUser,
+    deleteUser:   deleteUser
   };
 })();
