@@ -244,12 +244,12 @@ var API_updateAlbum = function (req, res, next) {
               return done(new HttpError(400, null, 'Ошибка в процессе обработки файла!', err.message));
             }
 
-            logger.debug('Resized info - ', newImageInfo);
+            //logger.debug('Resized info - ', newImageInfo);
             // Создаем 'экземпляр новой фотки.
             newPhoto._album_id = album._id;
             newPhoto.album_bg = true;
-            newPhoto.imgURL = '/public/uploads/files/photos/' + path.basename(newImageInfo.imgPath);
-            newPhoto.thumbURL = '/public/uploads/files/photos/' + path.basename(newImageInfo.thumbPath);
+            newPhoto.imgURL = '/uploads/files/photos/' + path.basename(newImageInfo.imgPath);
+            newPhoto.thumbURL = '/uploads/files/photos/' + path.basename(newImageInfo.thumbPath);
 
             // Новую фотку  сохраненяем в БД
             newPhoto.save(function (err) {
@@ -276,6 +276,7 @@ var API_updateAlbum = function (req, res, next) {
         },
         //Вносим изменения в Альбом с указанием ссылки на новый Фон
         function (album, newPhoto, done) {
+
           album.name = album_name;
           album.descr = album_descr;
           if (newPhoto) {
@@ -301,7 +302,7 @@ var API_updateAlbum = function (req, res, next) {
           name:      album.name,
           descr:     album.descr,
           _album_bg: {
-            _id:      album._album_bg._id,
+            _id:      album._album_bg.id,
             imgURL:   album._album_bg.imgURL,
             thumbURL: album._album_bg.thumbURL
           }

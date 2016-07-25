@@ -48,10 +48,10 @@ PhotoResizer.prototype = {
           // Ресайз основной фотки
           imgPath:   function (done) {
             gmagic(that.originalImagePath)
-            .resize(options_big.size.width, options_big.size.heigh)
+            .resize(options_big.size.width, options_big.size.height, '')
             .noProfile()
             .quality(70)
-            .extent(options_big.size.width, options_big.size.height)
+            //.extent(options_big.size.width, options_big.size.height)
             .gravity('center')
             .write(that.resizedImgPath, function (err) {
               done(err, that.resizedImgPath);
@@ -60,10 +60,10 @@ PhotoResizer.prototype = {
           // Подготовка превью основной фотки
           thumbPath: function (done) {
             gmagic(that.originalImagePath)
-            .resize(photos_small.size.width, photos_small.size.heigh)
+            .resize(photos_small.size.width, photos_small.size.height, '')
             .noProfile()
             .quality(70)
-            .extent(photos_small.size.width, photos_small.size.height)
+            //.extent(photos_small.size.width, photos_small.size.height)
             .gravity('center')
             .write(that.resizedImgThumbPath, function (err) {
               done(err, that.resizedImgThumbPath);
@@ -71,7 +71,6 @@ PhotoResizer.prototype = {
           }
         },
         function (err, results) {
-          logger.debug('Resize Photo Result -', err, results);
           if (that.callback && typeof(that.callback) === 'function') {
             if (err) return that.callback(err);
             return that.callback(err, results);
