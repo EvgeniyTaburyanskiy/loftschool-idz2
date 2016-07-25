@@ -46,7 +46,7 @@ var _router = function (app) {
 
   // HOME ROUTES ==============================================
   router.route('/')
-  .all(checkAuth, loadUser)
+  .all(checkAuth)
   .get(controllers.main.getHome); //-> Выдаем Гл страницу
 
   // AUTH ROUTES ==============================
