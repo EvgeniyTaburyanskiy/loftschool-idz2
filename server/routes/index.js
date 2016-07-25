@@ -9,7 +9,7 @@
  */
 var logger = require('../utils/winston')(module);
 var checkAuth = require('../middleware/checkAuth');
-
+var loadUser = require('../middleware/loadUser');
 var config = require('../utils/nconf');
 var router = require('express').Router();
 var csrf = require('csurf');
@@ -38,11 +38,11 @@ var controllers = {
  */
 var _router = function (app) {
 
- // router.param('user_id',route_params);          //->
+  // router.param('user_id',route_params);          //->
 
   // HOME ROUTES ==============================================
   router.route('/')
-  .all(checkAuth)
+  .all(checkAuth, loadUser)
   .get(controllers.main.getHome); //-> Выдаем Гл страницу
 
   // AUTH ROUTES ==============================
@@ -52,7 +52,7 @@ var _router = function (app) {
   // RESET PASSWORD ROUTES ==============================
   router.route('/reset')
   .get(controllers.auth.getfogot)     //-> Редирект на страницу Авторизации/Восстановления пароля
-  
+
   router.route('/reset/:token')
   .get(csrfProtection, controllers.auth.getreset)     //-> Проверяем токен(из письма) и выдаем страницу смены пароля
 
@@ -76,7 +76,7 @@ var _router = function (app) {
    (список альбомов пользователя + шапка с данными пользователя)
    */
   router.get('/users', controllers.users.get);
-  
+
   /*
    Отдаем Персональную страницу  пользователя по ID
    (список альбомов пользователя + шапка с данными пользователя)

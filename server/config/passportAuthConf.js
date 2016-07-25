@@ -107,6 +107,7 @@ module.exports = function (passport) {
    * Достаем из Сессии ID и получаем свежие данные о Пользователе без оберточных служебных функций Mongoose
    */
   passport.deserializeUser(function (user_id, done) {
+    console.log('Start -passport.deserializeUser');
     try {
       var uid = new ObjectID(user_id);
     }
