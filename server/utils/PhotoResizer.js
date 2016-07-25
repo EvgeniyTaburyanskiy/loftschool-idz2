@@ -1,7 +1,6 @@
 'use strict';
 var fs = require('fs');
 var gmagic = require('gm');
-var imagic = gmagic.subClass({imageMagick: true});
 var async = require('async');
 var path = require('path');
 var config = require('./nconf');
@@ -13,24 +12,11 @@ var logger = require('./winston')(module);
  * @param callback
  * @constructor
  */
-function PhotoResizer(img, type, callback) {
-  if (typeof type === 'function') {
-    callback = type;
-    type = undefined;
-  }
-
-  if (!type || ['photo', 'avatar'].indexOf(type.toLowerCase()) !== -1) {
-    type = 'photo';
-  }
-
-  this.imgType = type;
-  this.img = img;
-  this.callback = callback;
-  this.init();
+function PhotoResizer(options) {
 }
 
 PhotoResizer.prototype = {
-  resizeAvatar: function () {
+  _resizeAvatar: function () {
     var
         that    = this,
         options = config.get('photoresizer:set:avatar');
@@ -52,21 +38,21 @@ PhotoResizer.prototype = {
     });
   },
 
-  resizePhoto: function () {
+  _resizePhoto: function () {
     var
         that         = this,
         options_big  = config.get('photoresizer:set:photos_big'),
         photos_small = config.get('photoresizer:set:photos_small');
 
-    async.series({
+    async.parallel({
           // Ресайз основной фотки
           imgPath:   function (done) {
             gmagic(that.originalImagePath)
             .resize(options_big.size.width, options_big.size.heigh)
-            .gravity('center')
             .noProfile()
             .quality(70)
             .extent(options_big.size.width, options_big.size.height)
+            .gravity('center')
             .write(that.resizedImgPath, function (err) {
               done(err, that.resizedImgPath);
             });
@@ -74,11 +60,11 @@ PhotoResizer.prototype = {
           // Подготовка превью основной фотки
           thumbPath: function (done) {
             gmagic(that.originalImagePath)
-            .resize(photos_small.size.width, photos_small.size.height)
-            .gravity('center')
+            .resize(photos_small.size.width, photos_small.size.heigh)
             .noProfile()
             .quality(70)
             .extent(photos_small.size.width, photos_small.size.height)
+            .gravity('center')
             .write(that.resizedImgThumbPath, function (err) {
               done(err, that.resizedImgThumbPath);
             });
@@ -94,24 +80,40 @@ PhotoResizer.prototype = {
 
   },
 
-  init: function () {
-    var saveFolder = path.join(__dirname, '/../', config.get('photoresizer:savefolder'));
-    this.originalImagePath = path.join(__dirname,'/../', this.img.path);
+  resize: function (img, type, callback) {
+    if (typeof type === 'function') {
+      callback = type;
+      type = undefined;
+    }
+    if (!type || ['photo', 'avatar'].indexOf(type.toLowerCase()) !== -1) {
+      type = 'photo';
+    }
+
+    this.img = img;
+    this.imgType = type;
+    this.callback = callback;
+
+
+    this.originalImagePath = path.join(__dirname, '/../', this.img.path);
+    this.saveFolder = path.join(__dirname, '/../', this.img.saveto);
+
+    var ext = this.img.originalname.split(".").pop();
+    this.resizedImgThumbPath = this.saveFolder + '/photos/thumb-' + this.img.destfilename + '.' + ext;
+
 
     if (this.imgType === 'avatar') {
-      this.resizedImgPath = '/ava/' + this.img.originalname;
+      this.resizedImgPath = this.saveFolder + '/ava/' + this.img.destfilename + '.' + ext;
 
-      this.resizeAvatar();
+      return this._resizeAvatar();
     }
 
     if (this.imgType === 'photo') {
-      this.resizedImgThumbPath = saveFolder + '/photos/thumb-' + this.img.originalname;
-      this.resizedImgPath = saveFolder + '/photos/' + this.img.originalname;
-
-      this.resizePhoto();
+      this.resizedImgPath = this.saveFolder + '/photos/' + this.img.destfilename + '.' + ext;
+      return this._resizePhoto();
     }
 
   }
+
 };
 
-exports = module.exports = PhotoResizer;
+exports = module.exports = new PhotoResizer;
