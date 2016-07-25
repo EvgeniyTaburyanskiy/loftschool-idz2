@@ -10,8 +10,12 @@
  * @returns {*}
  */
 module.exports = function (req, res, next) {
-  res.locals.user = null;
-  if (!req.session.passport.user) return next();
+  res.locals.user = undefined;
+
+  if (req.session.passport === undefined ||
+      req.session.passport.user === undefined) {
+    return next();
+  }
 
   res.locals.user = req.user;
 
