@@ -38,7 +38,11 @@ var controllers = {
  */
 var _router = function (app) {
 
-  // router.param('user_id',route_params);          //->
+  router.use(function (req, res, next) {
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    logger.info('Remote IP = %s', ip);
+    next();
+  });          //->
 
   // HOME ROUTES ==============================================
   router.route('/')
