@@ -72,9 +72,9 @@ var getReset = function (req, res) {
   );
 };
 
+
 /**
- * Обрабатывает форму смены пароля и Меняет пароль для пользователя с правильным Токеном
- * После успешной смены пароля высылаает уведомление на емайл.
+ * Обрабатывает пользователя с правильным Токеном Подтверждения Email
  *
  * @param req
  * @param res
@@ -83,7 +83,7 @@ var getReset = function (req, res) {
  */
 var confirmEmail = function (req, res, next) {
   var token = req.query.token || req.params.token;
-  
+
   async.waterfall([
         // Ищем пользователя с токеном и меняем пароль
         function (done) {
@@ -157,6 +157,7 @@ var confirmEmail = function (req, res, next) {
         res.status(200).redirect('/');
       });
 };
+
 
 exports = module.exports = {
   signin:       signin,
