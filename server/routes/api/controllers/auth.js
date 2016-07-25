@@ -100,15 +100,17 @@ var api_signup = function (req, res, next) {
           text:    'Мы очень рады, что Вы решили попробовать Loftogram!\n\n' +
                    'Прежде чем Вы сможете начать обмениваться впечатлениями. Мы просим Вас подтвердить ваш E-mail\n\n' +
                    'Для этого Вам всего лишь нужно перейти по указанной ссылке: \n\n' +
-                   'http://' + req.headers.host + '/email.confirm/' + user.emailConfirmationToken + '\n\n'+
-                   'Не отвечайте на это сообщение.\n' 
-                   
+                   'http://' + req.headers.host + '/email.confirm/' + user.emailConfirmationToken + '\n\n' +
+                   'Акаунт необходимо подтвердить в течение 2 дней. Иначе сервис отставляет за собой право его' +
+                   ' заблокировать! \n' +
+                   'Не отвечайте на это сообщение.\n'
+
         };
 
         mail(mailOptions, function (err, info) {
           if (err) return next(err);
         });
-        
+
         /*
          * Выполняем автологон для только что сгенерированного пользователя, редиректим на главную
          * метод req.login() добавляется  модулем passport. http://passportjs.org/docs/login
@@ -119,8 +121,8 @@ var api_signup = function (req, res, next) {
             return next(new HttpError(500, null, err.message));
           }
           // TODO: API- статус ответа в API для успешной регистрации
-          // Все ок. Отправляем Ответ со статусом
-          next(new HttpError(200))
+          // Все ок.
+          next(new HttpError(200, null, 'Вам было отправлено письмо для подтверждения E-mail.'))
         });
       }
   )(req, res, next);

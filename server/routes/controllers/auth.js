@@ -82,13 +82,15 @@ var getReset = function (req, res) {
  * @private
  */
 var confirmEmail = function (req, res, next) {
-
+  var token = req.query.token || req.params.token;
+  
   async.waterfall([
         // Ищем пользователя с токеном и меняем пароль
         function (done) {
           User
           .findOne({
-            'emailConfirmationToken': String(req.query.token)
+            'emailConfirmationToken': String(token),
+            'emailConfirmed':         false
           }, done)
         },
         // Пользователя нашли! Пытаемся внести изменения в Карточку пользователя - БД,
@@ -143,21 +145,6 @@ var confirmEmail = function (req, res, next) {
 
           mail(mailOptions, function (err, info) {
             if (err) return done(err);
-            return done(err, user);
-          });
-        },
-        // Если со сменой пароля небыло проблем , отправляем письмо подтверждение
-        function (user, done) {
-
-          var mailOptions = {
-            to:      user.userdata.emailAddress,
-            subject: 'Ваш Пароль был изменен!',
-            text:    'Здравствуйте,\n\n' +
-                     'Пароль вашего аккаунта с E-mail: ' + user.userdata.emailAddress + ' был успешно изменен!'
-          };
-
-          mail(mailOptions, function (err, info) {
-            if (err) return next(err);
             return done(err, 'Success');
           });
         }
@@ -166,7 +153,8 @@ var confirmEmail = function (req, res, next) {
       // Все не ОК  Возвращаем на туде страницу с ошибками
       function (err, result) {
         if (err) return next(err);
-        next(new HttpError(200, null, 'Ваш Пароль успешно изменен!', null));
+        req.flash('success', 'Ваш E-mail Успешно подтвержден!');
+        res.status(200).redirect('/');
       });
 };
 
