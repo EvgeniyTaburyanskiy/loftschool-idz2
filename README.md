@@ -4,8 +4,8 @@
 
 ### Projects Links
 * <img src="http://image.flaticon.com/icons/png/512/104/104111.png" width="24"> [TASK LIST](https://docs.google.com/spreadsheets/d/1fGqRRAGeujqcND2gL5ljCe2yVsB1Guc97A_XADirQ3I/edit#gid=0)
-* <img src="http://image.flaticon.com/icons/svg/18/18454.svg" width="24">[Dev site]()
-* <img src="http://image.flaticon.com/icons/svg/18/18454.svg" width="24">[Prod site]()
+* <img src="http://image.flaticon.com/icons/svg/18/18454.svg" width="24">[Dev site](http://dev.loftogram.tmweb.ru/)
+* <img src="http://image.flaticon.com/icons/svg/18/18454.svg" width="24">[Prod site](http://loftogram.tmweb.ru/)
 
 ### Getting started:
 
@@ -47,7 +47,7 @@ gulp
     npm i
     ```
 
-## Server (NODEjs + MongoDB)
+## Server (Nginx + NODEjs + MongoDB)
 
 * CD to root directory project and:
 ```
