@@ -19,17 +19,17 @@ include ../helpers/mixins.pug
                 .profile__field
                     .field__cover.profile-av
                         .avatar-cover
-                            img.avatar-cover__img(src='assets/img/jason.jpg' alt='avatar' name='ava_img')
+                            img.avatar-cover__img(src='assets/img/jason.jpg' alt='avatar')
                     .field__cover-info.profile-cover
-                        +btnCustom('Загрузить фотографию')
+                        +inpFile('Загрузить фотографию','ava_img')
                         .cover-info__text (файл должен быть размером не более&nbsp;
                             span 1024 КБ)
                 .profile__field
                     .field__cover.profile-av
                         .avatar-cover
-                            img.avatar-cover__img(src='assets/img/jason.jpg' alt='background' name='bg_img')
+                            img.avatar-cover__img(src='assets/img/jason.jpg' alt='background')
                     .field__cover-info.profile-cover
-                        +btnCustom('Загрузить фон')
+                        +inpFile('Загрузить фон','bg_img')
                         .cover-info__text (файл должен быть размером не более&nbsp;
                             span 1024 КБ)
                 .profile__field.profile__field--direction
