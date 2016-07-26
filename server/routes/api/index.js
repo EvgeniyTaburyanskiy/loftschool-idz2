@@ -115,6 +115,7 @@ var _router = function (app) {
 
   router.route(['/api/method/albums.updateAlbum'])    // U Изменение Альбома (ID альбома, Имя, Описание, Фон)
   .post(
+      csrfProtection,
       Upload.single('album_bg'), // Ожидаем форму с полем тип единичный файл.Имя поля - "album_bg"
       controllers.albums.API_updateAlbum
   );

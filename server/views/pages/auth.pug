@@ -38,13 +38,25 @@ block APP_content
     br
     a(href='/api/method/auth.signout') Logout
 
-
   br
-  h4 update Album
-  form(action='/api/method/albums.update' method='POST' enctype="multipart/form-data")
+  h4 Add Album
+  form(action='/api/method/albums.addAlbum' method='POST' enctype="multipart/form-data")
     fieldset
       input(type='hidden' name='_csrf' value= csrfToken)
-      input(type='hidden' name='album_id' value='5790ca9f5cacd8c8103167b2')
+      label(for='album_name') album_name
+      input(type='text' name='album_name' placeholder='Your album_name' autofocus)
+      label(for='album_descr') album_descr
+      input(type='text' name='album_descr' placeholder='Your album_descr')
+      label(for='album_bg') album_bg
+      input(type='file' name='album_bg')
+      button(type='submit') Add Album
+
+  br
+  h4 Update Album
+  form(action='/api/method/albums.updateAlbum' method='POST' enctype="multipart/form-data")
+    fieldset
+      input(type='hidden' name='_csrf' value= csrfToken)
+      input(type='text' name='album_id' value='5790ca9f5cacd8c8103167b2')
       label(for='album_name') album_name
       input(type='text' name='album_name' placeholder='Your album_name' autofocus)
       label(for='album_descr') album_descr
