@@ -32,17 +32,18 @@ block APP_content
       div.main-new
         h1.main-new__t Новое в мире
         div.new-photos
-          - var arr = [1,2,3,4,5,6]
-          for item in arr
-            include ../modules/_photo_tile.pug
+          if(newPotos)
+            for photo in newPotos
+              include ../modules/_photo_tile.pug
         div.new-show
           +btnShow
     section.main-albums-w
       div.main-albums
         h2.main-albums__t Мои альбомы
         div.albums-photos
-          for item in arr
-            include ../modules/_photo_album.pug
+          if(userAlbums)
+            for album in userAlbums
+              include ../modules/_photo_album.pug
       div.albums-controls
         +btnAdd
   include ../modules/_footer.pug

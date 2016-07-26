@@ -53,19 +53,27 @@ var _router = function (app) {
 
   // AUTH ROUTES ==============================
   router.route('/api/method/auth.signin')
-  .post(csrfProtection, controllers.auth.api_signin);     //-> Вход в Систему
+  .post(
+      csrfProtection,
+      controllers.auth.api_signin);     //-> Вход в Систему
 
   router.route('/api/method/auth.signout')
-  .all(controllers.auth.api_signout);                     //-> Выход из Системы
+  .all(controllers.auth.api_signout);    //-> Выход из Системы
 
   router.route('/api/method/auth.signup')
-  .post(csrfProtection, controllers.auth.api_signup);     //-> Регистрация
+  .post(
+      csrfProtection,
+      controllers.auth.api_signup);     //-> Регистрация
 
   router.route('/api/method/auth.fogotPasswd')
-  .post(csrfProtection, controllers.auth.api_fogotPasswd);//-> Восстановление пароля(отправка письма с токеном)
+  .post(
+      csrfProtection,
+      controllers.auth.api_fogotPasswd);//-> Восстановление пароля(отправка письма с токеном)
 
   router.route('/api/method/auth.resetPasswd')
-  .all(csrfProtection, controllers.auth.api_resetPasswd); //-> Смена пароля(применение нового пароля)
+  .all(
+      csrfProtection,
+      controllers.auth.api_resetPasswd); //-> Смена пароля(применение нового пароля)
 
 
   // USERS ROUTES ==============================================
@@ -89,10 +97,13 @@ var _router = function (app) {
       controllers.users.API_addUser);           //->
 
   router.route('/api/method/users.updateUserProfile')
-  .post(controllers.users.API_updateUserProfile);                 //->
+  .post(
+     // csrfProtection,
+      controllers.users.API_updateUserProfile);                 //->
 
   router.route('/api/method/users.updateUserImgs')
   .post(
+      //csrfProtection,
       Upload.fields([{name: 'ava_img'}, {name: 'bg_img'}]),
       controllers.users.API_updateUserImgs);                      //->
 
@@ -112,20 +123,22 @@ var _router = function (app) {
 
   router.route(['/api/method/albums.addAlbum'])   // C Добавление нового альбома(имя, описние, фотка-фон)
   .post(
-      csrfProtection,
+     // csrfProtection,
       Upload.single('album_bg'),
       controllers.albums.API_addAlbum
   );
 
   router.route(['/api/method/albums.updateAlbum'])    // U Изменение Альбома (ID альбома, Имя, Описание, Фон)
   .post(
-      csrfProtection,
+      //csrfProtection,
       Upload.single('album_bg'), // Ожидаем форму с полем тип единичный файл.Имя поля - "album_bg"
       controllers.albums.API_updateAlbum
   );
 
   router.route(['/api/method/albums.deleteAlbum'])    // D Удаление Альбома и всех его фоткок
-  .post(controllers.albums.API_deleteAlbum);
+  .post(
+      //csrfProtection,
+      controllers.albums.API_deleteAlbum);
 
 
   // PHOTO ROUTES ==============================================

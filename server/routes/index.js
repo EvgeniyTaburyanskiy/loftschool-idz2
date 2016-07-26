@@ -50,7 +50,10 @@ var _router = function (app) {
   .get(csrfProtection, controllers.main.getHome); //-> Выдаем Гл страницу
 
   // AUTH ROUTES ==============================
-  router.get('/auth', csrfProtection, controllers.auth.signin);//-> Отдаем страницу Авторизации/Регистрации/Восстановления пароля
+  router.get('/auth', 
+      csrfProtection,
+      controllers.auth.signin); //-> Отдаем страницу Авторизации/Регистрации/Восстановления пароля
+  
   router.all('/auth/signout', controllers.auth.signout);       //-> Любой метод =  Выход из Системы
 
   router.route('/reset')
