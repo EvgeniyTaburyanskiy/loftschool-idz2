@@ -5,23 +5,23 @@ include ../helpers/mixins.pug
             h4.h__title Добавить альбом
             +btnCancelPop
         .album__b
-            form.b__form
+            form.b__form(method='POST' enctype="multipart/form-data")
+                input(type="hidden", name="_csrf", value="#{csrf}")
                 .form__field.form__field--direction
                     .field__lbl
                         label(for="name") Название
-                    input#name.field__it(type="text")
+                    input#name.field__it(type="text" name='album_name')
                 .form__field.form__field--direction
                     .field__lbl.field__lbl-top
                         label(for="descr") Описание
-                    textarea#descr.field__itx
+                    textarea#descr.field__itx(name='album_descr')
                 .form__field
                     .field__cover
                         .album-cover
-                            img.album-cover__img(src='assets/img/jason.jpg' alt='avatar')
+                            img.album-cover__img(src='assets/img/jason.jpg' alt='background' name='bg_img')
                     .field__cover-info
                         +btnLoad
                         .cover-info__text (файл должен быть размером не более&nbsp;
                             span 1024 КБ)
-                input(type="hidden", name="_csrf", value="#{csrf}")
         .album__f
             +formMenu
