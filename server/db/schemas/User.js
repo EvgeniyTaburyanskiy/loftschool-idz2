@@ -107,7 +107,7 @@ schemaUser.statics.register = function (username, password, next) {
             });
 
             // Дополняем данными объект пользователя
-            newUser.userdata.emailAddress = username;
+            newUser.userdata.email = username;
 
             // Сохраняем нового пользователя в БД.
             // И передаем управление следующему обработчику

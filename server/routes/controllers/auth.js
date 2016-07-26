@@ -109,9 +109,9 @@ var confirmEmail = function (req, res, next) {
               if (err.name === 'ValidationError') {//-> Это наша ошибка Валидации данных из Mongoose
                 var errMsgList = [];
 
-                if (err.errors.emailAddress) {
-                  logger.info("Ошибка валидации Email пользователя: %s", err.errors.emailAddress.message);
-                  errMsgList.push(err.errors.emailAddress.message);
+                if (err.errors.email) {
+                  logger.info("Ошибка валидации Email пользователя: %s", err.errors.email.message);
+                  errMsgList.push(err.errors.email.message);
                 }
 
                 if (err.errors.password) {
@@ -134,7 +134,7 @@ var confirmEmail = function (req, res, next) {
         // Отправляем Велоком письмо
         function (user, done) {
           var mailOptions = {
-            to:      user.userdata.emailAddress,
+            to:      user.userdata.email,
             subject: 'Добро пожаловать!',
             text:    'Мы очень рады, что Вы решили попробовать Loftogram!\n\n' +
                      'Теперь Вы можете воспользоваться всеми преимуществами нашего сервиса.\n\n' +

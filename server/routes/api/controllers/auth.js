@@ -70,9 +70,9 @@ var api_signup = function (req, res, next) {
           }
           else if (err.name === 'ValidationError') {//-> Это наша ошибка Валидации данных из Mongoose
             var errMsgList = [];
-            if (err.errors.emailAddress) {
-              logger.info("Ошибка валидации Email пользователя. %s", err.errors.emailAddress.message);
-              errMsgList.push(err.errors.emailAddress.message);
+            if (err.errors.email) {
+              logger.info("Ошибка валидации Email пользователя. %s", err.errors.email.message);
+              errMsgList.push(err.errors.email.message);
             }
 
             if (err.errors.password) {
@@ -95,7 +95,7 @@ var api_signup = function (req, res, next) {
          */
 
         var mailOptions = {
-          to:      user.userdata.emailAddress,
+          to:      user.userdata.email,
           subject: 'Подтверждение E-mail!',
           text:    'Мы очень рады, что Вы решили попробовать Loftogram!\n\n' +
                    'Прежде чем Вы сможете начать обмениваться впечатлениями. Мы просим Вас подтвердить ваш E-mail\n\n' +
@@ -180,7 +180,7 @@ var api_fogotPasswd = function (req, res, next) {
     },
     function (token, user, done) {
       var mailOptions = {
-        to:      user.userdata.emailAddress,
+        to:      user.userdata.email,
         subject: 'Восстановление пароля!',
         text:    'Вы получили это письмо потому, что Вы (либо кто-то другой) отправил запрос на смену пароля для' +
                  ' доступа к  Вашему аккаунту.\n\n' +
@@ -242,9 +242,9 @@ var api_resetPasswd = function (req, res, next) {
               if (err.name === 'ValidationError') {//-> Это наша ошибка Валидации данных из Mongoose
                 var errMsgList = [];
 
-                if (err.errors.emailAddress) {
-                  logger.info("Ошибка валидации Email пользователя: %s", err.errors.emailAddress.message);
-                  errMsgList.push(err.errors.emailAddress.message);
+                if (err.errors.email) {
+                  logger.info("Ошибка валидации Email пользователя: %s", err.errors.email.message);
+                  errMsgList.push(err.errors.email.message);
                 }
 
                 if (err.errors.password) {
@@ -268,10 +268,10 @@ var api_resetPasswd = function (req, res, next) {
         function (user, done) {
 
           var mailOptions = {
-            to:      user.userdata.emailAddress,
+            to:      user.userdata.email,
             subject: 'Ваш Пароль был изменен!',
             text:    'Здравствуйте,\n\n' +
-                     'Пароль вашего аккаунта с E-mail: ' + user.userdata.emailAddress + ' был успешно изменен!'
+                     'Пароль вашего аккаунта с E-mail: ' + user.userdata.email + ' был успешно изменен!'
           };
 
           mail(mailOptions, function (err, info) {

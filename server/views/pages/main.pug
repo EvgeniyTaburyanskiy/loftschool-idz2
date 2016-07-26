@@ -3,7 +3,7 @@ block APP_content
   header.m-h-w
     div.m-h
       a.m-h__a(href="#")
-        img.m-h__img(src= user.userdata.avatar, alt= user.userdata.firstName + " " +  user.userdata.lastName)
+        img.m-h__img(src= user.userdata.ava_img, alt= user.userdata.firstName + " " +  user.userdata.lastName)
       div.m-person
         p.m-person__n
           if (user)
@@ -25,6 +25,7 @@ block APP_content
   main.m-main
     section.main-search
       form.main-search__form(action="/search")
+        input(type='hidden' name='_csrf' value= csrfToken)
         input.main-search__input(type="search" name="q" id="q" placeholder="Исследовать мир")
         +use('search','main-search__svg')
     section.main-new-w

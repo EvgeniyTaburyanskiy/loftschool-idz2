@@ -149,29 +149,29 @@ var API_updateUserProfile = function (req, res, next) {
 
   var newData = {};
 
-  var firstName = req.query.firstName || req.params.firstName || req.body.firstName;
-  var lastName = req.query.lastName || req.params.lastName || req.body.lastName;
-  var lastName = req.query.lastName || req.params.lastName || req.body.lastName;
-  
-  var emailAddress = req.query.emailAddress || req.params.emailAddress || req.body.emailAddress;
-  var gl = req.query.gl || req.params.gl || req.body.gl;
-  var tw = req.query.tw || req.params.tw || req.body.tw;
-  var fb = req.query.fb || req.params.fb || req.body.fb;
-  var vk = req.query.vk || req.params.vk || req.body.vk;
+  var firstName = req.query.firstName || req.body.firstName;
+  var lastName = req.query.lastName || req.body.lastName;
+  var message = req.query.message || req.body.message;
+
+  var email = req.query.email || req.body.email;
+  var gl = req.query.gl || req.body.gl;
+  var tw = req.query.tw || req.body.tw;
+  var fb = req.query.fb || req.body.fb;
+  var vk = req.query.vk || req.body.vk;
 
 
   if (firstName) newData.firstName = firstName.trim();
   if (lastName) newData.lastName = lastName.trim();
+  if (message) newData.message = message.trim();
+  if (email) newData.email = email.trim();
+  if (gl) newData.gl = gl.trim();
+  if (tw) newData.tw = tw.trim();
+  if (fb) newData.fb = fb.trim();
+  if (vk) newData.vk = vk.trim();
 
-  if (emailAddress || gl || tw || fb || vk) newData.userdata = {};
-
-  if (emailAddress) newData.userdata.emailAddress = emailAddress.trim();
-  if (gl) newData.userdata.gl = gl.trim();
-  if (tw) newData.userdata.tw = tw.trim();
-  if (fb) newData.userdata.fb = fb.trim();
-  if (vk) newData.userdata.vk = vk.trim();
 
   console.log(newData);
+
   if (isEmpty(newData)) {
     return next(new HttpError(400, null, 'Не заданы новые значения для полей профиля.'));
   }
@@ -207,7 +207,7 @@ var API_updateUserProfile = function (req, res, next) {
         },
         // обновляем данные в БД
         function (user, done) {
-          User.update({_id: user._id}, {$set: newData}, {runValidators: true}, function (err, raw) {
+          User.update({_id: user._id}, {$set: {userdata: newData}}, {runValidators: true}, function (err, raw) {
             if (err) {//-> если в процессе регистрации была Ошибка, обрабатываем ее.
               logger.debug("Ошибка ", err.name);
               if (err.name === 'ValidationError') {//-> Это наша ошибка Валидации данных из Mongoose

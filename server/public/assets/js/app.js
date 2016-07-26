@@ -158,16 +158,18 @@
     _ajaxCall(serviceUrl + ".updateUser", "POST", newProfile);
   };
 
-  var updateUserProfile = function (user_id, socials) {
+  var updateUserProfile = function (user_id, profileData) {
 
     var newSocials = {
-      user_id:      user_id || undefined,
-      user_message:      "",
-      emailAddress: "admin@admin.ru",
-      fb:           "",
-      gl:            "",
-      tw:           "",
-      vk:           "https://new.vk.com/proglib"
+      user_id:   user_id || undefined,
+      firstName: "Джеки",
+      lastName:  "Чен",
+      message:   "Я голливудский актер, мне уже лет 50. Люблю сниматься в боевиках и активный отдых.",
+      email:     "djaki@chan.ru",
+      fb:        "",
+      gl:        "",
+      tw:        "",
+      vk:        "https://new.vk.com/djaki" 
     };
 
 

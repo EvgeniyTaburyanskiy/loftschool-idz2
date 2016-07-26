@@ -38,21 +38,21 @@ var schemaUserData = new Schema({
     trim:      true,
     required:  false
   },
-  avatar:       {
+  ava_img:      {
     type:      String,
     default:   '/img/no-avatar.png',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
     trim:      true,
     required:  true
   },
-  imgURL:       {
+  bg_img:       {
     type:      String,
     default:   '/img/no-user-bg.png',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
     trim:      true,
     required:  true
   },
-  emailAddress: {
+  email: {
     type:      String,
     maxlength: 254, // http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690
     trim:      true,
@@ -79,7 +79,7 @@ var schemaUserData = new Schema({
     trim:      true,
     required:  false
   },
-  gl:            {
+  gl:           {
     type:      String,
     default:   '',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
@@ -89,7 +89,7 @@ var schemaUserData = new Schema({
 });
 
 // ================= UserData Validators =============================
-schemaUserData.path('emailAddress').validate(
+schemaUserData.path('email').validate(
     function (email) { //-> http://emailregex.com/
       var emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       return emailRegex.test(email); // Assuming email has a text attribute

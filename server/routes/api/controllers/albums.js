@@ -226,6 +226,7 @@ var API_updateAlbum = function (req, res, next) {
             // изменений фотки небыло
             return done(null, album, null);
           }
+
           //создаем пустую болванку для фотки в базе.
           var newPhoto = new Photo({'_album_id': album._album_bg._id});
           newPhoto.save(function (err) {
@@ -249,8 +250,8 @@ var API_updateAlbum = function (req, res, next) {
             // Создаем 'экземпляр новой фотки.
             newPhoto._album_id = album._id;
             newPhoto.album_bg = true;
-            newPhoto.imgURL = '/uploads/files/photos/' + path.basename(newImageInfo.imgPath);
-            newPhoto.thumbURL = '/uploads/files/photos/' + path.basename(newImageInfo.thumbPath);
+            newPhoto.img = '/uploads/files/photos/' + path.basename(newImageInfo.imgPath);
+            newPhoto.thumb = '/uploads/files/photos/' + path.basename(newImageInfo.thumbPath);
 
             // Новую фотку  сохраненяем в БД
             newPhoto.save(function (err) {
