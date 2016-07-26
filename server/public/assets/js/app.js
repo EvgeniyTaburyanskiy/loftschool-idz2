@@ -162,7 +162,7 @@
 
     var newSocials = {
       user_id:      user_id || undefined,
-      emailAddress: "",
+      emailAddress: "admin@admin.ru",
       fb:           "",
       g:            "",
       message:      "",

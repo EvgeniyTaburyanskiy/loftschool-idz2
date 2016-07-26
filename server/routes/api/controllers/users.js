@@ -116,13 +116,13 @@ var API_updateUserSocials = function (req, res, next) {
   var fb = req.query.fb || req.params.fb || req.body.fb;
   var vk = req.query.vk || req.params.vk || req.body.vk;
 
-  if (emailAddress) newData.userdata.emailAddress = emailAddress.trim();
-  if (g) newData.userdata.g = g.trim();
-  if (tw) newData.userdata.tw = tw.trim();
-  if (fb) newData.userdata.fb = fb.trim();
-  if (vk) newData.userdata.vk = vk.trim();
+  if (emailAddress) newData.emailAddress = emailAddress.trim();
+  if (g) newData.g = g.trim();
+  if (tw) newData.tw = tw.trim();
+  if (fb) newData.fb = fb.trim();
+  if (vk) newData.vk = vk.trim();
 
-  if (_isEmpty(newData.userdata)) {
+  if (_isEmpty(newData)) {
     return next(new HttpError(400, null, 'Не заданы новые значения для соц сетей.'));
   }
 
@@ -147,7 +147,6 @@ var API_updateUserSocials = function (req, res, next) {
             if (!user) {
               return next(new HttpError(400, null, 'ID пользователя указан не верно либо пользователь не существует'));
             }
-            console.log(user._id, req.user._id);
 
             if (user._id.toString() !== req.user._id.toString()) {
               return next(new HttpError(400, null, 'Вы можете редактировать только свои данные!'));
@@ -158,8 +157,26 @@ var API_updateUserSocials = function (req, res, next) {
         },
         // обновляем данные в БД
         function (user, done) {
-          User.update({_id: user._id}, {$set: newData}, {runValidators: true}, function (err, raw) {
-            if (err) return done(err);
+          User.update({_id: user._id}, {$set: {userdata: newData}}, {runValidators: true}, function (err, raw) {
+            if (err) {//-> если в процессе регистрации была Ошибка, обрабатываем ее.
+              logger.debug("Ошибка ", err.name);
+              if (err.name === 'ValidationError') {//-> Это наша ошибка Валидации данных из Mongoose
+                var errMsgList = [];
+
+                if (err.errors['userdata.emailAddress']) {
+                  logger.info("Ошибка валидации Email пользователя. %s", err.errors['userdata.emailAddress'].message);
+                  errMsgList.push(err.errors['userdata.emailAddress'].message);
+                }
+
+                return errMsgList.length ?
+                    done(new HttpError(400, 'ILLEGAL_PARAM_VALUE', errMsgList)) :
+                    done(new HttpError(500));
+              }
+              else {//-> Это ошибка не нами сгенерена и не результат Валидации Mongoose, отдаем ее express
+                return done(err);
+              }
+            }
+
             return done(null, user);
           });
         },
