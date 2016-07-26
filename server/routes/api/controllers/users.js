@@ -1,8 +1,11 @@
+
+var async = require('async');
+var path = require('path');
+var ObjectID = require('mongodb').ObjectID;
 var logger = require('../../../utils/winston')(module);
 var HttpError = require('../../../middleware/HttpError').HttpError;
-var ObjectID = require('mongodb').ObjectID;
-var async = require('async');
-
+var PhotoResizer = require('../../../utils/PhotoResizer');
+var isEmpty = require('../../../utils/helpers/isEmpty');
 var User = require('../../../db/models/User').mUser;
 
 
@@ -76,8 +79,13 @@ var API_addUser = function (req, res, next) {
  * @param res
  * @param next
  */
-var API_updateUser = function (req, res, next) {
+var API_updateUserBg = function (req, res, next) {
   var user_id = req.query.user_id || req.params.user_id || req.body.user_id || req.user._id;
+
+  var newData = {};
+
+  var avatar = req.query.avatar || req.params.avatar || req.body.avatar || feq.files['avatar'];
+  var bg_img = req.query.bg_img || req.params.bg_img || req.body.bg_img || feq.files['bg_img'];
 
 
   if (user_id === undefined) {
@@ -103,27 +111,158 @@ var API_updateUser = function (req, res, next) {
  * @param req
  * @param res
  * @param next
+ */
+var API_updateUserImgs = function (req, res, next) {
+  var user_id = req.query.user_id || req.params.user_id || req.body.user_id || req.user._id;
+  user_id = user_id.replace(/["']/g, '');
+
+  var ava_img = req.query.ava_img || req.body.ava_img;
+  if (!ava_img && req.files['ava_img']) {
+    ava_img = req.files['ava_img'][0]
+  }
+
+  var bg_img = req.query.bg_img || req.body.bg_img;
+  if (!bg_img && req.files['bg_img']) {
+    bg_img = req.files['bg_img'][0]
+  }
+
+  if (user_id === undefined) {
+    return next(new HttpError(400, null, 'Неверно указан идентификатор пользователя!'));
+  }
+
+  try {
+    var uid = new ObjectID(user_id);
+  }
+  catch (e) {
+    return next(new HttpError(400, null, 'Неверно указан идентификатор пользователя!'));
+  }
+
+  async.waterfall([
+        //Ищем пользователя и проверяем что он сущ-ет и это мы сами
+        function (done) {
+          User.findById(uid).exec(function (err, user) {
+            if (err) return next(err);
+
+            if (!user) {
+              return next(new HttpError(400, null, 'ID пользователя указан не верно либо пользователь не существует'));
+            }
+
+            if (user._id.toString() !== req.user._id.toString()) {
+              return next(new HttpError(400, null, 'Вы можете редактировать только свои данные!'));
+            }
+
+            return done(null, user);
+          });
+        },
+        // Обрабатываем аватар
+        function (user, done) {
+          //Если новую фотку аватар не загрузили файлом - движемся дальше
+          if (isEmpty(ava_img)) {
+            return done(null, user);
+          }
+
+          ava_img.destfilename = user._id;
+
+          PhotoResizer.resize(ava_img, 'avatar', function (err, newImageInfo) {
+            if (err) {
+              // если при ресайзе что-то пошло не так, удаляем альбом и фотки с ним связанные (см Схему альбома)
+              return done(new HttpError(400, null, 'Ошибка в процессе обработки файла аватар!', err.message));
+            }
+
+            user.userdata.ava_img = '/uploads/files/ava/' + path.basename(newImageInfo.imgPath);
+
+            // Новую аватарку  сохраненяем в БД
+            user.save(function (err) {
+              if (err) {
+                return done(err)
+              }
+
+              return done(null, user);
+            });
+          });
+        },
+        // Обрабатываем Фоновую картинку bg_img
+        function (user, done) {
+          //Если новую фотку не загрузили файлом - движемся дальше
+          //TODO: API- При создании альбома обработку указания номера сущ. фотки. без загрузки новой
+          if (isEmpty(bg_img)) {
+            return done(null, user);
+          }
+
+          bg_img.destfilename = user._id;
+
+          PhotoResizer.resize(bg_img, 'userbg', function (err, newImageInfo) {
+            if (err) {
+              return done(new HttpError(400, null, 'Ошибка в процессе обработки фоновой картинки!', err.message));
+            }
+            
+
+            user.userdata.bg_img = '/uploads/files/bg/' + path.basename(newImageInfo.imgPath);
+
+            // Новую фотку  сохраненяем в БД
+            user.save(function (err) {
+              if (err) {
+
+                return done(err)
+              }
+              return done(null, user);
+            });
+          });
+
+        }
+      ],
+      function (err, result) {
+        if (err) return next(err);
+        //TODO: API- Сделать обновление пользователя по API
+        User
+        .findById(uid, '_id, userdata')
+        .lean()
+        .exec(function (err, user) {
+          if (err) return next(err);
+          next(new HttpError(200, null, '', [user]));
+        });
+      });
+};
+
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
  * @returns {*}
  * @constructor
  */
-var API_updateUserSocials = function (req, res, next) {
+var API_updateUserProfile = function (req, res, next) {
   var user_id = req.query.user_id || req.params.user_id || req.body.user_id || req.user._id;
 
-  var newData = {userdata: {}};
-  var emailAddress = req.query.emailAddress || req.params.emailAddress || req.body.emailAddress;
-  var g = req.query.g || req.params.g || req.body.g;
-  var tw = req.query.tw || req.params.tw || req.body.tw;
-  var fb = req.query.fb || req.params.fb || req.body.fb;
-  var vk = req.query.vk || req.params.vk || req.body.vk;
+  var newData = {};
 
-  if (emailAddress) newData.emailAddress = emailAddress.trim();
-  if (g) newData.g = g.trim();
+  var firstName = req.query.firstName || req.body.firstName;
+  var lastName = req.query.lastName || req.body.lastName;
+  var message = req.query.message || req.body.message;
+
+  var email = req.query.email || req.body.email;
+  var gl = req.query.gl || req.body.gl;
+  var tw = req.query.tw || req.body.tw;
+  var fb = req.query.fb || req.body.fb;
+  var vk = req.query.vk || req.body.vk;
+
+
+  if (firstName) newData.firstName = firstName.trim();
+  if (lastName) newData.lastName = lastName.trim();
+  if (message) newData.message = message.trim();
+  if (email) newData.email = email.trim();
+  if (gl) newData.gl = gl.trim();
   if (tw) newData.tw = tw.trim();
   if (fb) newData.fb = fb.trim();
   if (vk) newData.vk = vk.trim();
 
-  if (_isEmpty(newData)) {
-    return next(new HttpError(400, null, 'Не заданы новые значения для соц сетей.'));
+
+  console.log(newData);
+
+  if (isEmpty(newData)) {
+    return next(new HttpError(400, null, 'Не заданы новые значения для полей профиля.'));
   }
 
   if (user_id === undefined) {
@@ -198,27 +337,6 @@ var API_updateUserSocials = function (req, res, next) {
       });
 
 
-  function _isEmpty(obj) {
-    // Speed up calls to hasOwnProperty
-    var hasOwnProperty = Object.prototype.hasOwnProperty;
-
-    // null and undefined are "empty"
-    if (obj == null) return true;
-
-    // Assume if it has a length property with a non-zero value
-    // that that property is correct.
-    if (obj.length > 0)    return false;
-    if (obj.length === 0)  return true;
-
-    // Otherwise, does it have any properties of its own?
-    // Note that this doesn't handle
-    // toString and valueOf enumeration bugs in IE < 9
-    for (var key in obj) {
-      if (hasOwnProperty.call(obj, key)) return false;
-    }
-
-    return true;
-  }
 };
 
 
@@ -239,8 +357,9 @@ exports = module.exports = {
   API_getUsersList:      API_getUsersList,
   API_getUserById:       API_getUserById,
   API_addUser:           API_addUser,
-  API_updateUser:        API_updateUser,
-  API_updateUserSocials: API_updateUserSocials,
+  API_updateUserImgs:    API_updateUserImgs,
+  API_updateUserBg:      API_updateUserBg,
+  API_updateUserProfile: API_updateUserProfile,
   API_deleteUser:        API_deleteUser
 };
 

@@ -28,14 +28,14 @@ var schemaPhoto = new Schema({
     trim:      true,
     required:  false
   },
-  imgURL:     { //-> URL
+  img:        { //-> URL
     type:      String,
     default:   '/assets/img/no_photo.jpg',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
     trim:      true,
     required:  true
   },
-  thumbURL:   {//-> URL
+  thumb:      {//-> URL
     type:      String,
     default:   '/assets/img/no_photo.jpg',
     maxlength: 2000,
@@ -66,7 +66,7 @@ var schemaPhoto = new Schema({
 
 // ================= Event Func =============================
 
-schemaPhoto.pre('remove', function(next){
+schemaPhoto.pre('remove', function (next) {
   // Перед Удалением Фотки, удаляем все Комменты к нему
   this.model('PhotoComment').remove(
       {_photo_id: this._id},

@@ -47,15 +47,14 @@ var _router = function (app) {
   // HOME ROUTES ==============================================
   router.route('/')
   .all(checkAuth)
-  .get(controllers.main.getHome); //-> Выдаем Гл страницу
+  .get(csrfProtection, controllers.main.getHome); //-> Выдаем Гл страницу
 
   // AUTH ROUTES ==============================
   router.get('/auth', csrfProtection, controllers.auth.signin);//-> Отдаем страницу Авторизации/Регистрации/Восстановления пароля
   router.all('/auth/signout', controllers.auth.signout);       //-> Любой метод =  Выход из Системы
 
-  // RESET PASSWORD ROUTES ==============================
   router.route('/reset')
-  .get(controllers.auth.getFogot)                       //-> Редирект на страницу Авторизации/Восстановления пароля
+  .get(controllers.auth.getFogot);                    //-> Редирект на страницу Авторизации/Восстановления пароля
 
   router.route('/reset/:token')
   .get(csrfProtection, controllers.auth.getReset);     //-> Проверяем токен(из письма) и выдаем страницу смены пароля

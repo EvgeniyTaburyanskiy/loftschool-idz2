@@ -51,7 +51,8 @@ gulp
 * Dependencies : graphicsmagick tools
 * CD to root directory project and:
 ```
-node ./server/www
+cd ./server
+node ./www
 ```
 
 ### Server PKGs

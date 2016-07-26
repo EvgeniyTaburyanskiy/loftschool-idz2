@@ -7,7 +7,8 @@ var logger = require('../../utils/winston')(module);
 var getHome = function (req, res) {
   res.render('main',
       {
-        title: 'HOME'
+        title: 'HOME',
+        csrfToken: req.csrfToken()
       }
   );
 };

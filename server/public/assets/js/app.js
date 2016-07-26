@@ -144,34 +144,34 @@
     _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
   };
 
-  var updateUser = function (user_id, profile) {
+  var updateUserImgs = function (user_id, profile) {
 
     var newProfile = {
-      user_id:   user_id || undefined,
-      avatar:    "/img/no-avatar.png",
-      imgURL:    "/img/no-user-bg.png",
-      firstName: "Без",
-      lastName:  "Имени"
+      user_id: user_id || undefined,
+      ava_img: "/img/no-avatar.png",
+      bg_img:  "/img/no-user-bg.png"
     };
 
 
-    _ajaxCall(serviceUrl + ".updateUser", "POST", newProfile);
+    _ajaxCall(serviceUrl + ".updateUserImgs", "POST", newProfile);
   };
 
-  var updateUserSocials = function (user_id, socials) {
+  var updateUserProfile = function (user_id, profileData) {
 
-    var newSocials = {
-      user_id:      user_id || undefined,
-      emailAddress: "admin@admin.ru",
-      fb:           "",
-      g:            "",
-      message:      "",
-      tw:           "",
-      vk:           "https://new.vk.com/proglib"
+    var profileData_ = {
+      user_id:   user_id || undefined,
+      firstName: "Джеки",
+      lastName:  "Чен",
+      message:   "Я голливудский актер, мне уже лет 50. Люблю сниматься в боевиках и активный отдых.",
+      email:     "djaki@chan.ru",
+      fb:        "",
+      gl:        "",
+      tw:        "",
+      vk:        "https://new.vk.com/djaki"
     };
 
 
-    _ajaxCall(serviceUrl + ".updateUserSocials", "POST", newSocials);
+    _ajaxCall(serviceUrl + ".updateUserProfile", "POST", profileData_);
   };
 
   var deleteUser = function (user_id) {
@@ -184,8 +184,8 @@
     getUsersList:      getUsersList,
     getUserById:       getUserById,
     addUser:           addUser,
-    updateUser:        updateUser,
-    updateUserSocials: updateUserSocials,
+    updateUserImgs:    updateUserImgs,
+    updateUserProfile: updateUserProfile,
     deleteUser:        deleteUser
   };
 })();

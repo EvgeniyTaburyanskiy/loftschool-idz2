@@ -67,8 +67,7 @@ var _router = function (app) {
   router.route('/api/method/auth.resetPasswd')
   .all(csrfProtection, controllers.auth.api_resetPasswd); //-> Смена пароля(применение нового пароля)
 
-  
-  
+
   // USERS ROUTES ==============================================
   /*
    *  TODO: API-ROUTE - U Изменить список социалок пользователя
@@ -87,18 +86,19 @@ var _router = function (app) {
   router.route('/api/method/users.addUser')
   .post(csrfProtection, controllers.users.API_addUser);           //->
 
-  router.route('/api/method/users.updateUser')
-  .post(csrfProtection, controllers.users.API_updateUser);       //->
-  
-  router.route('/api/method/users.updateUserSocials')
-  .post( controllers.users.API_updateUserSocials); //->
-  
+  router.route('/api/method/users.updateUserProfile')
+  .post(controllers.users.API_updateUserProfile);      //->
+
+  router.route('/api/method/users.updateUserImgs')
+  .post(
+      Upload.fields([{name: 'ava_img'}, {name: 'bg_img'}]), // Ожидаем форму с полем тип единичный файл.Имя поля - "album_bg"
+      controllers.users.API_updateUserImgs); //->
+
+
   router.route('/api/method/users.deleteUser')
   .post(csrfProtection, controllers.users.API_deleteUser);       //->
 
 
-  
-  
   // ALBUM ROUTES ==============================================
   router.route(['/api/method/albums.getAlbumByID'])// R Список Фоток Альбома (Id альбома)
   .get(controllers.albums.API_getAlbumById);
@@ -122,8 +122,7 @@ var _router = function (app) {
   router.route(['/api/method/albums.deleteAlbum'])    // D Удаление Альбома и всех его фоткок
   .post(controllers.albums.API_deleteAlbum);
 
-  
-  
+
   // PHOTO ROUTES ==============================================
   /*
    *  TODO: API-ROUTE - С Добавление Фото (Id альбома,фалы фоток)

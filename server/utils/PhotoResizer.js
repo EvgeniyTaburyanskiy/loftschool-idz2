@@ -18,16 +18,41 @@ function PhotoResizer(options) {
 
 PhotoResizer.prototype = {
   _resizeAvatar: function () {
+
+
     var
         that    = this,
         options = config.get('photoresizer:set:avatar');
+    console.log('originalImagePath ', that.originalImagePath);
+    console.log('resizedImgPath ', that.resizedImgPath);
+    
+    gmagic(that.originalImagePath)
+    .resize(options.size.width, options.size.height)
+    .noProfile()
+    .quality(70)
+    .gravity('center')
+    .write(that.resizedImgPath, function (err) {
+      if (that.callback && typeof(that.callback) === 'function') {
+        var resizedImgs = {
+          "imgPath":   that.resizedImgPath,
+          "thumbPath": ''
+        };
+        that.callback(err, resizedImgs);
+      }
+
+    });
+  },
+
+  _resizeUserBg: function () {
+    var
+        that    = this,
+        options = config.get('photoresizer:set:user_bg');
 
     gmagic(that.originalImagePath)
     .resize(options.size.width, options.size.height)
     .gravity('center')
     .quality(70)
     .noProfile()
-    .extent(options.size.width, options.size.height)
     .write(that.resizedImgPath, function (err) {
       if (that.callback && typeof(that.callback) === 'function') {
         var resizedImgs = {
@@ -85,32 +110,42 @@ PhotoResizer.prototype = {
       callback = type;
       type = undefined;
     }
-    if (!type || ['photo', 'avatar'].indexOf(type.toLowerCase()) !== -1) {
+
+    if (!type || ['photo', 'avatar', 'userbg'].indexOf(type.toLowerCase()) === -1) {
       type = 'photo';
     }
+
 
     this.img = img;
     this.imgType = type;
     this.callback = callback;
 
+    var saveTo = (this.img.saveto) ? this.img.saveto : config.get('photoresizer:savefolder');
+
+    console.log('Image ', img);
+    console.log(__dirname);
 
     this.originalImagePath = path.join(__dirname, '/../', this.img.path);
-    this.saveFolder = path.join(__dirname, '/../', this.img.saveto);
+    this.saveFolder = path.join(__dirname, '/../', saveTo);
 
     var ext = this.img.originalname.split(".").pop();
-    this.resizedImgThumbPath = this.saveFolder + '/photos/thumb-' + this.img.destfilename + '.' + ext;
-
-
-    if (this.imgType === 'avatar') {
-      this.resizedImgPath = this.saveFolder + '/ava/' + this.img.destfilename + '.' + ext;
-
-      return this._resizeAvatar();
-    }
 
     if (this.imgType === 'photo') {
       this.resizedImgPath = this.saveFolder + '/photos/' + this.img.destfilename + '.' + ext;
+      this.resizedImgThumbPath = this.saveFolder + '/photos/thumb-' + this.img.destfilename + '.' + ext;
       return this._resizePhoto();
     }
+
+    if (this.imgType === 'avatar') {
+      this.resizedImgPath = this.saveFolder + '/ava/' + this.img.destfilename + '.' + ext;
+      return this._resizeAvatar();
+    }
+
+    if (this.imgType === 'userbg') {
+      this.resizedImgPath = this.saveFolder + '/bg/' + this.img.destfilename + '.' + ext;
+      return this._resizeUserBg();
+    }
+
 
   }
 
