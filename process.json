@@ -2,7 +2,7 @@
   "apps": [
     {
       "name"              : "dev-loftogram",
-      "script"            : "./server/www",
+      "script"            : "./www",
       "watch"             : true,
       "ignore_watch"      : [
         "[\\/\\\\]\\./",
@@ -14,7 +14,7 @@
       ],
       "max_memory_restart": "300M",
       "max_restarts"      : 20,
-      "cwd"               : "/home/admin/node-www/dev-loftogram/",
+      "cwd"               : "/home/admin/node-www/dev-loftogram/server/",
       "log_date_format"   : "YYYY-MM-DD HH:mm Z",
       "merge_logs"        : true,
       "env"               : {

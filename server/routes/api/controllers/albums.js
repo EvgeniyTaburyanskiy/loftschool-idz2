@@ -113,73 +113,113 @@ var API_getAlbumsByUser = function (req, res, next) {
  * @constructor
  */
 var API_addAlbum = function (req, res, next) {
-  var album_name = req.body.album_name;
-  var album_descr = req.body.album_descr;
-  var album_bg = req.file;
-  var user = req.user;
+  var album_name = req.body.album_name || 'Альбом без названия!';
+  var album_descr = req.body.album_descr || '';
+  var album_bg = (req.file !== 'undefined') ? req.file : req.body.album_bg; // ожидаем либо файл либо ID фотки из БД
+  var user_id = req.user._id;
   // TODO: API- Валидация данных перед добавлением нового альбома
 
   async.waterfall([
-    // Создаем Новый Альбом и сохраняем + связка с пльзователем
-    function (done) {
-      var newAlbum = new Album({
-        _user_id: user._id,
-        name:     album_name,
-        descr:    album_descr
-      });
+        // Создаем Новый Альбом и сохраняем + связка с пльзователем
+        function (done) {
+          var newAlbum = new Album({
+            _user_id: user_id,
+            name:     album_name,
+            descr:    album_descr
+          });
 
-      newAlbum.save(function (err) {
-        if (err) return done(err);
-        // TODO: API- Обработка ошибок валидации Сохранения Альбома
-        return done(null, newAlbum);
-      });
-    },
-    //Создаем документ в БД для хранения инфо о фотографии
-    function (album, done) {
-      var newPhoto = new Photo({
-        _album_id: album._id,
-        album_bg:  true
-      });
+          newAlbum.save(function (err) {
+            if (err) return done(err);
+            // TODO: API- Обработка ошибок валидации Сохранения Альбома
+            return done(null, newAlbum);
+          });
+        },
+        // Обрабатываем фото и создаем в БД
+        function (newAlbum, done) {
+          //Если новую фотку не загрузили файлом - движемся дальше
+          //TODO: API- При создании альбома обработку указания номера сущ. фотки. без загрузки новой
+          if (!album_bg) {
+            // изменений фотки небыло
+            return done(null, newAlbum, null);
+          }
+          //создаем пустую болванку для фотки в базе.
+          var newPhoto = new Photo({'_album_id': newAlbum._id});
 
-      newPhoto.save(function (err) {
-        if (err) return done(err);
-        // TODO: API- Обработка ошибок валидации Сохранения Фотографии
-        return done(null, album, newPhoto);
-      });
-    },
-    // Устанавливаем обратную ссылку альбому на Фотку(фон)
-    function (album, photo, done) {
+          newPhoto.save(function (err) {
+            if (err) {
+              //Если при сохранении Фотки в БД произошла ошибка. То отменяем создание альбома
+              newAlbum.remove(function (err) {
+              });
+              return done(err);
+            }
+          });
 
-      album._album_bg = photo._id;
+          album_bg.saveto = config.get('photoresizer:savefolder');
+          album_bg.destfilename = newPhoto._id;
 
-      album.save(function (err) {
-        if (err) return done(err);
-        // TODO: API- Обработка ошибок валидации Сохранения Альбома
-        return done(null, album, photo);
-      });
-    },
-    // Получаем фотки и обрабатываем их. Сохраняем в FS и обновляем документ Фотки.
-    function (album, photo, done) {
-      var result;
-      // TODO: API- Обработка Загруженой фотки с валидацией
+          PhotoResizer.resize(album_bg, function (err, newImageInfo) {
+            if (err) {
+              // если при ресайзе что-то пошло не так, удаляем альбом и фотки с ним связанные (см Схему альбома)
+              newAlbum.remove(function (err) {
+              });
+              return done(new HttpError(400, null, 'Ошибка в процессе обработки файла!', err.message));
+            }
 
-      result = {
-        id:        album.id,
-        name:      album.name,
-        descr:     album.descr,
-        _album_bg: {
-          imgURL:   photo.imgURL,
-          thumbURL: photo.thumbURL
+            //logger.debug('Resized info - ', newImageInfo);
+
+            newPhoto.album_bg = true;
+            newPhoto.img = '/uploads/files/photos/' + path.basename(newImageInfo.imgPath);
+            newPhoto.thumb = '/uploads/files/photos/' + path.basename(newImageInfo.thumbPath);
+
+            // Новую фотку  сохраненяем в БД
+            newPhoto.save(function (err) {
+              if (err) {
+                newAlbum.remove(function (err) {
+                });
+                return done(err)
+              }
+              ;
+
+              return done(null, newAlbum, newPhoto);
+            });
+          });
+        },
+        // Устанавливаем обратную ссылку альбому на Фотку(фон)
+        function (newAlbum, newPhoto, done) {
+
+          newAlbum._album_bg = newPhoto._id;
+
+          newAlbum.save(function (err) {
+            if (err) {
+              newAlbum.remove(function (err) {
+              });
+              return done(err);
+            }
+            // TODO: API- Обработка ошибок валидации Сохранения Альбома
+            return done(null, newAlbum, newPhoto);
+          });
+        },
+        //Подготавливаем ответ на запрос
+        function (newAlbum, newPhoto, done) {
+          var result = {
+            _id:       newAlbum.id,
+            name:      newAlbum.name,
+            descr:     newAlbum.descr,
+            _album_bg: {
+              img:   newPhoto.img,
+              thumb: newPhoto.thumb
+            }
+          };
+
+          return done(null, result);
         }
-      };
-      return done(null, result);
-    }
-  ], function (err, result) {
-    if (err) return next(err);
-    // TODO: API- Код ошибки об успешном сосздании альбома
-
-    next(new HttpError(200, null, '', result));
-  });
+      ],
+      //Отдаем результат
+      function (err, result) {
+        if (err) return next(err);
+        // TODO: API- Код ошибки об успешном сосздании альбома
+        next(new HttpError(200, null, 'Новый альбом успешно создан!', result));
+      });
 };
 
 
@@ -195,7 +235,7 @@ var API_updateAlbum = function (req, res, next) {
   var album_id = req.body.album_id;
   var album_name = req.body.album_name || 'Альбом без названия!';
   var album_descr = req.body.album_descr || '';
-  var album_bg = (req.file !== 'undefined') ? req.file : '' || req.body.album_bg; // ожидаем либо файл либо ID фотки из БД
+  var album_bg = (req.file !== 'undefined') ? req.file : req.body.album_bg; // ожидаем либо файл либо ID фотки из БД
 
   // TODO: API- Валидация данных перед обновлением  альбома
 
@@ -219,6 +259,7 @@ var API_updateAlbum = function (req, res, next) {
         //Обрабатываем загруженный файл фотки Imagick и сохраняем в FS и в БД
         function (album, done) {
           //Если новую фотку не загрузили файлом или ID новой и старой совпадают, движемся дальше
+          //TODO: API- При обновлении альбома обработку указания номера сущ. фотки. без загрузки новой
           if (
               !album_bg ||
               album_bg.toString() === album._album_bg._id.toString()
@@ -227,8 +268,9 @@ var API_updateAlbum = function (req, res, next) {
             return done(null, album, null);
           }
 
+
           //создаем пустую болванку для фотки в базе.
-          var newPhoto = new Photo({'_album_id': album._album_bg._id});
+          var newPhoto = new Photo({'_album_id': album._id});
           newPhoto.save(function (err) {
             if (err) return done(err);
           });
@@ -247,8 +289,6 @@ var API_updateAlbum = function (req, res, next) {
             }
 
             //logger.debug('Resized info - ', newImageInfo);
-            // Создаем 'экземпляр новой фотки.
-            newPhoto._album_id = album._id;
             newPhoto.album_bg = true;
             newPhoto.img = '/uploads/files/photos/' + path.basename(newImageInfo.imgPath);
             newPhoto.thumb = '/uploads/files/photos/' + path.basename(newImageInfo.thumbPath);

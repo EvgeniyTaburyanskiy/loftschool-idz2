@@ -5,7 +5,7 @@ block APP_content
   h4 Register your account
   form(action='/api/method/auth.signup' method='post')
     fieldset
-    input(type='hidden' name='_csrf' value= csrfToken)
+      input(type='hidden' name='_csrf' value= csrfToken)
       label(for='username') Email
       input(type='email' name='username' placeholder='Your Email')
       label(for='password') Password
@@ -40,7 +40,7 @@ block APP_content
 
 
   br
-  h4 Upload
+  h4 update Album
   form(action='/api/method/albums.update' method='POST' enctype="multipart/form-data")
     fieldset
       input(type='hidden' name='_csrf' value= csrfToken)
@@ -52,3 +52,15 @@ block APP_content
       label(for='album_bg') album_bg
       input(type='file' name='album_bg')
       button(type='submit') Update Album
+
+  br
+  h4 Upload User Imgs
+  form(action='/api/method/users.updateUserImgs' method='POST' enctype="multipart/form-data")
+    fieldset
+      input(type='hidden' name='_csrf' value= csrfToken)
+      input(type='hidden' name='user_id' value= user._id)
+      label(for='ava_img') ava_img
+      input(type='file' name='ava_img')
+      label(for='bg_img') bg_img
+      input(type='file' name='bg_img')
+      button(type='submit') Update Fotos

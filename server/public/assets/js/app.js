@@ -144,23 +144,21 @@
     _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
   };
 
-  var updateUser = function (user_id, profile) {
+  var updateUserImgs = function (user_id, profile) {
 
     var newProfile = {
-      user_id:   user_id || undefined,
-      avatar:    "/img/no-avatar.png",
-      imgURL:    "/img/no-user-bg.png",
-      firstName: "Без",
-      lastName:  "Имени"
+      user_id: user_id || undefined,
+      ava_img: "/img/no-avatar.png",
+      bg_img:  "/img/no-user-bg.png"
     };
 
 
-    _ajaxCall(serviceUrl + ".updateUser", "POST", newProfile);
+    _ajaxCall(serviceUrl + ".updateUserImgs", "POST", newProfile);
   };
 
   var updateUserProfile = function (user_id, profileData) {
 
-    var newSocials = {
+    var profileData_ = {
       user_id:   user_id || undefined,
       firstName: "Джеки",
       lastName:  "Чен",
@@ -169,11 +167,11 @@
       fb:        "",
       gl:        "",
       tw:        "",
-      vk:        "https://new.vk.com/djaki" 
+      vk:        "https://new.vk.com/djaki"
     };
 
 
-    _ajaxCall(serviceUrl + ".updateUserProfile", "POST", newSocials);
+    _ajaxCall(serviceUrl + ".updateUserProfile", "POST", profileData_);
   };
 
   var deleteUser = function (user_id) {
@@ -186,7 +184,7 @@
     getUsersList:      getUsersList,
     getUserById:       getUserById,
     addUser:           addUser,
-    updateUser:        updateUser,
+    updateUserImgs:    updateUserImgs,
     updateUserProfile: updateUserProfile,
     deleteUser:        deleteUser
   };

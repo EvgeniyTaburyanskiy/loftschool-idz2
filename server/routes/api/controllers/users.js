@@ -1,7 +1,10 @@
+
+var async = require('async');
+var path = require('path');
+var ObjectID = require('mongodb').ObjectID;
 var logger = require('../../../utils/winston')(module);
 var HttpError = require('../../../middleware/HttpError').HttpError;
-var ObjectID = require('mongodb').ObjectID;
-var async = require('async');
+var PhotoResizer = require('../../../utils/PhotoResizer');
 var isEmpty = require('../../../utils/helpers/isEmpty');
 var User = require('../../../db/models/User').mUser;
 
@@ -109,14 +112,19 @@ var API_updateUserBg = function (req, res, next) {
  * @param res
  * @param next
  */
-var API_updateUserAva = function (req, res, next) {
+var API_updateUserImgs = function (req, res, next) {
   var user_id = req.query.user_id || req.params.user_id || req.body.user_id || req.user._id;
+  user_id = user_id.replace(/["']/g, '');
 
-  var newData = {};
+  var ava_img = req.query.ava_img || req.body.ava_img;
+  if (!ava_img && req.files['ava_img']) {
+    ava_img = req.files['ava_img'][0]
+  }
 
-  var avatar = req.query.avatar || req.params.avatar || req.body.avatar || feq.files['avatar'];
-  var bg_img = req.query.bg_img || req.params.bg_img || req.body.bg_img || feq.files['bg_img'];
-
+  var bg_img = req.query.bg_img || req.body.bg_img;
+  if (!bg_img && req.files['bg_img']) {
+    bg_img = req.files['bg_img'][0]
+  }
 
   if (user_id === undefined) {
     return next(new HttpError(400, null, 'Неверно указан идентификатор пользователя!'));
@@ -129,10 +137,91 @@ var API_updateUserAva = function (req, res, next) {
     return next(new HttpError(400, null, 'Неверно указан идентификатор пользователя!'));
   }
 
+  async.waterfall([
+        //Ищем пользователя и проверяем что он сущ-ет и это мы сами
+        function (done) {
+          User.findById(uid).exec(function (err, user) {
+            if (err) return next(err);
 
-  //TODO: API- Сделать обновление пользователя по API
-  var result = {};
-  next(new HttpError(200, null, '', result));
+            if (!user) {
+              return next(new HttpError(400, null, 'ID пользователя указан не верно либо пользователь не существует'));
+            }
+
+            if (user._id.toString() !== req.user._id.toString()) {
+              return next(new HttpError(400, null, 'Вы можете редактировать только свои данные!'));
+            }
+
+            return done(null, user);
+          });
+        },
+        // Обрабатываем аватар
+        function (user, done) {
+          //Если новую фотку аватар не загрузили файлом - движемся дальше
+          if (isEmpty(ava_img)) {
+            return done(null, user);
+          }
+
+          ava_img.destfilename = user._id;
+
+          PhotoResizer.resize(ava_img, 'avatar', function (err, newImageInfo) {
+            if (err) {
+              // если при ресайзе что-то пошло не так, удаляем альбом и фотки с ним связанные (см Схему альбома)
+              return done(new HttpError(400, null, 'Ошибка в процессе обработки файла аватар!', err.message));
+            }
+
+            user.userdata.ava_img = '/uploads/files/ava/' + path.basename(newImageInfo.imgPath);
+
+            // Новую аватарку  сохраненяем в БД
+            user.save(function (err) {
+              if (err) {
+                return done(err)
+              }
+
+              return done(null, user);
+            });
+          });
+        },
+        // Обрабатываем Фоновую картинку bg_img
+        function (user, done) {
+          //Если новую фотку не загрузили файлом - движемся дальше
+          //TODO: API- При создании альбома обработку указания номера сущ. фотки. без загрузки новой
+          if (isEmpty(bg_img)) {
+            return done(null, user);
+          }
+
+          bg_img.destfilename = user._id;
+
+          PhotoResizer.resize(bg_img, 'userbg', function (err, newImageInfo) {
+            if (err) {
+              return done(new HttpError(400, null, 'Ошибка в процессе обработки фоновой картинки!', err.message));
+            }
+            
+
+            user.userdata.bg_img = '/uploads/files/bg/' + path.basename(newImageInfo.imgPath);
+
+            // Новую фотку  сохраненяем в БД
+            user.save(function (err) {
+              if (err) {
+
+                return done(err)
+              }
+              return done(null, user);
+            });
+          });
+
+        }
+      ],
+      function (err, result) {
+        if (err) return next(err);
+        //TODO: API- Сделать обновление пользователя по API
+        User
+        .findById(uid, '_id, userdata')
+        .lean()
+        .exec(function (err, user) {
+          if (err) return next(err);
+          next(new HttpError(200, null, '', [user]));
+        });
+      });
 };
 
 
@@ -268,7 +357,7 @@ exports = module.exports = {
   API_getUsersList:      API_getUsersList,
   API_getUserById:       API_getUserById,
   API_addUser:           API_addUser,
-  API_updateUserAva:     API_updateUserAva,
+  API_updateUserImgs:    API_updateUserImgs,
   API_updateUserBg:      API_updateUserBg,
   API_updateUserProfile: API_updateUserProfile,
   API_deleteUser:        API_deleteUser
