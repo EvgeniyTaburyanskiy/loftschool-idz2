@@ -79,7 +79,7 @@ var schemaUserData = new Schema({
     trim:      true,
     required:  false
   },
-  g:            {
+  gl:            {
     type:      String,
     default:   '',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html

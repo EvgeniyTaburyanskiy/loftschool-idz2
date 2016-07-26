@@ -158,20 +158,20 @@
     _ajaxCall(serviceUrl + ".updateUser", "POST", newProfile);
   };
 
-  var updateUserSocials = function (user_id, socials) {
+  var updateUserProfile = function (user_id, socials) {
 
     var newSocials = {
       user_id:      user_id || undefined,
+      user_message:      "",
       emailAddress: "admin@admin.ru",
       fb:           "",
-      g:            "",
-      message:      "",
+      gl:            "",
       tw:           "",
       vk:           "https://new.vk.com/proglib"
     };
 
 
-    _ajaxCall(serviceUrl + ".updateUserSocials", "POST", newSocials);
+    _ajaxCall(serviceUrl + ".updateUserProfile", "POST", newSocials);
   };
 
   var deleteUser = function (user_id) {
@@ -185,7 +185,7 @@
     getUserById:       getUserById,
     addUser:           addUser,
     updateUser:        updateUser,
-    updateUserSocials: updateUserSocials,
+    updateUserProfile: updateUserProfile,
     deleteUser:        deleteUser
   };
 })();

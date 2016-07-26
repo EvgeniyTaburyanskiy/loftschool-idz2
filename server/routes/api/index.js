@@ -87,12 +87,14 @@ var _router = function (app) {
   router.route('/api/method/users.addUser')
   .post(csrfProtection, controllers.users.API_addUser);           //->
 
-  router.route('/api/method/users.updateUser')
-  .post(csrfProtection, controllers.users.API_updateUser);       //->
-  
+  router.route('/api/method/users.updateUserProfile')
+  .post(csrfProtection, controllers.users.API_updateUserProfile);       //->
+/*
+
   router.route('/api/method/users.updateUserSocials')
   .post( controllers.users.API_updateUserSocials); //->
-  
+*/
+
   router.route('/api/method/users.deleteUser')
   .post(csrfProtection, controllers.users.API_deleteUser);       //->
 
