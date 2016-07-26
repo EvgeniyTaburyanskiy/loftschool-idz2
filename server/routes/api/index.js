@@ -91,7 +91,7 @@ var _router = function (app) {
   .post(csrfProtection, controllers.users.API_updateUser);       //->
   
   router.route('/api/method/users.updateUserSocials')
-  .post(csrfProtection, controllers.users.API_updateUserSocials); //->
+  .post( controllers.users.API_updateUserSocials); //->
   
   router.route('/api/method/users.deleteUser')
   .post(csrfProtection, controllers.users.API_deleteUser);       //->

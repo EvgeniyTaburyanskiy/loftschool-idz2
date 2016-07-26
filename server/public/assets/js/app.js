@@ -144,24 +144,34 @@
     _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
   };
 
-  var updateUser = function (user_id, profile, socials) {
+  var updateUser = function (user_id, profile) {
 
     var newProfile = {
-      user_id:      user_id || undefined,
-      avatar:       "/img/no-avatar.png",
-      imgURL:       "/img/no-user-bg.png",
-      firstName:    "Без",
-      lastName:     "Имени",
-      emailAddress: "admin@loftogram.ru",
-      fb:           "",
-      g:            "",
-      message:      "",
-      tw:           "",
-      vk:           ""
+      user_id:   user_id || undefined,
+      avatar:    "/img/no-avatar.png",
+      imgURL:    "/img/no-user-bg.png",
+      firstName: "Без",
+      lastName:  "Имени"
     };
 
 
     _ajaxCall(serviceUrl + ".updateUser", "POST", newProfile);
+  };
+
+  var updateUserSocials = function (user_id, socials) {
+
+    var newSocials = {
+      user_id:      user_id || undefined,
+      emailAddress: "",
+      fb:           "",
+      g:            "",
+      message:      "",
+      tw:           "",
+      vk:           "https://new.vk.com/proglib"
+    };
+
+
+    _ajaxCall(serviceUrl + ".updateUserSocials", "POST", newSocials);
   };
 
   var deleteUser = function (user_id) {
@@ -171,10 +181,11 @@
   };
 
   window.modUser = {
-    getUsersList: getUsersList,
-    getUserById:  getUserById,
-    addUser:      addUser,
-    updateUser:   updateUser,
-    deleteUser:   deleteUser
+    getUsersList:      getUsersList,
+    getUserById:       getUserById,
+    addUser:           addUser,
+    updateUser:        updateUser,
+    updateUserSocials: updateUserSocials,
+    deleteUser:        deleteUser
   };
 })();
