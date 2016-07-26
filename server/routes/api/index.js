@@ -87,12 +87,12 @@ var _router = function (app) {
   .post(csrfProtection, controllers.users.API_addUser);           //->
 
   router.route('/api/method/users.updateUserProfile')
-  .post(controllers.users.API_updateUserProfile);      //->
+  .post(controllers.users.API_updateUserProfile);                 //->
 
   router.route('/api/method/users.updateUserImgs')
   .post(
-      Upload.fields([{name: 'ava_img'}, {name: 'bg_img'}]), // Ожидаем форму с полем тип единичный файл.Имя поля - "album_bg"
-      controllers.users.API_updateUserImgs); //->
+      Upload.fields([{name: 'ava_img'}, {name: 'bg_img'}]),
+      controllers.users.API_updateUserImgs);                      //->
 
 
   router.route('/api/method/users.deleteUser')

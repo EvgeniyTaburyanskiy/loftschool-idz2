@@ -72,40 +72,6 @@ var API_addUser = function (req, res, next) {
   next(new HttpError(200, null, '', result));
 };
 
-
-/**
- *
- * @param req
- * @param res
- * @param next
- */
-var API_updateUserBg = function (req, res, next) {
-  var user_id = req.query.user_id || req.params.user_id || req.body.user_id || req.user._id;
-
-  var newData = {};
-
-  var avatar = req.query.avatar || req.params.avatar || req.body.avatar || feq.files['avatar'];
-  var bg_img = req.query.bg_img || req.params.bg_img || req.body.bg_img || feq.files['bg_img'];
-
-
-  if (user_id === undefined) {
-    return next(new HttpError(400, null, 'Неверно указан идентификатор пользователя!'));
-  }
-
-  try {
-    var uid = new ObjectID(user_id);
-  }
-  catch (e) {
-    return next(new HttpError(400, null, 'Неверно указан идентификатор пользователя!'));
-  }
-
-
-  //TODO: API- Сделать обновление пользователя по API
-  var result = {};
-  next(new HttpError(200, null, '', result));
-};
-
-
 /**
  *
  * @param req
@@ -358,7 +324,6 @@ exports = module.exports = {
   API_getUserById:       API_getUserById,
   API_addUser:           API_addUser,
   API_updateUserImgs:    API_updateUserImgs,
-  API_updateUserBg:      API_updateUserBg,
   API_updateUserProfile: API_updateUserProfile,
   API_deleteUser:        API_deleteUser
 };
