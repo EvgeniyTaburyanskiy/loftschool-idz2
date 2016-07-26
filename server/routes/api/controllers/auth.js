@@ -164,7 +164,7 @@ var api_fogotPasswd = function (req, res, next) {
     },
     function (token, done) {
       User
-      .findOne({'userdata.emailAddress': email},
+      .findOne({'userdata.email': email},
           function (err, user) {
             if (!user) {
               return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE', 'Пользователь с указанным Email не существует'));

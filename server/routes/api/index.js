@@ -84,7 +84,9 @@ var _router = function (app) {
   .get(controllers.users.API_getUserById);        //->
 
   router.route('/api/method/users.addUser')
-  .post(csrfProtection, controllers.users.API_addUser);           //->
+  .post(
+      csrfProtection,
+      controllers.users.API_addUser);           //->
 
   router.route('/api/method/users.updateUserProfile')
   .post(controllers.users.API_updateUserProfile);                 //->
@@ -96,7 +98,9 @@ var _router = function (app) {
 
 
   router.route('/api/method/users.deleteUser')
-  .post(csrfProtection, controllers.users.API_deleteUser);       //->
+  .post(
+      csrfProtection,
+      controllers.users.API_deleteUser);       //->
 
 
   // ALBUM ROUTES ==============================================
@@ -109,7 +113,7 @@ var _router = function (app) {
   router.route(['/api/method/albums.addAlbum'])   // C Добавление нового альбома(имя, описние, фотка-фон)
   .post(
       csrfProtection,
-      Upload.single('album_bg'), // Ожидаем форму с полем тип единичный файл.Имя поля - "album_bg"
+      Upload.single('album_bg'),
       controllers.albums.API_addAlbum
   );
 
