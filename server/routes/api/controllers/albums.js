@@ -39,8 +39,8 @@ var API_getAlbumById = function (req, res, next) {
           name:      album.name,
           descr:     album.descr,
           _album_bg: {
-            imgURL:   album._album_bg.imgURL,
-            thumbURL: album._album_bg.thumbURL
+            img:   album._album_bg.img,
+            thumb: album._album_bg.thumb
           }
 
         };
@@ -50,7 +50,7 @@ var API_getAlbumById = function (req, res, next) {
     //ВЫборка всех фоток альбома
     function (done) {
       Photo
-      .find({_album_id: album_id}, 'name descr imgURL thumbURL album_bg comments likes')
+      .find({_album_id: album_id}, 'name descr img thumb album_bg comments likes')
       .lean()
       .populate('comments')
       .exec(function (err, photos) {
@@ -90,7 +90,7 @@ var API_getAlbumsByUser = function (req, res, next) {
       Album
       .find({_user_id: user_id}, 'id name descr _album_bg')
       .lean()
-      .populate('_album_bg', 'imgURL thumbURL')
+      .populate('_album_bg', 'img thumb')
       .exec(function (err, albums) {
         if (err) return done(err);
         return done(err, albums);
@@ -275,7 +275,7 @@ var API_updateAlbum = function (req, res, next) {
             if (err) return done(err);
           });
 
-          album_bg.saveto = config.get('photoresizer:savefolder');
+
           album_bg.destfilename = newPhoto._id;
 
           PhotoResizer.resize(album_bg, function (err, newImageInfo) {
@@ -345,8 +345,8 @@ var API_updateAlbum = function (req, res, next) {
           descr:     album.descr,
           _album_bg: {
             _id:      album._album_bg.id,
-            imgURL:   album._album_bg.imgURL,
-            thumbURL: album._album_bg.thumbURL
+            img:   album._album_bg.img,
+            thumb: album._album_bg.thumb
           }
         };
         next(new HttpError(200, null, 'Альбом успешно изменен!', result));
