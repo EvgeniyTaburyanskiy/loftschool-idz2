@@ -1,13 +1,41 @@
 @import "../helpers/mixins";
 @import "../helpers/functions";
-
+@keyframes profileSlideDown {
+  from {
+    bottom: 100%;
+    transform: translate(-50%,0);
+  }
+  to {
+    bottom: 50%;
+    transform: translate(-50%,50%);
+  }
+}
+.profileSlideDown {
+  animation-name: profileSlideDown;
+  animation-duration: .3s;
+  animation-fill-mode: both;
+}
+.edit-profile-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(#000,0.7);
+  z-index: 5555;
+  display: none;
+}
 .edit-profile {
   width: 679px;
   background: #fff;
-  display: flex;
+  display: block;
   flex-direction: column;
   border-radius: 5px;
   overflow: hidden;
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translate(-50%,0);
   @include mediamax(1299px) {
     width: 596px;
   }
@@ -179,23 +207,30 @@
   overflow: hidden;
   border-radius: 50%;
   margin-left: auto;
+  position: relative;
 }
 
 .avatar-cover__img {
-  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform: translate(50%,0);
+  right: 50%;
 }
 
 .field__cover-info {
   margin-left: 19px;
   display: flex;
   align-items: center;
-  .custom-block__btn {
+  .inputFile-block__btn {
     height: 40px;
     border: 1px solid #28bbf0;
     border-radius: 20px;
     font: 700 14px panton;
     color: #28bbf0;
     transition: background .3s, color .3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     &:hover {
       background: #28bbf0;
       color: #fff;

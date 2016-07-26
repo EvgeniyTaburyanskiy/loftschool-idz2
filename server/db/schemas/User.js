@@ -39,6 +39,10 @@ var schemaUser = new Schema({
     type:    String,
     default: new mongoose.Types.ObjectId().toString()
   },
+  emailConfirmed:         {
+    type:    Boolean,
+    default: false
+  },
   userdata:               {
     type:    schemaUserData,
     default: schemaUserData
@@ -89,7 +93,8 @@ schemaUser.statics.register = function (username, password, next) {
   var User = this;
   async.waterfall([
         function (done) {
-          User.findOne({'username': username.toLowerCase()}, done);//-> Ищем пользователя в БД по username(он же email)
+          User
+          .findOne({'username': username.toLowerCase()}, done);//-> Ищем пользователя в БД по username(он же email)
         },
         function (user, done) {// ошибок не возникло возвращен результат из пред функции
           if (user) {//-> если пользователь найден

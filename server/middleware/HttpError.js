@@ -75,7 +75,7 @@ var apiErrorsList = {
 
   },
   404: {//-> Ошибки валидации параметров запроса.
-    "DEFAULT":               {
+    "DEFAULT": {
       "message":          "Запрошеный ресурс не найден",
       "type":             "",
       "code":             "404",
@@ -110,7 +110,7 @@ var sendHttpError = function (req, res, next) {
       .status(500)
       .render('error',
           {
-            message: error.message
+            message: 'Внутренняя ошибка сервера'
           }
       );
     }
@@ -119,7 +119,7 @@ var sendHttpError = function (req, res, next) {
       .status(404)
       .render('error',
           {
-            message: error.message
+            message: 'Запрошеный ресурс не найден'
           }
       );
     }
@@ -170,7 +170,7 @@ var sendAPIHttpError = function (req, res, next) {
     // все остальне отдаем в XML так удобно читать
     else {
       res.set('Content-Type', 'text/xml');
-      res.send(js2xmlparser("error", errData));
+      res.send(js2xmlparser("result", JSON.stringify(errData)));
     }
 
     logger.debug('API ERR- %s %d %s', req.method, res.statusCode, error.message + ' [' + req.url + ']');

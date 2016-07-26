@@ -2,10 +2,12 @@ var logger = require('../../../utils/winston')(module);
 var config = require('../../../utils/nconf');
 var HttpError = require('../../../middleware/HttpError').HttpError;
 var AuthError = require('../../../db/schemas/User').AuthError;
-var nodemailer = require('nodemailer');
+
 var async = require('async');
 var crypto = require('crypto');
 var passport = require('passport');
+var mail = require('../../../utils/mail');
+
 //Конфигурируем стратегии Passport
 require('../../../config/passportAuthConf')(passport);
 
@@ -41,11 +43,7 @@ var api_signin = function (req, res, next) {
 
           // TODO: API- статус ответа в API для успешной авторизации
           // Все ок. Отправляем Ответ со статусом
-          res.json(
-              {
-                staus: 200
-              }
-          )
+          next(new HttpError(200, null, 'Добро пожаловать в Loftogram!'));
         });
       }
   )(req, res, next);
@@ -96,6 +94,23 @@ var api_signup = function (req, res, next) {
          *  TODO: - Логику обработки результата подтверждения
          */
 
+        var mailOptions = {
+          to:      user.userdata.emailAddress,
+          subject: 'Подтверждение E-mail!',
+          text:    'Мы очень рады, что Вы решили попробовать Loftogram!\n\n' +
+                   'Прежде чем Вы сможете начать обмениваться впечатлениями. Мы просим Вас подтвердить ваш E-mail\n\n' +
+                   'Для этого Вам всего лишь нужно перейти по указанной ссылке: \n\n' +
+                   'http://' + req.headers.host + '/email.confirm/' + user.emailConfirmationToken + '\n\n' +
+                   'Акаунт необходимо подтвердить в течение 2 дней. Иначе сервис отставляет за собой право его' +
+                   ' заблокировать! \n' +
+                   'Не отвечайте на это сообщение.\n'
+
+        };
+
+        mail(mailOptions, function (err, info) {
+          if (err) return next(err);
+        });
+
         /*
          * Выполняем автологон для только что сгенерированного пользователя, редиректим на главную
          * метод req.login() добавляется  модулем passport. http://passportjs.org/docs/login
@@ -106,8 +121,8 @@ var api_signup = function (req, res, next) {
             return next(new HttpError(500, null, err.message));
           }
           // TODO: API- статус ответа в API для успешной регистрации
-          // Все ок. Отправляем Ответ со статусом
-          next( new HttpError(200) )
+          // Все ок.
+          next(new HttpError(200, null, 'Вам было отправлено письмо для подтверждения E-mail.'))
         });
       }
   )(req, res, next);
@@ -127,11 +142,7 @@ var api_signout = function (req, res, next) {
   //(согласно доке passport удаляет свои данные из сессии, но объект сессии нет.)
   req.session.destroy(); //-> Удаляем сессию пользователя
   // TODO: API- статус ответа в API для успешного разлогона
-  res.json(
-      {
-        staus: 200
-      }
-  ); //-> Отдаем ответ о результате!
+  next(new HttpError(200, null, ''));//-> Отдаем ответ о результате!
 };
 
 
@@ -141,7 +152,7 @@ var api_signout = function (req, res, next) {
  * @param res
  * @param next
  */
-var api_postfogot = function (req, res, next) {
+var api_fogotPasswd = function (req, res, next) {
   var email = req.body.email;
 
   async.waterfall([
@@ -152,27 +163,25 @@ var api_postfogot = function (req, res, next) {
       });
     },
     function (token, done) {
-      User.findOne({'userdata.emailAddress': email}, function (err, user) {
-        if (!user) {
-          return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE', 'Пользователь с указанным Email не существует'));
-        }
+      User
+      .findOne({'userdata.emailAddress': email},
+          function (err, user) {
+            if (!user) {
+              return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE', 'Пользователь с указанным Email не существует'));
+            }
 
-        user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+            user.resetPasswordToken = token;
+            user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
-        user.save(function (err) {
-          done(err, token, user);
-        });
-      });
+            user.save(function (err) {
+              done(err, token, user);
+            });
+          });
     },
     function (token, user, done) {
-      var mailTransporter = nodemailer.createTransport(config.get('nodemailer:transport'));
-      // TODO: API -текст письма нужно на русском
-      // TODO: API -шаблоны писем https://github.com/nodemailer/nodemailer#using-templates
       var mailOptions = {
         to:      user.userdata.emailAddress,
-        from:    config.get('nodemailer:mailOptions:from'),
-        subject: 'LOFTOGRAM: Восстановление пароля!',
+        subject: 'Восстановление пароля!',
         text:    'Вы получили это письмо потому, что Вы (либо кто-то другой) отправил запрос на смену пароля для' +
                  ' доступа к  Вашему аккаунту.\n\n' +
                  'Пожалуйста перейдите по следующей сслыке, либо скопирйте и вставьте ее в адресную строку вашего' +
@@ -182,10 +191,10 @@ var api_postfogot = function (req, res, next) {
                  'Если Вы не отправляли подобный запрос, то не обращайте внимания на это письмо.\n'
       };
 
-      mailTransporter.sendMail(mailOptions, function (err, info) {
-        if (err) return done(err);
-        return done(err, 'Succeess');
+      mail(mailOptions, function (err, info) {
+        return done(err, info);
       });
+
     }
   ], function (err, result) {
     if (err) return next(err);
@@ -205,12 +214,13 @@ var api_postfogot = function (req, res, next) {
  * @param next
  * @private
  */
-var api_passwdReset = function (req, res, next) {
+var api_resetPasswd = function (req, res, next) {
 
   async.waterfall([
         // Ищем пользователя с токеном и меняем пароль
         function (done) {
-          User.findOne({
+          User
+          .findOne({
             'resetPasswordToken':   String(req.body.token),
             'resetPasswordExpires': {$gt: new Date}
           }, done)
@@ -254,21 +264,18 @@ var api_passwdReset = function (req, res, next) {
             });
           });
         },
-        // Если со сменой пароля небыло проблем , отпарвляем письмо подтверждение
+        // Если со сменой пароля небыло проблем , отправляем письмо подтверждение
         function (user, done) {
-          var mailTransporter = nodemailer.createTransport(config.get('nodemailer:transport'));
 
-          // TODO:  -шаблон писема подтверждения сброса пароля https://github.com/nodemailer/nodemailer#using-templates
           var mailOptions = {
             to:      user.userdata.emailAddress,
-            from:    config.get('nodemailer:mailOptions:from'),
-            subject: 'LOFTOGRAM: Ваш Пароль был изменен!',
+            subject: 'Ваш Пароль был изменен!',
             text:    'Здравствуйте,\n\n' +
                      'Пароль вашего аккаунта с E-mail: ' + user.userdata.emailAddress + ' был успешно изменен!'
           };
 
-          mailTransporter.sendMail(mailOptions, function (err, info) {
-            if (err) return done(err);
+          mail(mailOptions, function (err, info) {
+            if (err) return next(err);
             return done(err, 'Success');
           });
         }
@@ -282,24 +289,11 @@ var api_passwdReset = function (req, res, next) {
 };
 
 
-/**
- *
- * @param req
- * @param res
- * @param next
- */
-var getAuth = function (req, res, next) {
-  res.render(
-      'auth',
-      {title: 'getAuth'}
-  );
-};
-
 exports = module.exports = {
   api_signin:      api_signin,
   api_signout:     api_signout,
   api_signup:      api_signup,
-  api_postfogot:   api_postfogot,
-  api_passwdreset: api_passwdReset
+  api_fogotPasswd: api_fogotPasswd,
+  api_resetPasswd: api_resetPasswd
 };
 

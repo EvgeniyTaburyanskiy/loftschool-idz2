@@ -48,7 +48,7 @@ gulp
     ```
 
 ## Server (Nginx + NODEjs + MongoDB)
-
+* Dependencies : graphicsmagick tools
 * CD to root directory project and:
 ```
 node ./server/www
@@ -62,6 +62,7 @@ body-parser         | пакет обрабатывает тела application/x
 cookie-parser       | пакет для синтаксического анализа Cookie  выставляет для них  req.cookies
 express             | базовый пакет, для создания http-сервера
 faker               | пакет для генерации фейковых данных, например при наполнении БД демо данными
+mongodb             | драйвер для Nodejs под MongoDB
 method-override     | пакет для поддержки put и delete
 mongoose            | фреймверк, для удобной работы с MongoDB
 nconf               | пакет для удобной работы с настройками приложения (собственный config.json)

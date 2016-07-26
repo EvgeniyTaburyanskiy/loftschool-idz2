@@ -41,66 +41,89 @@ var _router = function (app) {
    * TODO: - api_key Валидацию через мидлвар в app.param (http://expressjs.com/ru/api.html#app.param)
    * */
   //router.all('*', chkApiKey);
+  router.use(function (req, res, next) {
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    logger.info('API Remote req IP = %s', ip);
+    next();
+  });          //->
 
   // HOME ROUTES ==============================================
-  router.get('/api', controllers.main.api_home); //-> Редиректим на авторизацию публички
+  router.get(['/api', '/api/method/'], controllers.main.api_home); //-> Редиректим на авторизацию публички
 
 
   // AUTH ROUTES ==============================
-  router.route('/api/auth/signin')
+  router.route('/api/method/auth.signin')
   .post(csrfProtection, controllers.auth.api_signin);     //-> Вход в Систему
 
-  router.route('/api/auth/signout')
+  router.route('/api/method/auth.signout')
   .all(controllers.auth.api_signout);                     //-> Выход из Системы
 
-  router.route('/api/auth/signup')
+  router.route('/api/method/auth.signup')
   .post(csrfProtection, controllers.auth.api_signup);     //-> Регистрация
 
-  router.route('/api/auth/fogot')
-  .post(csrfProtection, controllers.auth.api_postfogot);  //-> Восстановление пароля(отправка письма с токеном)
+  router.route('/api/method/auth.fogotPasswd')
+  .post(csrfProtection, controllers.auth.api_fogotPasswd);//-> Восстановление пароля(отправка письма с токеном)
 
-  router.route('/api/auth/reset')
-  .all(csrfProtection, controllers.auth.api_passwdreset); //-> Смена пароля(применение нового пароля)
+  router.route('/api/method/auth.resetPasswd')
+  .all(csrfProtection, controllers.auth.api_resetPasswd); //-> Смена пароля(применение нового пароля)
 
+  
+  
   // USERS ROUTES ==============================================
   /*
-   *  TODO: API-ROUTE - R Выдача Данных пользователя по ID
    *  TODO: API-ROUTE - U Изменить список социалок пользователя
    *  TODO: API-ROUTE - U Изменить карточку пользоватея(ФИ+Описание+Фотка+Фон)
    *
    * */
-  router.route(['/api/users', '/api/users/*'])
+  router.route(['/api/method/users*'])
   .all(checkAuth);
 
-  router.route('/api/users')
-  .get(controllers.users.list);       //->
+  router.route('/api/method/users.getUsersList')
+  .get(controllers.users.API_getUsersList);       //->
+
+  router.route('/api/method/users.getUserById')
+  .get(controllers.users.API_getUserById);        //->
+
+  router.route('/api/method/users.addUser')
+  .post(csrfProtection, controllers.users.API_addUser);           //->
+
+  router.route('/api/method/users.updateUser')
+  .post(csrfProtection, controllers.users.API_updateUser);       //->
+  
+  router.route('/api/method/users.updateUserSocials')
+  .post( controllers.users.API_updateUserSocials); //->
+  
+  router.route('/api/method/users.deleteUser')
+  .post(csrfProtection, controllers.users.API_deleteUser);       //->
 
 
-  router.route('/api/users/:user_id')
-  .get(controllers.users.get)         //->
-  .post(controllers.users.add);       //->
-
+  
+  
   // ALBUM ROUTES ==============================================
-  router.route(['/api/albums'])
-  .get(controllers.albums.API_getAlbumByID)     // R Список Фоток Альбома (Id альбома)
+  router.route(['/api/method/albums.getAlbumByID'])// R Список Фоток Альбома (Id альбома)
+  .get(controllers.albums.API_getAlbumById);
+
+  router.route(['/api/method/albums.getAlbumsByUser'])// R Выдать список альбомов пользователя (ID пользователя)
+  .get(controllers.albums.API_getAlbumsByUser);
+
+  router.route(['/api/method/albums.addAlbum'])   // C Добавление нового альбома(имя, описние, фотка-фон)
   .post(
-      Upload.single('album_bg'),
-      controllers.albums.API_addAlbum           // C Добавление нового альбома(имя, описние, фотка-фон)
+      csrfProtection,
+      Upload.single('album_bg'), // Ожидаем форму с полем тип единичный файл.Имя поля - "album_bg"
+      controllers.albums.API_addAlbum
   );
 
-  router.route(['/api/albums/useralbums'])
-  .get(controllers.albums.API_getAlbumsByUser); // R Выдать список альбомов пользователя (ID пользователя)
-
-
-  router.route(['/api/albums/update'])
+  router.route(['/api/method/albums.updateAlbum'])    // U Изменение Альбома (ID альбома, Имя, Описание, Фон)
   .post(
-      Upload.single('album_bg'),
-      controllers.albums.API_updateAlbum        // U Изменение Альбома (ID альбома, Имя, Описание, Фон)
+      Upload.single('album_bg'), // Ожидаем форму с полем тип единичный файл.Имя поля - "album_bg"
+      controllers.albums.API_updateAlbum
   );
 
-  router.route(['/api/albums/delete'])
-  .post(controllers.albums.API_deleteAlbum);    // D Удаление Альбома и всех его фоткок
+  router.route(['/api/method/albums.deleteAlbum'])    // D Удаление Альбома и всех его фоткок
+  .post(controllers.albums.API_deleteAlbum);
 
+  
+  
   // PHOTO ROUTES ==============================================
   /*
    *  TODO: API-ROUTE - С Добавление Фото (Id альбома,фалы фоток)

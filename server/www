@@ -13,7 +13,8 @@ var
 /**
  * Get port from environment and store in Express.
  */
-var port = normalizePort(process.env.PORT || config.get('port') || 3000);
+var port = normalizePort(process.env.PORT || config.get('port') || 8080);
+var ipAddress = config.get('appIpAddress') || '127.0.0.1';
 app.set('port', port);
 
 /**
@@ -24,7 +25,7 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-server.listen(port, '127.0.0.1');
+server.listen(port, ipAddress);
 server.on('listening', function (err) {
   var address = server.address();
   logger.info('Express server listening on http://%s:%d', address.address, address.port);

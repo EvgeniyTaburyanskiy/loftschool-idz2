@@ -51,6 +51,11 @@ mixin use(name, sname)
 mixin btnCustom(buttontext)
   div.custom-block
     button.custom-block__btn #{buttontext}
+//кнопка input type=file
+mixin inpFile(inputText, inputName)
+  div.inputFile-block
+    label.inputFile-block__btn #{inputText}
+      input(type='file' name=inputName)
 //синяя кнопка Войти
 mixin btnEnter
   div.enter-block

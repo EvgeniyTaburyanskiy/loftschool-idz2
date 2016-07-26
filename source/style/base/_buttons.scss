@@ -380,3 +380,15 @@ button {
   cursor: pointer;
   padding: 0 20px;
 }
+
+/* input file button style */
+
+.inputFile-block__btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0 20px;
+  input[type='file'] {
+    display: none;
+  }
+}

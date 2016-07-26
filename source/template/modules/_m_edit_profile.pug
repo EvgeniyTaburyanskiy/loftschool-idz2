@@ -5,48 +5,48 @@ include ../helpers/mixins.pug
             h4.h__title Редактировать профиль
             +btnCancelPop
         .edit-profile__b
-            form.b__form
+            form.b__form(method='POST' enctype="multipart/form-data")
+                input(type="hidden", name="_csrf", value="#{csrf}")
                 .profile__field.profile__field--direction
                     .field__lbl
                         label(for="name") Имя
-                    input#name.field__it.field__it--name(type="text" placeholder='Имя')
-                    input.field__it.field__it--surname(type="text" placeholder='Фамилия')
+                    input#name.field__it.field__it--name(type="text" placeholder='Имя' name='firstName')
+                    input.field__it.field__it--surname(type="text" placeholder='Фамилия' name='lastName')
                 .profile__field.profile__field--direction
                     .field__lbl.field__lbl-top
                         label(for="descr") О себе
-                    textarea#descr.field__itx
+                    textarea#descr.field__itx(name='message')
                 .profile__field
                     .field__cover.profile-av
                         .avatar-cover
-                            img.avatar-cover__img(src='assets/img/jason.jpg' alt='avatar')
+                            img.avatar-cover__img(src='assets/img/no_photo.jpg' alt='avatar')
                     .field__cover-info.profile-cover
-                        +btnCustom('Загрузить фотографию')
+                        +inpFile('Загрузить фотографию','ava_img')
                         .cover-info__text (файл должен быть размером не более&nbsp;
                             span 1024 КБ)
                 .profile__field
                     .field__cover.profile-av
                         .avatar-cover
-                            img.avatar-cover__img(src='assets/img/jason.jpg' alt='avatar')
+                            img.avatar-cover__img(src='assets/img/no_photo.jpg' alt='background')
                     .field__cover-info.profile-cover
-                        +btnCustom('Загрузить фон')
+                        +inpFile('Загрузить фон','bg_img')
                         .cover-info__text (файл должен быть размером не более&nbsp;
                             span 1024 КБ)
                 .profile__field.profile__field--direction
                     .field__lbl
                         label(for="vk") Вконтакте
-                    input#vk.field__it.field__it--social(type="text" placeholder='https://vk.com/')
+                    input#vk.field__it.field__it--social(type="text" placeholder='https://vk.com/' name='vk')
                 .profile__field.profile__field--direction
                     .field__lbl
                         label(for="fb") Facebook
-                    input#fb.field__it.field__it--social(type="text" placeholder='https://www.facebook.com/')
+                    input#fb.field__it.field__it--social(type="text" placeholder='https://www.facebook.com/' name='fb')
                 .profile__field.profile__field--direction
                     .field__lbl
                         label(for="email") Email
-                    input#email.field__it.field__it--social(type="text" placeholder='info@domain.com')
+                    input#email.field__it.field__it--social(type="text" placeholder='info@domain.com' name='email')
                 .profile__field.profile__field--direction
                     .field__lbl
                         label(for="twit") Twitter
-                    input#twit.field__it.field__it--social(type="text" placeholder='https://twitter.com/')
-                input(type="hidden", name="_csrf", value="#{csrf}")
+                    input#twit.field__it.field__it--social(type="text" placeholder='https://twitter.com/' name='tw')
         .edit-profile__f
             +formMenu

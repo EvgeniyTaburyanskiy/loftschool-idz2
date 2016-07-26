@@ -8,8 +8,8 @@ var HttpError = require('../../../middleware/HttpError').HttpError;
  * @param req
  * @param res
  */
-var API_home = function (req, res) {
-  res.json(new HttpError(200));
+var API_home = function (req, res, next) {
+  return next(new HttpError(200));
 };
 
 exports = module.exports = {

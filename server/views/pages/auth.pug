@@ -3,7 +3,7 @@ extends ../_template
 block APP_content
 
   h4 Register your account
-  form(action='/api/auth/signup' method='post')
+  form(action='/api/method/auth.signup' method='post')
     fieldset
       input(type='hidden' name='_csrf' value= csrfToken)
       label(for='username') Email
@@ -14,7 +14,7 @@ block APP_content
 
   br
   h4 Login to your account
-  form(action='/api/auth/signin' method='post')
+  form(action='/api/method/auth.signin' method='post')
     fieldset
       input(type='hidden' name='_csrf' value= csrfToken)
       label(for='username') Email
@@ -25,13 +25,30 @@ block APP_content
 
   br
   h4 Forgot Password
-  form(action='/api/auth/fogot' method='POST')
+  form(action='/api/method/auth.fogotPasswd' method='POST')
     fieldset
       input(type='hidden' name='_csrf' value= csrfToken)
-      label(for='username') Email
+      label(for='email') Email
       input(type='email' name='email' placeholder='Your Email' autofocus)
       button(type='submit') Reset Password
+
+
   br
   h4 LOGOUT
     br
-    a(href='/auth/signout') Logout
+    a(href='/api/method/auth.signout') Logout
+
+
+  br
+  h4 Upload
+  form(action='/api/method/albums.update' method='POST' enctype="multipart/form-data")
+    fieldset
+      input(type='hidden' name='_csrf' value= csrfToken)
+      input(type='hidden' name='album_id' value='5790ca9f5cacd8c8103167b2')
+      label(for='album_name') album_name
+      input(type='text' name='album_name' placeholder='Your album_name' autofocus)
+      label(for='album_descr') album_descr
+      input(type='text' name='album_descr' placeholder='Your album_descr')
+      label(for='album_bg') album_bg
+      input(type='file' name='album_bg')
+      button(type='submit') Update Album
