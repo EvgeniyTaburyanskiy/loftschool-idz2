@@ -3,6 +3,7 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 /**
  * Схема Альбома
@@ -37,7 +38,7 @@ var schemaAlbum = new Schema({
   }
 });
 
-
+schemaAlbum.plugin(deepPopulate);
 // ================= Event Func =============================
 schemaAlbum.pre('remove', function (next) {
   // Перед Удалением Альбома удаляем все Фотки с ним связанные.

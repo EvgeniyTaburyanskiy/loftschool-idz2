@@ -3,21 +3,20 @@
  */
 var logger = require('../../utils/winston')(module);
 var async = require('async');
-var getAlbumsByUser = require('../../utils/helpers/getAlbumsByUser');
-var getNewPhotos = require('../../utils/helpers/getNewPhotos');
+var Core = require('../../utils/core');
 
 
 var getHome = function (req, res, next) {
-[].length
+
   async.parallel({
         albums: function (done) {
-          getAlbumsByUser(req.user._id, function (err, albums) {
+          Core.getAlbumsByUser(req.user._id, function (err, albums) {
             if (err) return done(err);
             return done(null, albums);
           })
         },
         photos: function (done) {
-          getNewPhotos(1, 9, function (err, photos) {
+          Core.getNewPhotos(9, function (err, photos) {
             if (err) return done(err);
             return done(null, photos);
           })
@@ -25,7 +24,7 @@ var getHome = function (req, res, next) {
       },
       function (err, results) {
         if (err) return next(err);
-
+console.log(results);
         res.render('main',
             {
               title:      'HOME',
@@ -35,8 +34,6 @@ var getHome = function (req, res, next) {
             }
         );
       });
-
-
 };
 
 exports = module.exports = {

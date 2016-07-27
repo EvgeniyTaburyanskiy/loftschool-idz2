@@ -169,8 +169,9 @@ var sendAPIHttpError = function (req, res, next) {
     }
     // все остальне отдаем в XML так удобно читать
     else {
-      res.set('Content-Type', 'text/xml');
-      res.send(js2xmlparser("result", JSON.stringify(errData)));
+      res.json(errData);
+      //res.set('Content-Type', 'text/xml');
+      //res.send(js2xmlparser("result", JSON.stringify(errData)));
     }
 
     logger.debug('API ERR- %s %d %s', req.method, res.statusCode, error.message + ' [' + req.url + ']');

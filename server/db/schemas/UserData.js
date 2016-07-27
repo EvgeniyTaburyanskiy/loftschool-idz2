@@ -10,12 +10,13 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 /**
  * Схема Коллекции Личных Данных Пользователей
  */
 var schemaUserData = new Schema({
-  firstName:    {
+  firstName: {
     type:      String,
     default:   'Без',
     minlength: 1,
@@ -23,7 +24,7 @@ var schemaUserData = new Schema({
     trim:      true,
     required:  true
   },
-  lastName:     {
+  lastName:  {
     type:      String,
     default:   'Имени',
     minlength: 1,
@@ -31,55 +32,55 @@ var schemaUserData = new Schema({
     trim:      true,
     required:  true
   },
-  message:      {
+  message:   {
     type:      String,
     default:   '',
     maxlength: 250,
     trim:      true,
     required:  false
   },
-  ava_img:      {
+  ava_img:   {
     type:      String,
     default:   '/img/no-avatar.png',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
     trim:      true,
     required:  true
   },
-  bg_img:       {
+  bg_img:    {
     type:      String,
     default:   '/img/no-user-bg.png',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
     trim:      true,
     required:  true
   },
-  email: {
+  email:     {
     type:      String,
     maxlength: 254, // http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690
     trim:      true,
     required:  true
   },
-  fb:           {
+  fb:        {
     type:      String,
     default:   '',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
     trim:      true,
     required:  false
   },
-  tw:           {
+  tw:        {
     type:      String,
     default:   '',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
     trim:      true,
     required:  false
   },
-  vk:           {
+  vk:        {
     type:      String,
     default:   '',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
     trim:      true,
     required:  false
   },
-  gl:           {
+  gl:        {
     type:      String,
     default:   '',
     maxlength: 2000, // https://www.boutell.com/newfaq/misc/urllength.html
@@ -87,7 +88,7 @@ var schemaUserData = new Schema({
     required:  false
   }
 });
-
+schemaUserData.plugin(deepPopulate);
 // ================= UserData Validators =============================
 schemaUserData.path('email').validate(
     function (email) { //-> http://emailregex.com/

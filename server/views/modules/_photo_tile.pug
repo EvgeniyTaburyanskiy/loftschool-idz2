@@ -1,6 +1,6 @@
 include ../helpers/mixins.pug
-script.
-  console.log( !{photo});
+- var owner = photo._album_id._user_id;
+
 div.photo-tile
   a.tile-top(href="#" id= photo._id)
     +use('loupe','tile-top__svg')
@@ -8,16 +8,16 @@ div.photo-tile
     div.top-mask
   div.tile-mid
     div.tile-mid-wrapper
-      a.tile-avatar(href="/users/" + photo._album_id._user_id)
+      a.tile-avatar(href="/users/" + owner._id)
         +use('more','tile-avatar__svg')
-        img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
+        img.tile-avatar__img(src= owner.userdata.ava_img alt= owner.userdata.firstName +owner.userdata.lastName)
         div.tile-avatar-mask
       div.tile-desc
         div.desc-wrapper
           p.desc-wrapper__tx #{photo.name}
         div.tile-stats
           +use('comments','tile-stats__svg')
-          span.tile-stats__span.tile-stats__span-comments #{photo.comments}
+          span.tile-stats__span.tile-stats__span-comments #{photo.comments.comment_list.length}
           +use('like','tile-stats__svg')
           span.tile-stats__span.tile-stats__span-likes #{photo.likes.length}
   div.tile-bot

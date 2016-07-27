@@ -8,6 +8,7 @@ var crypto = require('crypto');
 var util = require('util');
 var Schema = mongoose.Schema;
 var schemaUserData = require('./UserData').sUserData;
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 /**
  * Схема Коллекции Пользователей
@@ -53,6 +54,7 @@ var schemaUser = new Schema({
   }
 });
 
+schemaUser.plugin(deepPopulate);
 // ================= User Entity Methods =============================
 schemaUser.methods.encryptPassword = function (password) {
   return crypto.createHmac('sha1', this.salt).update(password).digest('hex');

@@ -101,7 +101,62 @@
     });
   };
 
-  window.modPhoto = {};
+
+  var getPhotoById = function () {
+
+  };
+
+
+  var getNewPhotos = function (count, skip) {
+
+    data = {
+      skip:  parseInt(skip) || undefined,
+      count: parseInt(count) || undefined
+    };
+
+    _ajaxCall(serviceUrl + ".getNewPhotos", null, data);
+  };
+
+
+  var addPhoto = function () {
+  };
+
+
+  var addPhotoComment = function () {
+  };
+
+
+  var addPhotoLike = function () {
+  };
+
+
+  var deletePhoto = function () {
+  };
+
+
+  var updatePhoto = function () {
+  };
+
+
+  var searchPhotos = function () {
+  };
+
+
+  var movePhotos = function () {
+  };
+
+
+  window.modPhoto = {
+    getPhotoById:    getPhotoById,
+    getNewPhotos:    getNewPhotos,
+    addPhoto:        addPhoto,
+    addPhotoComment: addPhotoComment,
+    addPhotoLike:    addPhotoLike,
+    deletePhoto:     deletePhoto,
+    updatePhoto:     updatePhoto,
+    searchPhotos:    searchPhotos,
+    movePhotos:      movePhotos
+  };
 })();
 
 

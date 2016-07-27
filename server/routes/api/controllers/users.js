@@ -80,6 +80,11 @@ var API_addUser = function (req, res, next) {
  */
 var API_updateUserImgs = function (req, res, next) {
   var user_id = req.query.user_id || req.params.user_id || req.body.user_id || req.user._id;
+
+  if (user_id === undefined) {
+    return next(new HttpError(400, null, 'Неверно указан идентификатор пользователя!'));
+  }
+
   user_id = user_id.replace(/["']/g, '');
 
   var ava_img = req.query.ava_img || req.body.ava_img;
@@ -92,9 +97,7 @@ var API_updateUserImgs = function (req, res, next) {
     bg_img = req.files['bg_img'][0]
   }
 
-  if (user_id === undefined) {
-    return next(new HttpError(400, null, 'Неверно указан идентификатор пользователя!'));
-  }
+
 
   try {
     var uid = new ObjectID(user_id);

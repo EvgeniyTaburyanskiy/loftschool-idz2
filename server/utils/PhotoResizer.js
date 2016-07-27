@@ -23,8 +23,7 @@ PhotoResizer.prototype = {
     var
         that    = this,
         options = config.get('photoresizer:set:avatar');
-    console.log('originalImagePath ', that.originalImagePath);
-    console.log('resizedImgPath ', that.resizedImgPath);
+
     
     gmagic(that.originalImagePath)
     .resize(options.size.width, options.size.height)
@@ -121,9 +120,6 @@ PhotoResizer.prototype = {
     this.callback = callback;
 
     var saveTo = (this.img.saveto) ? this.img.saveto : config.get('photoresizer:savefolder');
-
-    console.log('Image ', img);
-    console.log(__dirname);
 
     this.originalImagePath = path.join(__dirname, '/../', this.img.path);
     this.saveFolder = path.join(__dirname, '/../', saveTo);

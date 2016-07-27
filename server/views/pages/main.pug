@@ -33,7 +33,7 @@ block APP_content
         h1.main-new__t Новое в мире
         div.new-photos
           if(newPotos)
-            for photo in newPotos.photos
+            for photo in newPotos
               include ../modules/_photo_tile.pug
         div.new-show
           +btnShow

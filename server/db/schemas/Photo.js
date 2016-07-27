@@ -2,7 +2,11 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose');
+var ObjectId = require('mongoose').Types.ObjectId;
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var Schema = mongoose.Schema;
+var logger = require('../../utils/winston')(module);
+var PhotoComments = require('../models/PhotoComment').mPhotoComments;
 
 
 /**
@@ -64,6 +68,7 @@ var schemaPhoto = new Schema({
   }
 });
 
+schemaPhoto.plugin(deepPopulate);
 // ================= Event Func =============================
 
 schemaPhoto.pre('remove', function (next) {
@@ -74,5 +79,17 @@ schemaPhoto.pre('remove', function (next) {
       next
   );
 });
+
+schemaPhoto.pre('save', function (next) {
+  var that = this;
+  if (that.isNew) {
+    new PhotoComments({_photo_id: this._id}).save(function (err, list) {
+      if (err) return next(err);
+      that.comments = list._id;
+    });
+  }
+  next();
+});
+
 
 module.exports.sPhoto = schemaPhoto;

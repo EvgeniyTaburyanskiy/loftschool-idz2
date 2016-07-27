@@ -83,7 +83,7 @@ var API_getAlbumById = function (req, res, next) {
 var API_getAlbumsByUser = function (req, res, next) {
   var user_id = req.query.user_id || req.params.user_id || req.user._id;
   // TODO: API- Валидация ID Пользователя
-  var getAlbumsByUser = require('../../../utils/helpers/getAlbumsByUser');
+  var getAlbumsByUser = require('../../../utils/core/getAlbumsByUser');
   // Получаем Инфо об Альбомах
   async.waterfall({
         albums: function (done) {

@@ -13,7 +13,6 @@ var loadUser = require('../middleware/loadUser');
 var config = require('../utils/nconf');
 var router = require('express').Router();
 var csrf = require('csurf');
-var route_params = require('./api/controllers/routeparams.js');
 var csrfProtection = csrf(config.get('csrf')); //-> add req.csrfToken() function
 
 /**
@@ -25,8 +24,7 @@ var controllers = {
   album:        require('./controllers/albums'),       //-> Обработчик Маршрута Альбом
   users:        require('./controllers/users'),        //-> Обработчик Маршрута Пользователь
   search:       require('./controllers/search'),       //-> Обработчик Маршрута Поиска
-  error:        require('./controllers/error'),        //-> Обработчик Ошибочных запросов
-  route_params: require('./api/controllers/routeparams') //-> Обработчик Параметров
+  error:        require('./controllers/error')        //-> Обработчик Ошибочных запросов
 };
 
 

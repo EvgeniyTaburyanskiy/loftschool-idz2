@@ -1,11 +1,20 @@
 var async = require('async');
+var mongoose = require('mongoose');
+
 var Album = require('../../db/models/Album').mAlbum;
 var Photo = require('../../db/models/Photo').mPhoto;
 
-var getNewPhotos = function (num_start, count, callback) {
-  if (typeof num_start === 'function') {
-    callback = num_start;
-    num_start = undefined;
+/**
+ *
+ * @param count
+ * @param skip
+ * @param callback
+ * @returns {Error}
+ */
+var getNewPhotos = function (count, skip, callback) {
+  if (typeof skip === 'function') {
+    callback = skip;
+    skip = undefined;
   }
   if (typeof count === 'function') {
     callback = count;
@@ -14,25 +23,22 @@ var getNewPhotos = function (num_start, count, callback) {
 
   if (typeof callback !== 'function') return new Error('Не верные пароаметры');
 
-  num_start = parseInt(num_start) || 1;
+  skip = parseInt(skip) || 0;
   count = parseInt(count) || 6;
 
   // Получаем Инфо об Альбомах
   var query = Photo.find({});
 
-  async.parallel({
-        count:  function (done) {
-          query.count(done);
-        },
-        photos: function (done) {
+  async.waterfall([
+        function (done) {
           query
           .sort({created_at: 'desc'})
-          .skip(num_start)
+          .skip(skip)
           .limit(count)
-          .populate('_album_id _album_id._user_id comments')
+          .deepPopulate('_album_id _album_id._user_id comments')
           .exec('find', done);
         }
-      },
+      ],
       callback
   );
 };

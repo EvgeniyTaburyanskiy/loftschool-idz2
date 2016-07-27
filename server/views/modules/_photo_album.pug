@@ -9,4 +9,4 @@ div.photo-album
   div.album-bot
     div.album-menu
       +use('edit','album-menu__svg')
-      a.album-menu__a(href="#") #{album.name}
+      a.album-menu__a(href="/albums/" + album._id) #{album.name}

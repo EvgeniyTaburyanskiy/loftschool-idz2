@@ -4,7 +4,7 @@ var logger = require('../../../utils/winston')(module);
 var HttpError = require('../../../middleware/HttpError').HttpError;
 var config = require('../../../utils/nconf');
 var PhotoResizer = require('../../../utils/PhotoResizer');
-
+var Core = require('../../../utils/core');
 
 var Album = require('../../../db/models/Album').mAlbum;
 var Photo = require('../../../db/models/Photo').mPhoto;
@@ -12,6 +12,13 @@ var PhotoComment = require('../../../db/models/PhotoComment').mPhotoComments;
 
 
 var API_getNewPhotos = function (req, res, next) {
+  var count = req.query.count || req.body.count || undefined;
+  var skip = req.query.skip || req.body.skip || undefined;
+
+  Core.getNewPhotos(count, skip, function (err, photos) {
+    if (err) return next(err);
+    return next(new HttpError(200, null, '', photos));
+  })
 };
 
 

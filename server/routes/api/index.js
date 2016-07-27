@@ -161,7 +161,7 @@ var _router = function (app) {
    * */
 
   router.route(['/api/method/photos.getNewPhotos'])// R Список новых фоток (Кол-во, Стартовый номер)
-  .post(controllers.photos.API_getNewPhotos);
+  .all(controllers.photos.API_getNewPhotos);
 
   router.route(['/api/method/photos.getPhotoById'])//  R Детальная Инфо о фотографии (Id фото)
   .post(controllers.photos.API_getPhotoById);
