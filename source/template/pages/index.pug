@@ -23,6 +23,7 @@ block APP_content
                   .input-ic
                     +use('password', 'input-ic')
                   input.card__it(type="text" placeholder="Пароль" size="40")
+                input(type="hidden", name="_csrf", value="#{csrf}")
             a.card-a#pass(href="#") Забыли пароль?
             .btn
               +btnEnter
@@ -45,6 +46,7 @@ block APP_content
                   .input-ic
                     +use('password', 'input-ic')
                   input.card__it(type="text" placeholder="Пароль" size="40")
+                input(type="hidden", name="_csrf", value="#{csrf}")
               .reg
                 .card__tx Ваши данные остаются строго конфиденциальны
             .btn
@@ -62,6 +64,7 @@ block APP_content
                 .input-ic
                     +use('password', 'input-ic')
                 input.card__it(type="text" placeholder="Электронная почта" size="40")
+              input(type="hidden", name="_csrf", value="#{csrf}")
           .btn
             +btnRecreatePass
           .card__t Вспомнили пароль?
