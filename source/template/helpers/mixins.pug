@@ -160,3 +160,7 @@ mixin formMenu
   div.form-menu
     input.form-menu__submit(type='submit' value='Сохранить')
     input.form-menu__reset(type='reset' value='Отменить')
+mixin formMenuReverse
+  div.form-menu
+    input.form-menu__reset(type='reset' id="reset" value='Отменить')
+    input.form-menu__submit(type='submit' id="submit" value='Сохранить')

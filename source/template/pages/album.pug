@@ -1,7 +1,20 @@
 extends ../_template
 block APP_content
-  h.a-h-w
+  h.a-h-w#header
     div.a-h-mask
+    div.a-h-cnt
+      form.a-h-cnt__form
+        div.a-form-w
+          div.a-edit
+            input.a-edit__title(type="text" name="title" id="title")
+            textarea.a-edit__desc(name="description" id="description")
+          button.a-bg-edit
+            +use('cam','a-bg-edit__svg')
+            span.a-bg-edit__span Изменить фон
+            input.a-bg-edit__img(type="file" name="background" id="background" hidden)
+          div.a-form-controls
+            div.a-controls-w
+              +formMenuReverse
     div.a-h
       div.a-person
         a.a-person__a(href="#")
