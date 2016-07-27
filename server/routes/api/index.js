@@ -33,6 +33,7 @@ var _router = function (app) {
     main:   require('./controllers/main'),         //-> Обработчик Маршрута Гланая стр
     auth:   require('./controllers/auth'),         //-> Обработчик Маршрута Авторизация/Регистрация/Восстановление пароля
     albums: require('./controllers/albums'),       //-> Обработчик Маршрута Альбом
+    photos: require('./controllers/photos'),       //-> Обработчик Маршрута Фотографий
     users:  require('./controllers/users'),        //-> Обработчик Маршрута Пользователь
     error:  require('./controllers/error')         //-> Обработчик Ошибочных запросов
   };
@@ -98,7 +99,7 @@ var _router = function (app) {
 
   router.route('/api/method/users.updateUserProfile')
   .post(
-     // csrfProtection,
+      // csrfProtection,
       controllers.users.API_updateUserProfile);                 //->
 
   router.route('/api/method/users.updateUserImgs')
@@ -123,7 +124,7 @@ var _router = function (app) {
 
   router.route(['/api/method/albums.addAlbum'])   // C Добавление нового альбома(имя, описние, фотка-фон)
   .post(
-     // csrfProtection,
+      // csrfProtection,
       Upload.single('album_bg'),
       controllers.albums.API_addAlbum
   );
@@ -156,21 +157,35 @@ var _router = function (app) {
    *  TODO: API-ROUTE - U Добавление коментария  (Id фото, Текст Коментария)
    *  TODO: API-ROUTE - U Перенос Фотки в другой альбом (Список ID фото, Id нового альбома)
    *
-   *  TODO: API-ROUTE - D Удаление Альбома (ID Альбома,Флаг подтверждения)
+   *  TODO: API-ROUTE - D Удаление Фото (ID Фото,Флаг подтверждения)
    * */
 
-  //router.route(['/api/photos/add'])       // С Добавление Фото (Id альбома,фалы фоток)
+  router.route(['/api/method/photos.getNewPhotos'])// R Список новых фоток (Кол-во, Стартовый номер)
+  .post(controllers.photos.API_getNewPhotos);
 
-  //router.route(['/api/photos'])           // R Список новых фоток (Кол-во, Номер с которого)
-  //router.route(['/api/photos/search'])    // R Поиск Фоток по ключевому слову описанию и/или имени (ключевое слово)
-  //router.route(['/api/photos/detail'])    // R Детальная Инфо о фотографии (Id фото)
+  router.route(['/api/method/photos.getPhotoById'])//  R Детальная Инфо о фотографии (Id фото)
+  .post(controllers.photos.API_getPhotoById);
 
-  //router.route(['/api/photos/update'])    // U Изменение Фото по ID ( Id фото,Имя,Описание)
-  //router.route(['/api/photos/like'])      // U Добавить Like фотке (Id фото)
-  //router.route(['/api/photos/comment'])   // U Добавление коментария  (Id фото, Текст Коментария)
-  //router.route(['/api/photos/move'])      // U Перенос Фотки в другой альбом (Список ID фото, Id нового альбома)
-  //router.route(['/api/photos/delete'])    // D Удаление Альбома (ID Альбома,Флаг подтверждения)
+  router.route(['/api/method/photos.addPhoto']) // С Добавление Фото (Id альбома,файлы фоток)
+  .post(controllers.photos.API_addPhoto);
 
+  router.route(['/api/method/photos.addPhotoComment'])// U Добавление коментария  (Id фото, Текст Коментария)
+  .post(controllers.photos.API_addPhotoComment);
+
+  router.route(['/api/method/photos.addPhotoLike'])// U Добавить Like фотке (Id фото)
+  .post(controllers.photos.API_addPhotoLike);
+
+  router.route(['/api/method/photos.deletePhoto'])// D Удаление Фото (ID Фото,Флаг подтверждения)
+  .post(controllers.photos.API_deletePhoto);
+
+  router.route(['/api/method/photos.updatePhoto'])// U Изменение Фото по ID ( Id фото,Имя,Описание)
+  .post(controllers.photos.API_updatePhoto);
+
+  router.route(['/api/method/photos.searchPhotos'])// R Поиск Фоток по ключевому слову описанию и/или имени (ключевое слово)
+  .post(controllers.photos.API_searchPhotos);
+
+  router.route(['/api/method/photos.movePhotos'])// U Перемещение фоток в Др Альбом ( Id альбома,массив Id фоток)
+  .post(controllers.photos.API_movePhotos);
 
   // DEFAULT  Route 404 ==============================================
   router.use('/api', controllers.error.err_404);
