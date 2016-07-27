@@ -108,6 +108,19 @@ mixin btnAdd
     button.add-block__btn
       +use('add', 'add-block__svg')
       span.add-block__tx Добавить
+
+//соц кнопка с параметрами
+mixin socIcon(type, url)
+  div.soc-block
+    a.soc-block__a(href=url)
+      - var svg = '';
+      - if ( type === 'vk' ) svg = 'soc_vk';
+      - if ( type === 'fb' ) svg = 'soc_fb';
+      - if ( type === 'tw' ) svg = 'soc_twitter';
+      - if ( type === 'gp' ) svg = 'social_google';
+      - if ( type === 'em' ) svg = 'soc_email';
+        +use(svg, 'soc-block__svg')
+
 //соц кнопка ВК
 mixin socIconVk
   div.soc-block
