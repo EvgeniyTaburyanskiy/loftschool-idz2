@@ -1,12 +1,12 @@
 include ../helpers/mixins.pug
 div.photo-album
   a.album-top(href="#")
-    img.album-top__img(src="assets/img/lake.jpg" alt="lake")
+    img.album-top__img(src= album._album_bg.thumb alt= album.name)
     div.album-info-wrapper
       div.album-info
-        p.album-info__tx Фотографии природы, горных ландшафтов и солнечных закатов
+        p.album-info__tx #{album.descr}
         span.album-info__count 12 Фотографий
   div.album-bot
     div.album-menu
       +use('edit','album-menu__svg')
-      a.album-menu__a(href="#") Поход в горы
+      a.album-menu__a(href="#") #{album.name}

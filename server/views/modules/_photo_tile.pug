@@ -2,7 +2,7 @@ include ../helpers/mixins.pug
 div.photo-tile
   a.tile-top(href="#")
     +use('loupe','tile-top__svg')
-    img.tile-top__img(src="assets/img/lake.jpg" alt="lake")
+    img.tile-top__img(src= photo.thumb alt= photo.name)
     div.top-mask
   div.tile-mid
     div.tile-mid-wrapper

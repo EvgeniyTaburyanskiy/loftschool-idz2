@@ -47,7 +47,9 @@ var _router = function (app) {
   // HOME ROUTES ==============================================
   router.route('/')
   .all(checkAuth)
-  .get(csrfProtection, controllers.main.getHome); //-> Выдаем Гл страницу
+  .get(
+      csrfProtection,
+      controllers.main.getHome); //-> Выдаем Гл страницу
 
   // AUTH ROUTES ==============================
   router.get('/auth', 
