@@ -62,7 +62,9 @@ var _router = function (app) {
   .get(controllers.auth.getFogot);                    //-> Редирект на страницу Авторизации/Восстановления пароля
 
   router.route('/reset/:token')
-  .get(csrfProtection, controllers.auth.getReset);     //-> Проверяем токен(из письма) и выдаем страницу смены пароля
+  .get(
+      csrfProtection,
+      controllers.auth.getReset);     //-> Проверяем токен(из письма) и выдаем страницу смены пароля
 
   router.route('/email.confirm/:token')
   .get(controllers.auth.confirmEmail);                 //-> Проверяем токен(из письма) и подтверждаем E-mail

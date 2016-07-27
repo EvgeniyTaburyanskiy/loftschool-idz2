@@ -1,6 +1,6 @@
 include ../helpers/mixins.pug
 div.photo-album
-  a.album-top(href="#")
+  a.album-top(href="/albums/" + album._id)
     img.album-top__img(src= album._album_bg.thumb alt= album.name)
     div.album-info-wrapper
       div.album-info

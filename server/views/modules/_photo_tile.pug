@@ -1,24 +1,26 @@
 include ../helpers/mixins.pug
+script.
+  console.log( !{photo});
 div.photo-tile
-  a.tile-top(href="#")
+  a.tile-top(href="#" id= photo._id)
     +use('loupe','tile-top__svg')
     img.tile-top__img(src= photo.thumb alt= photo.name)
     div.top-mask
   div.tile-mid
     div.tile-mid-wrapper
-      a.tile-avatar(href="#")
+      a.tile-avatar(href="/users/" + photo._album_id._user_id)
         +use('more','tile-avatar__svg')
         img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
         div.tile-avatar-mask
       div.tile-desc
         div.desc-wrapper
-          p.desc-wrapper__tx Путешествия на лодке по великолепному озеру
+          p.desc-wrapper__tx #{photo.name}
         div.tile-stats
           +use('comments','tile-stats__svg')
-          span.tile-stats__span.tile-stats__span-comments 7
+          span.tile-stats__span.tile-stats__span-comments #{photo.comments}
           +use('like','tile-stats__svg')
-          span.tile-stats__span.tile-stats__span-likes 31
+          span.tile-stats__span.tile-stats__span-likes #{photo.likes.length}
   div.tile-bot
     div.tile-bot-wrapper
       +use('album','tile-bot__svg')
-      a.tile-bot__a(href="#") Прогулки по воде
+      a.tile-bot__a(href="/albums/" + photo._album_id._id) #{photo._album_id.name}

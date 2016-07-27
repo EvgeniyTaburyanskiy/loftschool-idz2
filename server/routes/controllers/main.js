@@ -5,9 +5,10 @@ var logger = require('../../utils/winston')(module);
 var async = require('async');
 var getAlbumsByUser = require('../../utils/helpers/getAlbumsByUser');
 var getNewPhotos = require('../../utils/helpers/getNewPhotos');
-/* GET home page. */
-var getHome = function (req, res, next) {
 
+
+var getHome = function (req, res, next) {
+[].length
   async.parallel({
         albums: function (done) {
           getAlbumsByUser(req.user._id, function (err, albums) {

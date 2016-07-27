@@ -29,7 +29,7 @@ var getNewPhotos = function (num_start, count, callback) {
           .sort({created_at: 'desc'})
           .skip(num_start)
           .limit(count)
-          .populate('_album_id comments', 'name')
+          .populate('_album_id _album_id._user_id comments')
           .exec('find', done);
         }
       },
