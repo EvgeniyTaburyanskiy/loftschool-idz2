@@ -1,6 +1,8 @@
 extends ../_template
 block APP_content
-  header.m-h-w
+  div.bg-mask
+  include ../modules/_slider_item.pug
+  header.m-h-w#header
     div.m-h
       a.m-h__a(href="#")
         img.m-h__img(src="assets/img/jason.jpg" alt="jason")
