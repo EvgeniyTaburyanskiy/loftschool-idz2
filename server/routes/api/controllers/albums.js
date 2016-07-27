@@ -39,8 +39,8 @@ var API_getAlbumById = function (req, res, next) {
           name:      album.name,
           descr:     album.descr,
           _album_bg: {
-            imgURL:   album._album_bg.imgURL,
-            thumbURL: album._album_bg.thumbURL
+            img:   album._album_bg.img,
+            thumb: album._album_bg.thumb
           }
 
         };
@@ -50,7 +50,7 @@ var API_getAlbumById = function (req, res, next) {
     //ВЫборка всех фоток альбома
     function (done) {
       Photo
-      .find({_album_id: album_id}, 'name descr imgURL thumbURL album_bg comments likes')
+      .find({_album_id: album_id}, 'name descr img thumb album_bg comments likes')
       .lean()
       .populate('comments')
       .exec(function (err, photos) {
@@ -83,24 +83,23 @@ var API_getAlbumById = function (req, res, next) {
 var API_getAlbumsByUser = function (req, res, next) {
   var user_id = req.query.user_id || req.params.user_id || req.user._id;
   // TODO: API- Валидация ID Пользователя
-
+  var getAlbumsByUser = require('../../../utils/helpers/getAlbumsByUser');
   // Получаем Инфо об Альбомах
-  async.waterfall([
-    function (done) {
-      Album
-      .find({_user_id: user_id}, 'id name descr _album_bg')
-      .lean()
-      .populate('_album_bg', 'imgURL thumbURL')
-      .exec(function (err, albums) {
-        if (err) return done(err);
-        return done(err, albums);
+  async.waterfall({
+        albums: function (done) {
+          getAlbumsByUser(req.user._id, function (err, albums) {
+            if (err) return done(err);
+            return done(null, albums);
+          })
+        }
+      },
+      function (err, albums) {
+        if (err) return next(err);
+        next(new HttpError(200, null, '', albums));
       });
-    }
-  ], function (err, albums) {
-    if (err) return next(err);
 
-    next(new HttpError(200, null, '', albums));
-  });
+
+
 
 };
 
@@ -154,7 +153,6 @@ var API_addAlbum = function (req, res, next) {
             }
           });
 
-          album_bg.saveto = config.get('photoresizer:savefolder');
           album_bg.destfilename = newPhoto._id;
 
           PhotoResizer.resize(album_bg, function (err, newImageInfo) {
@@ -178,7 +176,7 @@ var API_addAlbum = function (req, res, next) {
                 });
                 return done(err)
               }
-              ;
+
 
               return done(null, newAlbum, newPhoto);
             });
@@ -275,7 +273,7 @@ var API_updateAlbum = function (req, res, next) {
             if (err) return done(err);
           });
 
-          album_bg.saveto = config.get('photoresizer:savefolder');
+
           album_bg.destfilename = newPhoto._id;
 
           PhotoResizer.resize(album_bg, function (err, newImageInfo) {
@@ -344,9 +342,9 @@ var API_updateAlbum = function (req, res, next) {
           name:      album.name,
           descr:     album.descr,
           _album_bg: {
-            _id:      album._album_bg.id,
-            imgURL:   album._album_bg.imgURL,
-            thumbURL: album._album_bg.thumbURL
+            _id:   album._album_bg.id,
+            img:   album._album_bg.img,
+            thumb: album._album_bg.thumb
           }
         };
         next(new HttpError(200, null, 'Альбом успешно изменен!', result));
