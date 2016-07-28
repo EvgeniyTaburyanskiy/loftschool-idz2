@@ -11,6 +11,54 @@
   background-color: rgba(#000, .7);
 }
 
+.slide-controls {
+  position: relative;
+  top: 50%;
+  width: rem(860px);
+  height: rem(100px);
+  margin: rem(-50px) auto 0;
+  @include large() {
+    width: rem(1160px);
+  }
+  @include laptop() {
+    width: rem(768px);
+  }
+  @include tablet() {
+    width: 100%;
+  }
+}
+
+.slide-controls__btn {
+  width: rem(100px);
+  height: rem(100px);
+  background: none;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  &:hover {
+    .slide-controls__svg {
+      fill: #fff;
+    }
+  }
+}
+
+.slide-controls__btn_left {
+  position: absolute;
+  left: 0;
+}
+
+.slide-controls__btn_right {
+  position: absolute;
+  right: 0;
+}
+
+.slide-controls__svg {
+  width: 35%;
+  height: 100%;
+  fill: rgba(#fff, .7);
+  transition: fill .2s;
+}
+
 .m-h-w {
   position: relative;
   display: flex;

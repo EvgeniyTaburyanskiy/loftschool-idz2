@@ -1,6 +1,11 @@
 extends ../_template
 block APP_content
   div.bg-mask
+    div.slide-controls
+      button.slide-controls__btn.slide-controls__btn_left
+        +use('arrow_left','slide-controls__svg')
+      button.slide-controls__btn.slide-controls__btn_right
+        +use('arrow_right','slide-controls__svg')
   include ../modules/_slider_item.pug
   header.m-h-w#header
     div.m-h
@@ -30,9 +35,15 @@ block APP_content
       div.main-new
         h1.main-new__t Новое в мире
         div.new-photos
+          +photoTile('assets/img/lake.jpg')
+          +photoTile('assets/img/forest.jpg')
+          +photoTile('assets/img/autumn.jpg')
+          +photoTile('assets/img/trees.jpg')
+          +photoTile('assets/img/mountain.jpg')
+          +photoTile('assets/img/road.jpg')
           - var arr = [1,2,3,4,5,6]
-          for item in arr
-             include ../modules/_photo_tile.pug
+          //for item in arr
+          //   include ../modules/_photo_tile.pug
         div.new-show
           +btnShow
     section.main-albums-w
