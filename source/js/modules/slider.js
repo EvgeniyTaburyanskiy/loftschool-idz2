@@ -9,6 +9,11 @@ $(function() {
       slideControls = $('.slide-controls'),
       slideItem = $('.slider-item');
 
+  slideItem.css({
+    'max-height':'calc(100% - 50px)',
+    'overflow':'scroll'
+  });
+
 //invokes slider
   $(document).on('click', function (event) {
     var target = $(event.target),
@@ -18,6 +23,7 @@ $(function() {
         target.closest('.tile-top').length === 1 || target.is('.a-tile-menu__a')) {
 
       event.preventDefault();
+      window.onscroll = function () { window.scrollTo(0, offset - 25); };
 
       slideControls.css({'left':'0'}).animate({
         opacity: 1
@@ -29,6 +35,17 @@ $(function() {
         top: offset + 'px',
         opacity: '1'
       }, 300);
+      slideItem.niceScroll({
+        zindex: 9999,
+        cursorcolor:"#fff",
+        cursoropacitymin:".5",
+        cursorwidth:"10px",
+        cursorborder:"3px solid #000",
+        // autohidemode: "scroll",
+        bouncescroll: true,
+        railoffset: true,
+        railpadding: {right: -10}
+      });
     }
   });
 
@@ -37,6 +54,8 @@ $(function() {
     var target = $(event.target);
 
     if ( target.is('.bg-mask') ) {
+      window.onscroll = null;
+
       $('.bg-mask').animate({
         opacity: '0'
       }, 200, function() {
@@ -63,6 +82,10 @@ $(function() {
 
     if ( (controlsOffset > slideOffset || controlsOffset < sOffset) && switcher === false ) {
       switcher = true;
+
+      $(this).on('scroll', function (e) {
+        e.preventDefault();
+      });
 
       slideControls.animate({
         opacity: 0
@@ -106,7 +129,7 @@ $(function() {
       index = +target.closest('.photo-tile').attr('data-slide');
 
       var src = slides[index - 1].querySelector('.tile-top__img').getAttribute('src');
-      console.log(src);
+
       $('.slider-top__img').attr('src', src);
     }
   });
