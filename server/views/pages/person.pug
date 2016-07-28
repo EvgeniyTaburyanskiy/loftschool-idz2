@@ -2,19 +2,19 @@ extends ../_template
 block APP_content
   //здесь все классы одинаковы с main.pug
   //для привязки js добавляем пустой класс с любым названием
-  header.m-h-w
+  header.m-h-w#header
     div.m-h
       a.m-h__a(href="#")
-        img.m-h__img(src="/assets/img/jason.jpg" alt="jason")
+        img.m-h__img(src="assets/img/jason.jpg" alt="jason")
       div.m-person
         p.m-person__n Джейсон Стэтхем
         p.m-person__tx Я голливудский актер, мне уже лет 50. Люблю сниматься в боевиках и активный отдых.
         div.person-soc
-          +socIconVk
-          +socIconFb
-          +socIconTw
-          +socIconGp
-          +socIconEm
+          +socIcon('vk', 'vk.com')
+          +socIcon('fb', 'facebook.com')
+          +socIcon('tw', 'twitter.com')
+          +socIcon('gp', 'google.com')
+          +socIcon('em', 'email@email.email')
     div.m-controls
       div.controls-w
         +btnHome
@@ -23,6 +23,7 @@ block APP_content
       form.main-search__form(action="#")
         input.main-search__input(type="search" name="search" id="search" placeholder="Исследовать мир")
         +use('search','main-search__svg')
+        input(type="hidden", name="_csrf", value="#{csrf}")
     section.main-albums-w
       div.main-albums
         h2.main-albums__t Альбомы

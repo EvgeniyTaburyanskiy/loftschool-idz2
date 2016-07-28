@@ -51,11 +51,24 @@ mixin use(name, sname)
 mixin btnCustom(buttontext)
   div.custom-block
     button.custom-block__btn #{buttontext}
+//кнопка input type=file
+mixin inpFile(inputText, inputName)
+  div.inputFile-block
+    label.inputFile-block__btn #{inputText}
+      input(type='file' name=inputName)
 //синяя кнопка Войти
 mixin btnEnter
   div.enter-block
     button.enter-block__btn Войти
 //синяя кнопка Зарегистрироваться
+mixin btnCreateAcc
+  div.enter-block
+    button.enter-block__btn Создать аккаунт
+//синяя кнопка Создать аккаунт
+mixin btnRecreatePass
+  div.enter-block
+    button.enter-block__btn Восстановить пароль
+//синяя кнопка Создать аккаунт
 mixin btnReg
   div.enter-block
     button.enter-block__btn Зарегистрироваться
@@ -81,12 +94,14 @@ mixin btnEdit
 mixin btnExit
   div.exit-block
     button.exit-block__btn
+      a.exit-block__link(href="index.html")
       +use('off', 'exit-block__svg')
       span.exit-block__tx Выйти
 //выдвижная кнопка Домой
 mixin btnHome
   div.exit-block
     button.exit-block__btn.home-block__btn
+      a.home-block__link(href="main.html")
       +use('home', 'exit-block__svg')
       span.exit-block__tx Домой
 //выдвижная кнопка Добавить
@@ -95,6 +110,19 @@ mixin btnAdd
     button.add-block__btn
       +use('add', 'add-block__svg')
       span.add-block__tx Добавить
+
+//соц кнопка с параметрами
+mixin socIcon(type, url)
+  div.soc-block
+    a.soc-block__a(href=url)
+      - var svg = '';
+      - if ( type === 'vk' ) svg = 'soc_vk';
+      - if ( type === 'fb' ) svg = 'soc_fb';
+      - if ( type === 'tw' ) svg = 'soc_twitter';
+      - if ( type === 'gp' ) svg = 'social_google';
+      - if ( type === 'em' ) svg = 'soc_email';
+        +use(svg, 'soc-block__svg')
+
 //соц кнопка ВК
 mixin socIconVk
   div.soc-block
@@ -147,3 +175,32 @@ mixin formMenu
   div.form-menu
     input.form-menu__submit(type='submit' value='Сохранить')
     input.form-menu__reset(type='reset' value='Отменить')
+mixin formMenuReverse
+  div.form-menu
+    input.form-menu__reset(type='reset' id="reset" value='Отменить')
+    input.form-menu__submit(type='submit' id="submit" value='Сохранить')
+
+mixin photoTile(photo)
+  div.photo-tile
+    a.tile-top(href="#slide")
+      +use('loupe','tile-top__svg')
+      img.tile-top__img(src= url alt="lake")
+      div.top-mask
+    div.tile-mid
+      div.tile-mid-wrapper
+        a.tile-avatar(href="person.html")
+          +use('more','tile-avatar__svg')
+          img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
+          div.tile-avatar-mask
+        div.tile-desc
+          div.desc-wrapper
+            p.desc-wrapper__tx Путешествия на лодке по великолепному озеру
+          div.tile-stats
+            +use('comments','tile-stats__svg')
+            span.tile-stats__span.tile-stats__span-comments 7
+            +use('like','tile-stats__svg')
+            span.tile-stats__span.tile-stats__span-likes 31
+    div.tile-bot
+      div.tile-bot-wrapper
+        +use('album','tile-bot__svg')
+        a.tile-bot__a(href="album.html") Прогулки по воде

@@ -7,7 +7,7 @@ div.slider-item
       div.desc-top
         div.slider-author
           div.avatar-wrapper
-            a.tile-avatar(href="#")
+            a.tile-avatar(href="person.html")
               +use('more','tile-avatar__svg')
               img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
               div.tile-avatar-mask
@@ -27,7 +27,7 @@ div.slider-item
         +use('arrow_down','roll-comments__svg')
       div.add-comments
         div.avatar-wrapper
-          a.tile-avatar(href="#")
+          a.tile-avatar(href="person.html")
             +use('more','tile-avatar__svg')
             img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
             div.tile-avatar-mask
@@ -37,11 +37,12 @@ div.slider-item
           div.close-block
             button.close-block__btn.add-comments__btn Добавить
             //add-comments__btn класс для привязки сабмита аякса
+          input(type="hidden", name="_csrf", value="#{csrf}")
       div.read-comments
         ul.read-comments__lst
           li.read-comments__i
             div.avatar-wrapper
-              a.tile-avatar(href="#")
+              a.tile-avatar(href="person.html")
                 +use('more','tile-avatar__svg')
                 img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
                 div.tile-avatar-mask
@@ -52,7 +53,7 @@ div.slider-item
                 в Голливуд.
           li.read-comments__i
             div.avatar-wrapper
-              a.tile-avatar(href="#")
+              a.tile-avatar(href="person.html")
                 +use('more','tile-avatar__svg')
                 img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
                 div.tile-avatar-mask

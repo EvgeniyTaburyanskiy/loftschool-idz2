@@ -1,6 +1,8 @@
 extends ../_template
 block APP_content
-  header.s-h
+  div.bg-mask
+  include ../modules/_slider_item.pug
+  header.s-h#header
     h1.s-h__t Исследуй мир
     div.s-return
       +btnHome
@@ -8,12 +10,13 @@ block APP_content
     section.main-search.s-main-search
       div.person-w
         div.a-person
-          a.a-person__a(href="#")
+          a.a-person__a(href="person.html")
             img.a-person__img(src="assets/img/jason.jpg" alt="jason")
           p.a-person__n_black Джейсон Стэтхем
       form.main-search__form(action="#")
         input.main-search__input(type="search" name="search" id="search" placeholder="Исследовать мир")
         +use('search','main-search__svg')
+        input(type="hidden", name="_csrf", value="#{csrf}")
       div.show-new
         button.show-new__btn Показать новые
     section.main-new-w

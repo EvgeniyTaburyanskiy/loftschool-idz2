@@ -1,11 +1,26 @@
 extends ../_template
 block APP_content
-  h.a-h-w
+  div.bg-mask
+  include ../../../source/template/modules/_slider_item.pug
+  h.a-h-w#header
     div.a-h-mask
+    div.a-h-cnt
+      form.a-h-cnt__form(method="POST" enctype="multipart/form-data")
+        div.a-form-w
+          div.a-edit
+            input.a-edit__title(type="text" name="title" id="title")
+            textarea.a-edit__desc(name="description" id="description")
+          button.a-bg-edit
+            +use('cam','a-bg-edit__svg')
+            span.a-bg-edit__span Изменить фон
+            input.a-bg-edit__img(type="file" name="background" id="background" hidden)
+          div.a-form-controls
+            div.a-controls-w
+              +formMenuReverse
     div.a-h
       div.a-person
-        a.a-person__a(href="#")
-          img.a-person__img(src="/assets/img/jason.jpg" alt="jason")
+        a.a-person__a(href="person.html")
+          img.a-person__img(src="assets/img/jason.jpg" alt="jason")
         p.a-person__n Джейсон Стэтхем
       div.a-desc
         h1.a-desc__t Лесные прогулки
@@ -32,8 +47,12 @@ block APP_content
           span.info-comments__count 4
           span.info-comments__span Комментария
     section.a-photos-w
+      div.a-photos-add
+        +btnAdd
       div.a-photos
         - var arr = [1,2,3,4,5,6]
         for item in arr
-          include ../modules/_a_photo_tile.pug
-  include ../modules/_footer.pug
+          include ../../../source/template/modules/_a_photo_tile.pug
+  include ../../../source/template/modules/_footer.pug
+  include ../modules/_a_edit_photo
+  include ../modules/_a_add_photo

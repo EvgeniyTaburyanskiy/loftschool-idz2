@@ -23,10 +23,21 @@ var API_getNewPhotos = function (req, res, next) {
 
 
 var API_getPhotoById = function (req, res, next) {
+  var photo_id = req.query.photo_id || req.body.photo_id ;
+  if (!photo_id) return(next(new HttpError(400,null,'Не верно указан ID фотографии')));
+
+  Core.getPhotoById(photo_id, function (err, photo) {
+    if (err) return next(err);
+    return next(new HttpError(200, null, '', [photo]));
+  })
+  
 };
 
 
 var API_addPhoto = function (req, res, next) {
+  var album_id = req.query.album_id || req.params.album_id ||  req.body.album_id;
+
+  
 };
 
 

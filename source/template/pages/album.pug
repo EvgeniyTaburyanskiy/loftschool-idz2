@@ -1,7 +1,7 @@
 extends ../_template
 block APP_content
   div.bg-mask
-  include ../modules/_slider_item.pug
+  include ../../../source/template/modules/_slider_item.pug
   h.a-h-w#header
     div.a-h-mask
     div.a-h-cnt
@@ -52,7 +52,7 @@ block APP_content
       div.a-photos
         - var arr = [1,2,3,4,5,6]
         for item in arr
-          include ../modules/_a_photo_tile.pug
-  include ../modules/_footer.pug
+          include ../../../source/template/modules/_a_photo_tile.pug
+  include ../../../source/template/modules/_footer.pug
   include ../modules/_a_edit_photo
   include ../modules/_a_add_photo

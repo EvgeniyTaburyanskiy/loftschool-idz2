@@ -1,7 +1,6 @@
 var async = require('async');
 var mongoose = require('mongoose');
 
-var Album = require('../../db/models/Album').mAlbum;
 var Photo = require('../../db/models/Photo').mPhoto;
 
 /**

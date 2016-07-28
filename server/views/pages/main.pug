@@ -1,22 +1,25 @@
 extends ../_template
 block APP_content
-  header.m-h-w(style='background-image: url(' + user.userdata.bg_img+')')
+  div.bg-mask
+    div.slide-controls
+      button.slide-controls__btn.slide-controls__btn_left
+        +use('arrow_left','slide-controls__svg')
+      button.slide-controls__btn.slide-controls__btn_right
+        +use('arrow_right','slide-controls__svg')
+  include ../modules/_slider_item.pug
+  header.m-h-w#header
     div.m-h
-      a.m-h__a(href="#")
-        img.m-h__img(src= user.userdata.ava_img, alt= user.userdata.firstName + " " + user.userdata.lastName)
+      a.m-h__a(href="person.html")
+        img.m-h__img(src="assets/img/jason.jpg" alt="jason")
       div.m-person
-        p.m-person__n
-          if (user)
-            = user.userdata.firstName + " " + user.userdata.lastName
-        p.m-person__tx
-          if (user)
-            = user.userdata.message
+        p.m-person__n Джейсон Стэтхем
+        p.m-person__tx Я голливудский актер, мне уже лет 50. Люблю сниматься в боевиках и активный отдых.
         div.person-soc
-          +socIconVk
-          +socIconFb
-          +socIconTw
-          +socIconGp
-          +socIconEm
+          +socIcon('vk', 'vk.com')
+          +socIcon('fb', 'facebook.com')
+          +socIcon('tw', 'twitter.com')
+          +socIcon('gp', 'google.com')
+          +socIcon('em', 'email@email.email')
     div.m-controls
       div.controls-w
         +btnEdit
@@ -24,26 +27,33 @@ block APP_content
         +btnExit
   main.m-main
     section.main-search
-      form.main-search__form(action="/search")
-        input(type='hidden' name='_csrf' value= csrfToken)
-        input.main-search__input(type="search" name="q" id="q" placeholder="Исследовать мир")
+      form.main-search__form(action="#")
+        input.main-search__input(type="search" name="search" id="search" placeholder="Исследовать мир")
         +use('search','main-search__svg')
+        input(type="hidden", name="_csrf", value="#{csrf}")
     section.main-new-w
       div.main-new
         h1.main-new__t Новое в мире
         div.new-photos
-          if(newPotos)
-            for photo in newPotos
-              include ../modules/_photo_tile.pug
+          +photoTile('assets/img/lake.jpg')
+          +photoTile('assets/img/forest.jpg')
+          +photoTile('assets/img/autumn.jpg')
+          +photoTile('assets/img/trees.jpg')
+          +photoTile('assets/img/mountain.jpg')
+          +photoTile('assets/img/road.jpg')
+          - var arr = [1,2,3,4,5,6]
+          //for item in arr
+          //   include ../modules/_photo_tile.pug
         div.new-show
           +btnShow
     section.main-albums-w
       div.main-albums
         h2.main-albums__t Мои альбомы
         div.albums-photos
-          if(userAlbums)
-            for album in userAlbums
-              include ../modules/_photo_album.pug
+          for item in arr
+            include ../modules/_photo_album.pug
       div.albums-controls
         +btnAdd
+  include ../modules/_m_edit_profile
+  include ../modules/_m_add_album
   include ../modules/_footer.pug

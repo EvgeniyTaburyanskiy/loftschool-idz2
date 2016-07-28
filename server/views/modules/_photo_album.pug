@@ -1,12 +1,12 @@
 include ../helpers/mixins.pug
 div.photo-album
-  a.album-top(href="/albums/" + album._id)
-    img.album-top__img(src= album._album_bg.thumb alt= album.name)
+  a.album-top(href="album.html")
+    img.album-top__img(src="assets/img/lake.jpg" alt="lake")
     div.album-info-wrapper
       div.album-info
-        p.album-info__tx #{album.descr}
+        p.album-info__tx Фотографии природы, горных ландшафтов и солнечных закатов
         span.album-info__count 12 Фотографий
   div.album-bot
     div.album-menu
       +use('edit','album-menu__svg')
-      a.album-menu__a(href="/albums/" + album._id) #{album.name}
+      a.album-menu__a(href="album.html") Поход в горы
