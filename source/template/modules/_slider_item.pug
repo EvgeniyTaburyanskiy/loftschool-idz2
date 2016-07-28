@@ -1,5 +1,5 @@
 include ../helpers/mixins.pug
-div.slider-item#slide
+div.slider-item
   div.slider-top
     img.slider-top__img(src="assets/img/lake.jpg" alt="lake")
   div.slider-mid
@@ -7,7 +7,7 @@ div.slider-item#slide
       div.desc-top
         div.slider-author
           div.avatar-wrapper
-            a.tile-avatar(href="#")
+            a.tile-avatar(href="person.html")
               +use('more','tile-avatar__svg')
               img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
               div.tile-avatar-mask
@@ -27,7 +27,7 @@ div.slider-item#slide
         +use('arrow_down','roll-comments__svg')
       div.add-comments
         div.avatar-wrapper
-          a.tile-avatar(href="#")
+          a.tile-avatar(href="person.html")
             +use('more','tile-avatar__svg')
             img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
             div.tile-avatar-mask
@@ -42,7 +42,7 @@ div.slider-item#slide
         ul.read-comments__lst
           li.read-comments__i
             div.avatar-wrapper
-              a.tile-avatar(href="#")
+              a.tile-avatar(href="person.html")
                 +use('more','tile-avatar__svg')
                 img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
                 div.tile-avatar-mask
@@ -53,7 +53,7 @@ div.slider-item#slide
                 в Голливуд.
           li.read-comments__i
             div.avatar-wrapper
-              a.tile-avatar(href="#")
+              a.tile-avatar(href="person.html")
                 +use('more','tile-avatar__svg')
                 img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
                 div.tile-avatar-mask

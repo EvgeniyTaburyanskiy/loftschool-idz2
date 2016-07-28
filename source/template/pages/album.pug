@@ -1,9 +1,11 @@
 extends ../_template
 block APP_content
+  div.bg-mask
+  include ../modules/_slider_item.pug
   h.a-h-w#header
     div.a-h-mask
     div.a-h-cnt
-      form.a-h-cnt__form
+      form.a-h-cnt__form(method="POST" enctype="multipart/form-data")
         div.a-form-w
           div.a-edit
             input.a-edit__title(type="text" name="title" id="title")
@@ -17,7 +19,7 @@ block APP_content
               +formMenuReverse
     div.a-h
       div.a-person
-        a.a-person__a(href="#")
+        a.a-person__a(href="person.html")
           img.a-person__img(src="assets/img/jason.jpg" alt="jason")
         p.a-person__n Джейсон Стэтхем
       div.a-desc

@@ -94,12 +94,14 @@ mixin btnEdit
 mixin btnExit
   div.exit-block
     button.exit-block__btn
+      a.exit-block__link(href="index.html")
       +use('off', 'exit-block__svg')
       span.exit-block__tx Выйти
 //выдвижная кнопка Домой
 mixin btnHome
   div.exit-block
     button.exit-block__btn.home-block__btn
+      a.home-block__link(href="main.html")
       +use('home', 'exit-block__svg')
       span.exit-block__tx Домой
 //выдвижная кнопка Добавить

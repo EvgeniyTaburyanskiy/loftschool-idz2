@@ -1,24 +1,25 @@
 include ../helpers/mixins.pug
-div.photo-tile
-  a.tile-top(href="#slide")
-    +use('loupe','tile-top__svg')
-    img.tile-top__img(src="assets/img/lake.jpg" alt="lake")
-    div.top-mask
-  div.tile-mid
-    div.tile-mid-wrapper
-      a.tile-avatar(href="#")
-        +use('more','tile-avatar__svg')
-        img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
-        div.tile-avatar-mask
-      div.tile-desc
-        div.desc-wrapper
-          p.desc-wrapper__tx Путешествия на лодке по великолепному озеру
-        div.tile-stats
-          +use('comments','tile-stats__svg')
-          span.tile-stats__span.tile-stats__span-comments 7
-          +use('like','tile-stats__svg')
-          span.tile-stats__span.tile-stats__span-likes 31
-  div.tile-bot
-    div.tile-bot-wrapper
-      +use('album','tile-bot__svg')
-      a.tile-bot__a(href="#") Прогулки по воде
+mixin photoTile(url)
+  div.photo-tile
+    a.tile-top(href="#slide")
+      +use('loupe','tile-top__svg')
+      img.tile-top__img(src=url alt="lake")
+      div.top-mask
+    div.tile-mid
+      div.tile-mid-wrapper
+        a.tile-avatar(href="person.html")
+          +use('more','tile-avatar__svg')
+          img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
+          div.tile-avatar-mask
+        div.tile-desc
+          div.desc-wrapper
+            p.desc-wrapper__tx Путешествия на лодке по великолепному озеру
+          div.tile-stats
+            +use('comments','tile-stats__svg')
+            span.tile-stats__span.tile-stats__span-comments 7
+            +use('like','tile-stats__svg')
+            span.tile-stats__span.tile-stats__span-likes 31
+    div.tile-bot
+      div.tile-bot-wrapper
+        +use('album','tile-bot__svg')
+        a.tile-bot__a(href="album.html") Прогулки по воде

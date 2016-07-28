@@ -16,30 +16,42 @@ block APP_content
             .card__auth-sect
               form.card-form(name="test" method="post" action="#")
                 .card-input
+                  .input-ic
+                    +use('soc_email', 'input-ic')
                   input.card__it(type="text" placeholder="Электронная почта" size="40")
                 .card-input
+                  .input-ic
+                    +use('password', 'input-ic')
                   input.card__it(type="text" placeholder="Пароль" size="40")
-            a.card-a(href="#") Забыли пароль?
+                input(type="hidden", name="_csrf", value="#{csrf}")
+            a.card-a#pass(href="#") Забыли пароль?
             .btn
               +btnEnter
             .card__t Нет аккаунта?
-              a.card-a(href="#") Зарегистрироваться
+              a.card-a#reg(href="#") Зарегистрироваться
         .flip-cnt__back
           .flip-cnt__t Регистрация
           .card
             .card__auth-sect
               form.card-form(name="test" method="post" action="#")
                 .card-input
+                  .input-ic
+                    +use('name', 'input-ic')
                   input.card__it(type="text" placeholder="Имя" size="40")
                 .card-input
+                  .input-ic
+                    +use('soc_email', 'input-ic')
                   input.card__it(type="text" placeholder="Электронная почта" size="40")
                 .card-input
+                  .input-ic
+                    +use('password', 'input-ic')
                   input.card__it(type="text" placeholder="Пароль" size="40")
+                input(type="hidden", name="_csrf", value="#{csrf}")
               .reg
                 .card__tx Ваши данные остаются строго конфиденциальны
             .btn
               +btnCreateAcc
-            .card__tx Уже зарегистрированы?
+            .card__t Уже зарегистрированы?
               a.card-a(href="#") Войти
       .pass-rec.hidden
         .flip-cnt__t Восстановление пароля
@@ -49,9 +61,12 @@ block APP_content
           .card__auth_sect
             form.card-form(name="test" method="post" action="#")
               .card-input.lined
+                .input-ic
+                    +use('password', 'input-ic')
                 input.card__it(type="text" placeholder="Электронная почта" size="40")
+              input(type="hidden", name="_csrf", value="#{csrf}")
           .btn
             +btnRecreatePass
-          .card__tx Вспомнили пароль?
+          .card__t Вспомнили пароль?
             a.card-a(href="#") Войти
-    footer.f Создано командой профессионалов на продвинутом курсе по вебразработке от Loftschool
+    footer.index-f Создано командой профессионалов на продвинутом курсе по вебразработке от Loftschool
