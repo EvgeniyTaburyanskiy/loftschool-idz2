@@ -216,7 +216,7 @@ var api_fogotPasswd = function (req, res, next) {
 
 /**
  * Обрабатывает форму смены пароля и Меняет пароль для пользователя с правильным Токеном
- * После успешной смены пароля высылаает уведомление на емайл.
+ * После успешной смены пароля высылает уведомление на емайл.
  *
  * @param req
  * @param res
@@ -293,7 +293,7 @@ var api_resetPasswd = function (req, res, next) {
       // Все не ОК  Возвращаем на туде страницу с ошибками
       function (err, result) {
         if (err) return next(err);
-        next(new HttpError(200, null, 'Ваш Пароль успешно изменен!', null));
+        next(new HttpError(200, null, 'Ваш Пароль успешно изменен!'));
       });
 };
 

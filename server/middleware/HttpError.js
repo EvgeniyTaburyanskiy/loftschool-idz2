@@ -159,6 +159,7 @@ var sendAPIHttpError = function (req, res, next) {
         errData = majorErr[error.subcode];
       }
     }
+    
     errData.stacktrace = (ENV === 'development') ? error.stack : ''; //-> Дополняем трассировкой ошибки для режима DEv
     errData.error_user_msg = error.message || errData.message;       //-> Заменяем стандартное сообщение из списка кодов на "всплывшее" из приложения
     errData.data = error.data || errData.data;                       //-> Отдаем "вплывшие" данные из приложения

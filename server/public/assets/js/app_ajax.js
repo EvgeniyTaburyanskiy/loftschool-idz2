@@ -1,5 +1,5 @@
 'use strict';
-
+//--------------------- API MODULES---------------------------------//
 /**
  * mod ALBUMS
  */
@@ -243,10 +243,10 @@
     var serviceUrl_ = url || serviceUrl;
 
     return $.ajax({
-      type:     method_,
-      url:      serviceUrl_,
-      dataType: 'json',
-      data:     data
+      type:        method_,
+      url:         serviceUrl_,
+      dataType:    'json',
+      data:        data
     });
   };
 
@@ -285,6 +285,7 @@
 
 
   var fogotPasswd = function (form_id) {
+
     var form = document.forms[form_id];
 
     var data = {
@@ -298,6 +299,16 @@
 
 
   var resetPasswd = function (form_id) {
+    var form = document.forms[form_id];
+
+    var data = {
+      'password': form.elements['password'].value,
+      'token':    form.elements['token'].value,
+      '_csrf':    form.elements['_csrf'].value
+    };
+
+    return _ajaxCall(serviceUrl + ".resetPasswd", "POST", data);
+
   };
 
 
@@ -313,9 +324,11 @@
 
   };
 })();
-//--------------------------------------------------------------//
 
-/**  EDIT_PROFILE **/
+
+//---------------------  FRONT API USAGE---------------------------//
+
+// EDIT_PROFILE
 (function () {
   $(document).on('submit', '#edit_profile', function (event) {
     event.preventDefault();
@@ -340,8 +353,7 @@
 })();
 
 
-
-/** SIGN OUT**/
+// SIGN OUT
 (function () {
   $(document).on('click', '.exit-block__btn', function (event) {
     event.preventDefault();
@@ -357,8 +369,7 @@
 })();
 
 
-
-/** SIGN IN**/
+// SIGN IN
 (function () {
   $(document).on('submit', '#signin_form', function (event) {
     event.preventDefault();
@@ -369,9 +380,10 @@
         function (resSignIn) {
           window.location.href = '/';
         },
-
         function (resSignIn) {
-          alert(resSignIn.error_user_msg);
+          console.log(resSignIn);
+          var result = resSignIn.responseJSON;
+          alert(result.error_user_msg);
         }
     );
     return false;
@@ -379,8 +391,7 @@
 })();
 
 
-
-/** SIGN UP**/
+// SIGN UP
 (function () {
   $(document).on('submit', '#signup_form', function (event) {
     event.preventDefault();
@@ -392,7 +403,8 @@
           window.location.href = '/';
         },
         function (resSignup) {
-          alert(resSignup.error_user_msg);
+          var result = resSignup.responseJSON;
+          alert(result.error_user_msg);
         }
     );
     return false;
@@ -400,27 +412,44 @@
 })();
 
 
-
-/** FOGOT PASSWD**/
+// FOGOT PASSWD
 (function () {
   $(document).on('submit', '#fogotPasswd_form', function (event) {
     event.preventDefault();
 
-    var dfdFogotPasswd_form = window.loftogram.modAuth.fogotPasswd('fogotPasswd_form');
+    var dfdFogotPasswd = window.loftogram.modAuth.fogotPasswd('fogotPasswd_form');
 
-    $.when(dfdFogotPasswd_form).then(
+    $.when(dfdFogotPasswd).then(
         function (resFogotPasswd) {
-          alert(resFogotPasswd.error_user_msg);
+          var result = resFogotPasswd;
+          alert(result.error_user_msg);
         },
         function (resFogotPasswd) {
-          alert(resFogotPasswd.error_user_msg);
+          var result = resFogotPasswd.responseJSON;
+          alert(result.error_user_msg);
         }
     );
     return false;
   });
 })();
 
-/** RESET PASSWD**/
-(function () {
 
+// RESET PASSWD
+(function () {
+  $(document).on('submit', '#resetPasswd_form', function (event) {
+    event.preventDefault();
+
+    var dfdResetPasswd_form = window.loftogram.modAuth.resetPasswd('resetPasswd_form');
+
+    $.when(dfdResetPasswd_form).then(
+        function (resResetPasswd) {
+          window.location.href = '/';
+        },
+        function (resResetPasswd) {
+          var result = resResetPasswd.responseJSON;
+          alert(result.error_user_msg);
+        }
+    );
+    return false;
+  });
 })();

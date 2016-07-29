@@ -56,7 +56,6 @@ var _router = function (app) {
   router.route('/api/method/auth.signin')
   .post(
       //csrfProtection,
-      Upload.array(),
       controllers.auth.api_signin);     //-> Вход в Систему
 
   router.route('/api/method/auth.signout')
@@ -65,7 +64,6 @@ var _router = function (app) {
   router.route('/api/method/auth.signup')
   .post(
       //csrfProtection,
-      Upload.any(),
       controllers.auth.api_signup);     //-> Регистрация
 
   router.route('/api/method/auth.fogotPasswd')
@@ -74,7 +72,7 @@ var _router = function (app) {
       controllers.auth.api_fogotPasswd);//-> Восстановление пароля(отправка письма с токеном)
 
   router.route('/api/method/auth.resetPasswd')
-  .all(
+  .post(
       //csrfProtection,
       controllers.auth.api_resetPasswd); //-> Смена пароля(применение нового пароля)
 
@@ -189,6 +187,7 @@ var _router = function (app) {
   router.route(['/api/method/photos.movePhotos'])// U Перемещение фоток в Др Альбом ( Id альбома,массив Id фоток)
   .post(controllers.photos.API_movePhotos);
 
+  
   // DEFAULT  Route 404 ==============================================
   router.use('/api', controllers.error.err_404);
 

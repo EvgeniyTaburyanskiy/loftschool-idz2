@@ -20,7 +20,7 @@ block APP_content
                 .card-input
                   .input-ic
                     +use('password', 'input-ic')
-                  input.card__it(type='password' name='password' value='' placeholder="Новый пароль" size="40")
+                  input.card__it(type='text' name='password' value='' placeholder="Новый пароль" min='8' size="40")
             .btn
               +btnReset('resetPasswd_form')
             .card__t
