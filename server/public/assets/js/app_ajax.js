@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * ALBUMS
+ * mod ALBUMS
  */
 (function () {
   var serviceUrl = "/api/method/albums";
@@ -68,7 +68,9 @@
     _ajaxCall(serviceUrl + ".updateAlbum", "POST", data);
   };
 
-  window.modAlbum = {
+
+  if (!window.loftogram) window.loftogram = {};
+  window.loftogram.modAlbum = {
     getAlbumsByUser: getAlbumsByUser,
     getAlbumByID:    getAlbumByID,
     addAlbum:        addAlbum,
@@ -79,7 +81,7 @@
 
 
 /**
- * PHOTOS
+ * mod PHOTOS
  */
 (function () {
   var serviceUrl = "/api/method/photos";
@@ -145,8 +147,8 @@
   var movePhotos = function () {
   };
 
-
-  window.modPhoto = {
+  if (!window.loftogram) window.loftogram = {};
+  window.loftogram.modPhoto = {
     getPhotoById:    getPhotoById,
     getNewPhotos:    getNewPhotos,
     addPhoto:        addPhoto,
@@ -161,7 +163,7 @@
 
 
 /**
- * USERS
+ * mod USERS
  */
 (function () {
   var serviceUrl = "/api/method/users";
@@ -171,71 +173,53 @@
     var method_ = method || "GET";
     var serviceUrl_ = url || serviceUrl;
 
-    $.ajax({
-      type:    method_,
-      url:     serviceUrl_,
-      data:    data,
-      success: function (msg) {
-        console.log(msg);
-      },
-      error:   function (err) {
-      }
-    });
+    return $.ajax({
+      type:        method_,
+      url:         serviceUrl_,
+      processData: false,
+      data:        data
+    })
   };
 
   var getUsersList = function () {
-    _ajaxCall(serviceUrl + ".getUsersList", undefined, {});
+    return _ajaxCall(serviceUrl + ".getUsersList", undefined, {});
   };
 
   var getUserById = function (user_id) {
     var id_ = user_id || undefined;
 
-    _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
+    return _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
   };
 
   var addUser = function (user_id) {
     var id_ = user_id || undefined;
 
-    _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
+    return _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
   };
 
-  var updateUserImgs = function (user_id, profile) {
+  var updateUserImgs = function (form_id) {
 
-    var newProfile = {
-      user_id: user_id || undefined,
-      ava_img: "/img/no-avatar.png",
-      bg_img:  "/img/no-user-bg.png"
-    };
+    var profileData = new FormData(document.forms[form_id]);
 
-
-    _ajaxCall(serviceUrl + ".updateUserImgs", "POST", newProfile);
+    return _ajaxCall(serviceUrl + ".updateUserImgs", "POST", profileData);
   };
 
-  var updateUserProfile = function (user_id, profileData) {
+  var updateUserProfile = function (form_id) {
 
-    var profileData_ = {
-      user_id:   user_id || undefined,
-      firstName: "Джеки",
-      lastName:  "Чен",
-      message:   "Я голливудский актер, мне уже лет 50. Люблю сниматься в боевиках и активный отдых.",
-      email:     "djaki@chan.ru",
-      fb:        "",
-      gl:        "",
-      tw:        "",
-      vk:        "https://new.vk.com/djaki"
-    };
+    var profileData = new FormData(document.forms[form_id]);
 
-
-    _ajaxCall(serviceUrl + ".updateUserProfile", "POST", profileData_);
+    return _ajaxCall(serviceUrl + ".updateUserProfile", "POST", profileData);
   };
 
   var deleteUser = function (user_id) {
     var id_ = user_id || undefined;
 
-    _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
+    return _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
   };
 
-  window.modUser = {
+  if (!window.loftogram) window.loftogram = {};
+
+  window.loftogram.modUser = {
     getUsersList:      getUsersList,
     getUserById:       getUserById,
     addUser:           addUser,
@@ -243,4 +227,200 @@
     updateUserProfile: updateUserProfile,
     deleteUser:        deleteUser
   };
+})();
+
+
+/**
+ *  mod AUTH
+ */
+(function () {
+  var serviceUrl = "/api/method/auth";
+  var data = {};
+
+
+  var _ajaxCall = function (url, method, data) {
+    var method_ = method || "POST";
+    var serviceUrl_ = url || serviceUrl;
+
+    return $.ajax({
+      type:     method_,
+      url:      serviceUrl_,
+      dataType: 'json',
+      data:     data
+    });
+  };
+
+
+  var signin = function (form_id) {
+
+    var form = document.forms[form_id];
+
+    var data = {
+      'username': form.elements['username'].value,
+      'password': form.elements['password'].value,
+      '_csrf':    form.elements['_csrf'].value
+    };
+
+    return _ajaxCall(serviceUrl + ".signin", "POST", data);
+  };
+
+
+  var signout = function () {
+    return _ajaxCall(serviceUrl + ".signout", "POST", {});
+  };
+
+
+  var signup = function (form_id) {
+    var form = document.forms[form_id];
+
+    var data = {
+      'name':     form.elements['name'].value,
+      'username': form.elements['username'].value,
+      'password': form.elements['password'].value,
+      '_csrf':    form.elements['_csrf'].value
+    };
+
+    return _ajaxCall(serviceUrl + ".signup", "POST", data);
+  };
+
+
+  var fogotPasswd = function (form_id) {
+    var form = document.forms[form_id];
+
+    var data = {
+      'email': form.elements['email'].value,
+      '_csrf': form.elements['_csrf'].value
+    };
+
+    return _ajaxCall(serviceUrl + ".fogotPasswd", "POST", data);
+
+  };
+
+
+  var resetPasswd = function (form_id) {
+  };
+
+
+  if (!window.loftogram) window.loftogram = {};
+
+  window.loftogram.modAuth = {
+    signin:      signin,
+    signout:     signout,
+    signup:      signup,
+    fogotPasswd: fogotPasswd,
+    resetPasswd: resetPasswd
+
+
+  };
+})();
+//--------------------------------------------------------------//
+
+/**  EDIT_PROFILE **/
+(function () {
+  $(document).on('submit', '#edit_profile', function (event) {
+    event.preventDefault();
+    //var form = $(this);
+
+    var dfdEditProfile = window.loftogram.modUser.updateUserProfile('edit_profile');
+    var dfdEditProfileImgs = window.loftogram.modUser.updateUserImgs('edit_profile');
+
+    $.when(dfdEditProfile, dfdEditProfileImgs).then(
+        function (EditProfile, EditProfileImgs) {
+
+          console.log('SUC EditProfile=', JSON.parse(EditProfile.responseText));
+          console.log('SUC EditProfileImgs=', JSON.parse(EditProfileImgs));
+        },
+        function (EditProfile, EditProfileImgs) {
+          console.log('ERR EditProfile=', JSON.parse(EditProfile.responseText));
+          console.log('ERR  EditProfileImgs=', JSON.parse(EditProfileImgs.responseText));
+        }
+    );
+    return false;
+  });
+})();
+
+
+
+/** SIGN OUT**/
+(function () {
+  $(document).on('click', '.exit-block__btn', function (event) {
+    event.preventDefault();
+    var dfdSignout = window.loftogram.modAuth.signout();
+
+    dfdSignout.done(function (data, statusText, xhr) {
+      var status = xhr.status;
+      if (200 == status) {//200
+        window.location.href = '/auth';
+      }
+    });
+  });
+})();
+
+
+
+/** SIGN IN**/
+(function () {
+  $(document).on('submit', '#signin_form', function (event) {
+    event.preventDefault();
+
+    var dfdSignIn = window.loftogram.modAuth.signin('signin_form');
+
+    $.when(dfdSignIn).then(
+        function (resSignIn) {
+          window.location.href = '/';
+        },
+
+        function (resSignIn) {
+          alert(resSignIn.error_user_msg);
+        }
+    );
+    return false;
+  });
+})();
+
+
+
+/** SIGN UP**/
+(function () {
+  $(document).on('submit', '#signup_form', function (event) {
+    event.preventDefault();
+
+    var dfdSignUp = window.loftogram.modAuth.signup('signup_form');
+
+    $.when(dfdSignUp).then(
+        function (resSignup) {
+          window.location.href = '/';
+        },
+        function (resSignup) {
+          alert(resSignup.error_user_msg);
+        }
+    );
+    return false;
+  });
+})();
+
+
+
+/** FOGOT PASSWD**/
+(function () {
+  $(document).on('submit', '#fogotPasswd_form', function (event) {
+    event.preventDefault();
+
+    var dfdFogotPasswd_form = window.loftogram.modAuth.fogotPasswd('fogotPasswd_form');
+
+    $.when(dfdFogotPasswd_form).then(
+        function (resFogotPasswd) {
+          alert(resFogotPasswd.error_user_msg);
+        },
+        function (resFogotPasswd) {
+          alert(resFogotPasswd.error_user_msg);
+        }
+    );
+    return false;
+  });
+})();
+
+/** RESET PASSWD**/
+(function () {
+
 })();

@@ -17,12 +17,16 @@ var express          = require('express'),
     helmet           = require('helmet'),
     flash            = require('express-flash');
 
+
 var
     config       = require('./nconf'),
     logger       = require('./winston')(module),
     publicRouter = require('../routes').Router,
     apiRouter    = require('../routes/api').Router,
     mongoose     = require('./mongoose');
+
+var multer = require('multer');
+var Upload = multer(config.get('multer'));
 
 var serverRoot = path.join(__dirname, '/../');
 var documentRoot = path.join(serverRoot, config.get('documentRoot'));

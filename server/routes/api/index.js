@@ -55,7 +55,8 @@ var _router = function (app) {
   // AUTH ROUTES ==============================
   router.route('/api/method/auth.signin')
   .post(
-      csrfProtection,
+      //csrfProtection,
+      Upload.array(),
       controllers.auth.api_signin);     //-> Вход в Систему
 
   router.route('/api/method/auth.signout')
@@ -63,17 +64,18 @@ var _router = function (app) {
 
   router.route('/api/method/auth.signup')
   .post(
-      csrfProtection,
+      //csrfProtection,
+      Upload.any(),
       controllers.auth.api_signup);     //-> Регистрация
 
   router.route('/api/method/auth.fogotPasswd')
   .post(
-      csrfProtection,
+      //csrfProtection,
       controllers.auth.api_fogotPasswd);//-> Восстановление пароля(отправка письма с токеном)
 
   router.route('/api/method/auth.resetPasswd')
   .all(
-      csrfProtection,
+      //csrfProtection,
       controllers.auth.api_resetPasswd); //-> Смена пароля(применение нового пароля)
 
 
@@ -94,7 +96,7 @@ var _router = function (app) {
 
   router.route('/api/method/users.addUser')
   .post(
-      csrfProtection,
+      //csrfProtection,
       controllers.users.API_addUser);           //->
 
   router.route('/api/method/users.updateUserProfile')
@@ -111,7 +113,7 @@ var _router = function (app) {
 
   router.route('/api/method/users.deleteUser')
   .post(
-      csrfProtection,
+      //csrfProtection,
       controllers.users.API_deleteUser);       //->
 
 

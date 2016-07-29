@@ -1,4 +1,3 @@
-
 var async = require('async');
 var path = require('path');
 var ObjectID = require('mongodb').ObjectID;
@@ -98,7 +97,6 @@ var API_updateUserImgs = function (req, res, next) {
   }
 
 
-
   try {
     var uid = new ObjectID(user_id);
   }
@@ -164,14 +162,13 @@ var API_updateUserImgs = function (req, res, next) {
             if (err) {
               return done(new HttpError(400, null, 'Ошибка в процессе обработки фоновой картинки!', err.message));
             }
-            
+
 
             user.userdata.bg_img = '/uploads/files/bg/' + path.basename(newImageInfo.imgPath);
 
             // Новую фотку  сохраненяем в БД
             user.save(function (err) {
               if (err) {
-
                 return done(err)
               }
               return done(null, user);
@@ -228,7 +225,7 @@ var API_updateUserProfile = function (req, res, next) {
   if (vk) newData.vk = vk.trim();
 
 
-  console.log(newData);
+  console.log('New User data=', newData);
 
   if (isEmpty(newData)) {
     return next(new HttpError(400, null, 'Не заданы новые значения для полей профиля.'));

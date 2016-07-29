@@ -63,7 +63,7 @@ var getFogot = function (req, res) {
  */
 var getReset = function (req, res) {
   res.render(
-      'reset_passwd',
+      'reset',
       {
         title:     'Fogot Password',
         csrfToken: req.csrfToken(),

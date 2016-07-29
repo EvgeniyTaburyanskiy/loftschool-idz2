@@ -1,52 +1,53 @@
 include ../helpers/mixins.pug
 .edit-profile-wrap
-    .edit-profile
-        .edit-profile__h
-            h4.h__title Редактировать профиль
-            +btnCancelPop
-        .edit-profile__b
-            form.b__form(method='POST' enctype="multipart/form-data")
-                input(type="hidden", name="_csrf", value="#{csrf}")
-                .profile__field.profile__field--direction
-                    .field__lbl
-                        label(for="name") Имя
-                    input#name.field__it.field__it--name(type="text" placeholder='Имя' name='firstName')
-                    input.field__it.field__it--surname(type="text" placeholder='Фамилия' name='lastName')
-                .profile__field.profile__field--direction
-                    .field__lbl.field__lbl-top
-                        label(for="descr") О себе
-                    textarea#descr.field__itx(name='message')
-                .profile__field
-                    .field__cover.profile-av
-                        .avatar-cover
-                            img.avatar-cover__img(src='assets/img/no_photo.jpg' alt='avatar')
-                    .field__cover-info.profile-cover
-                        +inpFile('Загрузить фотографию','ava_img')
-                        .cover-info__text (файл должен быть размером не более&nbsp;
-                            span 1024 КБ)
-                .profile__field
-                    .field__cover.profile-av
-                        .avatar-cover
-                            img.avatar-cover__img(src='assets/img/no_photo.jpg' alt='background')
-                    .field__cover-info.profile-cover
-                        +inpFile('Загрузить фон','bg_img')
-                        .cover-info__text (файл должен быть размером не более&nbsp;
-                            span 1024 КБ)
-                .profile__field.profile__field--direction
-                    .field__lbl
-                        label(for="vk") Вконтакте
-                    input#vk.field__it.field__it--social(type="text" placeholder='https://vk.com/' name='vk')
-                .profile__field.profile__field--direction
-                    .field__lbl
-                        label(for="fb") Facebook
-                    input#fb.field__it.field__it--social(type="text" placeholder='https://www.facebook.com/' name='fb')
-                .profile__field.profile__field--direction
-                    .field__lbl
-                        label(for="email") Email
-                    input#email.field__it.field__it--social(type="text" placeholder='info@domain.com' name='email')
-                .profile__field.profile__field--direction
-                    .field__lbl
-                        label(for="twit") Twitter
-                    input#twit.field__it.field__it--social(type="text" placeholder='https://twitter.com/' name='tw')
+  .edit-profile
+    .edit-profile__h
+      h4.h__title Редактировать профиль
+      +btnCancelPop
+    .edit-profile__b
+      form.b__form#edit_profile(method='POST' enctype="multipart/form-data")
+        input(type="hidden", name="_csrf", value= csrfToken)
+        input(type="hidden", name="user_id", value= user._id)
+        .profile__field.profile__field--direction
+          .field__lbl
+            label(for="firstName") Имя
+          input#firstName.field__it.field__it--name(type="text" placeholder='Имя' name='firstName' value= user.userdata.firstName)
+          input.field__it.field__it--surname(type="text" placeholder='Фамилия' name='lastName' value= user.userdata.lastName )
+        .profile__field.profile__field--direction
+          .field__lbl.field__lbl-top
+            label(for="message") О себе
+          textarea#message.field__itx(name='message' value= user.userdata.message)
+        .profile__field
+          .field__cover.profile-av
+            .avatar-cover
+              img.avatar-cover__img(src= user.userdata.ava_img alt='avatar')
+          .field__cover-info.profile-cover
+            +inpFile('Загрузить фотографию','ava_img')
+            .cover-info__text (файл должен быть размером не более&nbsp;
+              span 1024 КБ)
+        .profile__field
+          .field__cover.profile-av
+            .avatar-cover
+              img.avatar-cover__img(src= user.userdata.bg_img alt='background')
+          .field__cover-info.profile-cover
+            +inpFile('Загрузить фон','bg_img')
+            .cover-info__text (файл должен быть размером не более&nbsp;
+              span 1024 КБ)
+        .profile__field.profile__field--direction
+          .field__lbl
+            label(for="vk") Вконтакте
+          input#vk.field__it.field__it--social(type="text" placeholder='https://vk.com/' name='vk' value= user.userdata.vk)
+        .profile__field.profile__field--direction
+          .field__lbl
+            label(for="fb") Facebook
+          input#fb.field__it.field__it--social(type="text" placeholder='https://www.facebook.com/' name='fb' value= user.userdata.fb)
+        .profile__field.profile__field--direction
+          .field__lbl
+            label(for="email") Email
+          input#email.field__it.field__it--social(type="email" placeholder='info@domain.com' name='email'   value= user.userdata.email)
+        .profile__field.profile__field--direction
+          .field__lbl
+            label(for="twit") Twitter
+          input#twit.field__it.field__it--social(type="text" placeholder='https://twitter.com/' name='tw' value= user.userdata.tw)
         .edit-profile__f
-            +formMenu
+          +formMenu

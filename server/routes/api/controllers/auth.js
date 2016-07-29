@@ -22,6 +22,7 @@ var User = require('../../../db/models/User').mUser;
  * обработать по своему
  */
 var api_signin = function (req, res, next) {
+
   passport.authenticate('local-signin',
       function (err, user, info) {
         if (err) {//-> если в процессе авторизации была Ошибка, обрабатываем ее.
@@ -61,6 +62,9 @@ var api_signin = function (req, res, next) {
  * @private
  */
 var api_signup = function (req, res, next) {
+
+  var name = req.body.name || undefined;
+
   passport.authenticate('local-signup',
       function (err, user, info) {
         if (err) {//-> если в процессе регистрации была Ошибка, обрабатываем ее.
@@ -88,11 +92,16 @@ var api_signup = function (req, res, next) {
             return next(err);
           }
         }
-        /*
-         *  TODO: - Генерация Токена подтверждения регистрации
-         *  TODO: - Создание письма и отправка пользователю для подтверждения регстрации
-         *  TODO: - Логику обработки результата подтверждения
-         */
+
+        if (name) {
+          name = name.trim().split(' ');
+          user.userdata.firstName = (name[0]) ? name[0] : 'Имя';
+          user.userdata.lastName = (name[1]) ? name[1] : '.';
+          user.save(function (err) {
+            if (err) return next(err);
+          });
+        }
+
 
         var mailOptions = {
           to:      user.userdata.email,
@@ -200,7 +209,7 @@ var api_fogotPasswd = function (req, res, next) {
     if (err) return next(err);
     //Все Ок. Токен сгенерен, письмо отправлено.
     // TODO: API- Сформировать объект ответа JSON по Восстановлению пароля
-    next(new HttpError(200, null, 'На Ваш e-mail было отправлено письмо с инструкциями!', null));
+    next(new HttpError(200, null, 'На Ваш e-mail было отправлено письмо с инструкциями!'));
   });
 };
 
