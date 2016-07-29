@@ -22,6 +22,7 @@ var User = require('../../../db/models/User').mUser;
  * обработать по своему
  */
 var api_signin = function (req, res, next) {
+
   passport.authenticate('local-signin',
       function (err, user, info) {
         if (err) {//-> если в процессе авторизации была Ошибка, обрабатываем ее.
@@ -61,6 +62,9 @@ var api_signin = function (req, res, next) {
  * @private
  */
 var api_signup = function (req, res, next) {
+
+  var name = req.body.name || undefined;
+
   passport.authenticate('local-signup',
       function (err, user, info) {
         if (err) {//-> если в процессе регистрации была Ошибка, обрабатываем ее.
@@ -88,11 +92,16 @@ var api_signup = function (req, res, next) {
             return next(err);
           }
         }
-        /*
-         *  TODO: - Генерация Токена подтверждения регистрации
-         *  TODO: - Создание письма и отправка пользователю для подтверждения регстрации
-         *  TODO: - Логику обработки результата подтверждения
-         */
+
+        if (name) {
+          name = name.trim().split(' ');
+          user.userdata.firstName = (name[0]) ? name[0] : 'Имя';
+          user.userdata.lastName = (name[1]) ? name[1] : '.';
+          user.save(function (err) {
+            if (err) return next(err);
+          });
+        }
+
 
         var mailOptions = {
           to:      user.userdata.email,
@@ -174,6 +183,7 @@ var api_fogotPasswd = function (req, res, next) {
             user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
             user.save(function (err) {
+              if(err) return done(new  HttpError(500, null, 'Ошибка в процессе сохранения токена', err.message));
               done(err, token, user);
             });
           });
@@ -200,14 +210,14 @@ var api_fogotPasswd = function (req, res, next) {
     if (err) return next(err);
     //Все Ок. Токен сгенерен, письмо отправлено.
     // TODO: API- Сформировать объект ответа JSON по Восстановлению пароля
-    next(new HttpError(200, null, 'На Ваш e-mail было отправлено письмо с инструкциями!', null));
+    next(new HttpError(200, null, 'На Ваш e-mail было отправлено письмо с инструкциями!'));
   });
 };
 
 
 /**
  * Обрабатывает форму смены пароля и Меняет пароль для пользователя с правильным Токеном
- * После успешной смены пароля высылаает уведомление на емайл.
+ * После успешной смены пароля высылает уведомление на емайл.
  *
  * @param req
  * @param res
@@ -243,18 +253,18 @@ var api_resetPasswd = function (req, res, next) {
                 var errMsgList = [];
 
                 if (err.errors.email) {
-                  logger.info("Ошибка валидации Email пользователя: %s", err.errors.email.message);
+                  logger.debug("Ошибка валидации Email пользователя: %s", err.errors.email.message);
                   errMsgList.push(err.errors.email.message);
                 }
 
                 if (err.errors.password) {
-                  logger.info("Ошибка валидации пароля пользователя: %s", err.errors.password.message);
+                  logger.debug("Ошибка валидации пароля пользователя: %s", err.errors.password.message);
                   errMsgList.push(err.errors.password.message);
                 }
               }
 
               return errMsgList.length ?
-                  new HttpError(400, 'ILLEGAL_PARAM_VALUE', errMsgList) :
+                  done(new HttpError(400, 'ILLEGAL_PARAM_VALUE','Ошибка при сохранении пользователя', errMsgList)) :
                   done(err);
             }
             //Сохранение прошло успешно. Есть Объект пользователя. Отдаем его в login фунцию которую навешивает  Passport
@@ -284,7 +294,7 @@ var api_resetPasswd = function (req, res, next) {
       // Все не ОК  Возвращаем на туде страницу с ошибками
       function (err, result) {
         if (err) return next(err);
-        next(new HttpError(200, null, 'Ваш Пароль успешно изменен!', null));
+        next(new HttpError(200, null, 'Ваш Пароль успешно изменен!'));
       });
 };
 

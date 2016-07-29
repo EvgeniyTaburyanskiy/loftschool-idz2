@@ -44,9 +44,9 @@ mixin FavIcon
 
 //svg
 mixin use(name, sname)
-  - var svg = 'assets/img/icons/sprite.svg'
+  - var svg = '/assets/img/icons/sprite.svg'
   svg(role='img' class=sname)
-    use(xlink:href=svg+'#'+name)
+    use(xlink:href=svg + '#' + name)
 //кастомная кнопка
 mixin btnCustom(buttontext)
   div.custom-block
@@ -57,21 +57,25 @@ mixin inpFile(inputText, inputName)
     label.inputFile-block__btn #{inputText}
       input(type='file' name=inputName)
 //синяя кнопка Войти
-mixin btnEnter
+mixin btnEnter(formid)
   div.enter-block
-    button.enter-block__btn Войти
+    button.enter-block__btn(type="submit" form= formid) Войти
 //синяя кнопка Зарегистрироваться
-mixin btnCreateAcc
+mixin btnCreateAcc(formid)
   div.enter-block
-    button.enter-block__btn Создать аккаунт
+    button.enter-block__btn(type="submit" form= formid) Создать аккаунт
 //синяя кнопка Создать аккаунт
-mixin btnRecreatePass
+mixin btnRecreatePass(formid)
   div.enter-block
-    button.enter-block__btn Восстановить пароль
+    button.enter-block__btn(type="submit" form= formid) Восстановить пароль
 //синяя кнопка Создать аккаунт
-mixin btnReg
+mixin btnReg(formid)
   div.enter-block
-    button.enter-block__btn Зарегистрироваться
+    button.enter-block__btn(type="submit" form= formid) Зарегистрироваться
+//синяя кнопка Сменить
+mixin btnReset(formid)
+  div.enter-block
+    button.enter-block__btn.reset-block__btn(type="submit" form= formid) Сменить
 //прозрачная кнопка Закрыть
 mixin btnClose
   div.close-block
@@ -94,7 +98,7 @@ mixin btnEdit
 mixin btnExit
   div.exit-block
     button.exit-block__btn
-      a.exit-block__link(href="index.html")
+      a.exit-block__link(href="#")
       +use('off', 'exit-block__svg')
       span.exit-block__tx Выйти
 //выдвижная кнопка Домой
@@ -114,7 +118,7 @@ mixin btnAdd
 //соц кнопка с параметрами
 mixin socIcon(type, url)
   div.soc-block
-    a.soc-block__a(href=url)
+    a.soc-block__a(class= 'soc-block__a_' + type  href= url )
       - var svg = '';
       - if ( type === 'vk' ) svg = 'soc_vk';
       - if ( type === 'fb' ) svg = 'soc_fb';
@@ -170,37 +174,55 @@ mixin btnCancelPop
   div.cancel-popup
     btn.cancel-popup__btn
       +use('close', 'cancel-popup__svg')
+
 //две нижние кнопки форм добавления фото и альбома
-mixin formMenu
+mixin formMenu(formid)
   div.form-menu
-    input.form-menu__submit(type='submit' value='Сохранить')
-    input.form-menu__reset(type='reset' value='Отменить')
+    button.form-menu__submit(type='submit' form= formid) Сохранить
+    button.form-menu__reset(type='reset' form= formid) Отменить
+
 mixin formMenuReverse
   div.form-menu
     input.form-menu__reset(type='reset' id="reset" value='Отменить')
     input.form-menu__submit(type='submit' id="submit" value='Сохранить')
 
+mixin albumTile(album)
+  div.photo-album
+    a.album-top(href="/albums/" + album._id)
+      img.album-top__img(src= album._album_bg.thumb alt= album.name)
+      div.album-info-wrapper
+        div.album-info
+          p.album-info__tx #{album.descr}
+          span.album-info__count #{album._id} Фотографий
+    div.album-bot
+      div.album-menu
+        +use('edit','album-menu__svg')
+        a.album-menu__a(href="/albums/" + album._id) #{album.name}
+
+
 mixin photoTile(photo)
+  -var owner = photo._album_id._user_id;
+  -var album = photo._album_id;
   div.photo-tile
-    a.tile-top(href="#slide")
+    a.tile-top(href="#slide" id= photo._id )
       +use('loupe','tile-top__svg')
-      img.tile-top__img(src= url alt="lake")
+      img.tile-top__img(src= photo.thumb alt= photo.name)
       div.top-mask
     div.tile-mid
       div.tile-mid-wrapper
-        a.tile-avatar(href="person.html")
+        a.tile-avatar(href="/users/" + owner._id)
           +use('more','tile-avatar__svg')
-          img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
+          img.tile-avatar__img(src= owner.userdata.ava_img alt= owner.userdata.firstName + " " + owner.userdata.lastName)
           div.tile-avatar-mask
         div.tile-desc
           div.desc-wrapper
-            p.desc-wrapper__tx Путешествия на лодке по великолепному озеру
+            p.desc-wrapper__tx #{photo.descr}
           div.tile-stats
             +use('comments','tile-stats__svg')
-            span.tile-stats__span.tile-stats__span-comments 7
+            span.tile-stats__span.tile-stats__span-comments #{photo.comments.comment_list.length}
             +use('like','tile-stats__svg')
-            span.tile-stats__span.tile-stats__span-likes 31
+            span.tile-stats__span.tile-stats__span-likes #{photo.likes.length}
     div.tile-bot
       div.tile-bot-wrapper
         +use('album','tile-bot__svg')
-        a.tile-bot__a(href="album.html") Прогулки по воде
+        a.tile-bot__a(href="/albums/" + album._id ) #{album.name}

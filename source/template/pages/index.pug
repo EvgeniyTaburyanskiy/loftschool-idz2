@@ -14,7 +14,7 @@ block APP_content
           .flip-cnt__tx Перед вами сервис, который поможет вам организовать свои фотографии в альбомы и поделиться ими со всем миром!
           .card
             .card__auth-sect
-              form.card-form(name="test" method="post" action="#" )
+              form.card-form(method="post" action='/api/method/auth.signin')
                 .card-input
                   .input-ic
                     +use('soc_email', 'input-ic')
@@ -33,7 +33,7 @@ block APP_content
           .flip-cnt__t Регистрация
           .card
             .card__auth-sect
-              form.card-form(name="test" method="post" action="#")
+              form.card-form(method="post" action='/api/method/auth.signup')
                 .card-input
                   .input-ic
                     +use('name', 'input-ic')

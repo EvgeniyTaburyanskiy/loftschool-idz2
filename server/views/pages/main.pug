@@ -7,19 +7,19 @@ block APP_content
       button.slide-controls__btn.slide-controls__btn_right
         +use('arrow_right','slide-controls__svg')
   include ../modules/_slider_item.pug
-  header.m-h-w#header
+  header.m-h-w#header(style="background-image: url(" + user.userdata.bg_img + ")")
     div.m-h
-      a.m-h__a(href="person.html")
-        img.m-h__img(src="assets/img/jason.jpg" alt="jason")
+      a.m-h__a(href="/users/" + user._id.toString())
+        img.m-h__img(src= user.userdata.ava_img alt= user.userdata.firstName + " " + user.userdata.lastName )
       div.m-person
-        p.m-person__n Джейсон Стэтхем
-        p.m-person__tx Я голливудский актер, мне уже лет 50. Люблю сниматься в боевиках и активный отдых.
+        p.m-person__n #{user.userdata.firstName + " " + user.userdata.lastName}
+        p.m-person__tx #{user.userdata.message}
         div.person-soc
-          +socIcon('vk', 'vk.com')
-          +socIcon('fb', 'facebook.com')
-          +socIcon('tw', 'twitter.com')
-          +socIcon('gp', 'google.com')
-          +socIcon('em', 'email@email.email')
+          +socIcon('vk', user.userdata.vk)
+          +socIcon('fb', user.userdata.fb)
+          +socIcon('tw', user.userdata.tw)
+          +socIcon('gp', user.userdata.gl)
+          +socIcon('em', user.userdata.email)
     div.m-controls
       div.controls-w
         +btnEdit
@@ -27,33 +27,28 @@ block APP_content
         +btnExit
   main.m-main
     section.main-search
-      form.main-search__form(action="#")
-        input.main-search__input(type="search" name="search" id="search" placeholder="Исследовать мир")
+      form.main-search__form(action="/search/")
+        input.main-search__input(type="search" name="q" id="q" placeholder="Исследовать мир")
         +use('search','main-search__svg')
-        input(type="hidden", name="_csrf", value="#{csrf}")
+        input(type="hidden", name="_csrf", value= csrfToken)
     section.main-new-w
       div.main-new
         h1.main-new__t Новое в мире
         div.new-photos
-          +photoTile('assets/img/lake.jpg')
-          +photoTile('assets/img/forest.jpg')
-          +photoTile('assets/img/autumn.jpg')
-          +photoTile('assets/img/trees.jpg')
-          +photoTile('assets/img/mountain.jpg')
-          +photoTile('assets/img/road.jpg')
-          - var arr = [1,2,3,4,5,6]
-          //for item in arr
-          //   include ../modules/_photo_tile.pug
+          if (newPotos)
+            for photo in newPotos
+              +photoTile(photo)
         div.new-show
           +btnShow
     section.main-albums-w
       div.main-albums
         h2.main-albums__t Мои альбомы
         div.albums-photos
-          for item in arr
-            include ../modules/_photo_album.pug
+          if (userAlbums)
+            for album in userAlbums
+              +albumTile(album)
       div.albums-controls
         +btnAdd
-  include ../modules/_m_edit_profile
-  include ../modules/_m_add_album
+  include ../modules/_m_edit_profile.pug
+  include ../modules/_m_add_album.pug
   include ../modules/_footer.pug

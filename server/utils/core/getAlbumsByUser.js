@@ -12,7 +12,7 @@ var getAlbumsByUser = function (user_id, callback) {
           Album
           .find({_user_id: user_id}, 'id name descr _album_bg')
           .lean()
-          .populate('_album_bg', 'img thumb')
+          .deepPopulate('_album_bg', 'img thumb')
           .exec(function (err, albums) {
             if (err) return done(err);
             return done(err, albums);

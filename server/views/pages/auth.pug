@@ -1,79 +1,72 @@
 extends ../_template
 
 block APP_content
-
-  h4 Register your account
-  form(action='/api/method/auth.signup' method='POST')
-    fieldset
-      input(type='hidden' name='_csrf' value= csrfToken)
-      label(for='username') Email
-      input(type='email' name='username' placeholder='Your Email')
-      label(for='password') Password
-      input(type='password' name='password' placeholder='Your Password')
-      button(type='Register') Register
-
-  br
-  h4 Login to your account
-  form(action='/api/method/auth.signin' method='POST')
-    fieldset
-      input(type='hidden' name='_csrf' value= csrfToken)
-      label(for='username') Email
-      input(type='email' name='username' placeholder='Your Email')
-      label(for='password') Password
-      input(type='password' name='password' placeholder='Your Password')
-      button(type='Login') Login
-
-  br
-  h4 Forgot Password
-  form(action='/api/method/auth.fogotPasswd' method='POST')
-    fieldset
-      input(type='hidden' name='_csrf' value= csrfToken)
-      label(for='email') Email
-      input(type='email' name='email' placeholder='Your Email' autofocus)
-      button(type='submit') Reset Password
-
-
-  br
-  h4 LOGOUT
-    br
-    a(href='/api/method/auth.signout') Logout
-
-  br
-  h4 Add Album
-  form(action='/api/method/albums.addAlbum' method='POST' enctype="multipart/form-data")
-    fieldset
-      input(type='hidden' name='_csrf' value= csrfToken)
-      label(for='album_name') album_name
-      input(type='text' name='album_name' placeholder='Your album_name' autofocus)
-      label(for='album_descr') album_descr
-      input(type='text' name='album_descr' placeholder='Your album_descr')
-      label(for='album_bg') album_bg
-      input(type='file' name='album_bg')
-      button(type='submit') Add Album
-
-  br
-  h4 Update Album
-  form(action='/api/method/albums.updateAlbum' method='POST' enctype="multipart/form-data")
-    fieldset
-      input(type='hidden' name='_csrf' value= csrfToken)
-      input(type='text' name='album_id' value='5790ca9f5cacd8c8103167b2')
-      label(for='album_name') album_name
-      input(type='text' name='album_name' placeholder='Your album_name' autofocus)
-      label(for='album_descr') album_descr
-      input(type='text' name='album_descr' placeholder='Your album_descr')
-      label(for='album_bg') album_bg
-      input(type='file' name='album_bg')
-      button(type='submit') Update Album
-
-  br
-  h4 Upload User Imgs
-  form(action='/api/method/users.updateUserImgs' method='POST' enctype="multipart/form-data")
-    fieldset
-      input(type='hidden' name='_csrf' value= csrfToken)
-      if(user)
-        input(type='hidden' name='user_id' value= user._id)
-      label(for='ava_img') ava_img
-      input(type='file' name='ava_img')
-      label(for='bg_img') bg_img
-      input(type='file' name='bg_img')
-      button(type='submit') Update Fotos
+  .b-w
+    div.parallax
+      - var parallaxImgs = ["/assets/img/01.png","/assets/img/02.png","/assets/img/03.png","/assets/img/04.png", "/assets/img/05.png","/assets/img/06.png"]
+      each item, key in parallaxImgs
+        div.parallax-layer(data-key= key)
+          img.parallax-layer__img(src=item alt="parallax layer")
+    .flip-cnt-w
+      .flip-cnt
+        .flip-cnt__front
+          .flip-cnt__t Добро пожаловать
+          .flip-cnt__tx Перед вами сервис, который поможет вам организовать свои фотографии в альбомы и поделиться ими со всем миром!
+          .card
+            .card__auth-sect
+              form#signin_form.card-form(method="post" action='/api/method/auth.signin')
+                input(type='hidden' name='_csrf' value= csrfToken)
+                .card-input
+                  .input-ic
+                    +use('soc_email', 'input-ic')
+                  input.card__it(type='email' name='username'  placeholder="Электронная почта" size="40")
+                .card-input
+                  .input-ic
+                    +use('password', 'input-ic')
+                  input.card__it(type='password' name='password' placeholder="Пароль" size="40")
+            a.card-a#pass(href="#") Забыли пароль?
+            .btn
+              +btnEnter('signin_form')
+            .card__t Нет аккаунта?
+              a.card-a#reg(href="#") Зарегистрироваться
+        .flip-cnt__back
+          .flip-cnt__t Регистрация
+          .card
+            .card__auth-sect
+              form#signup_form.card-form( method="post" action='/api/method/auth.signup')
+                input(type='hidden' name='_csrf' value= csrfToken)
+                .card-input
+                  .input-ic
+                    +use('name', 'input-ic')
+                  input.card__it(type="text" name='name' placeholder="Имя" size="40")
+                .card-input
+                  .input-ic
+                    +use('soc_email', 'input-ic')
+                  input.card__it(type='email' name='username' placeholder="Электронная почта" size="40")
+                .card-input
+                  .input-ic
+                    +use('password', 'input-ic')
+                  input.card__it(type='password' name='password' placeholder="Пароль" size="40")
+              .reg
+                .card__tx Ваши данные остаются строго конфиденциальны
+            .btn
+              +btnCreateAcc('signup_form')
+            .card__t Уже зарегистрированы?
+              a.card-a(href="#") Войти
+      .pass-rec.hidden
+        .flip-cnt__t Восстановление пароля
+        .card
+          .card__t.bold Забыли пароль?
+          .card__tx Ничего страшного, введите свой и мы вышлем вам инструкции по восстановлению пароля
+          .card__auth_sect
+            form#fogotPasswd_form.card-form( method="post" action='/api/method/auth.fogotPasswd' )
+              input(type='hidden' name='_csrf' value= csrfToken)
+              .card-input.lined
+                .input-ic
+                  +use('password', 'input-ic')
+                input.card__it(type='email' name='email' placeholder="Электронная почта" size="40")
+          .btn
+            +btnRecreatePass('fogotPasswd_form')
+          .card__t Вспомнили пароль?
+            a.card-a(href="#") Войти
+    footer.index-f Создано командой профессионалов на продвинутом курсе по вебразработке от Loftschool

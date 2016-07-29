@@ -55,7 +55,7 @@ var _router = function (app) {
   // AUTH ROUTES ==============================
   router.route('/api/method/auth.signin')
   .post(
-      csrfProtection,
+      //csrfProtection,
       controllers.auth.api_signin);     //-> Вход в Систему
 
   router.route('/api/method/auth.signout')
@@ -63,17 +63,17 @@ var _router = function (app) {
 
   router.route('/api/method/auth.signup')
   .post(
-      csrfProtection,
+      //csrfProtection,
       controllers.auth.api_signup);     //-> Регистрация
 
   router.route('/api/method/auth.fogotPasswd')
   .post(
-      csrfProtection,
+      //csrfProtection,
       controllers.auth.api_fogotPasswd);//-> Восстановление пароля(отправка письма с токеном)
 
   router.route('/api/method/auth.resetPasswd')
-  .all(
-      csrfProtection,
+  .post(
+      //csrfProtection,
       controllers.auth.api_resetPasswd); //-> Смена пароля(применение нового пароля)
 
 
@@ -94,7 +94,7 @@ var _router = function (app) {
 
   router.route('/api/method/users.addUser')
   .post(
-      csrfProtection,
+      //csrfProtection,
       controllers.users.API_addUser);           //->
 
   router.route('/api/method/users.updateUserProfile')
@@ -105,13 +105,16 @@ var _router = function (app) {
   router.route('/api/method/users.updateUserImgs')
   .post(
       //csrfProtection,
-      Upload.fields([{name: 'ava_img'}, {name: 'bg_img'}]),
+      Upload.fields([
+        {name: 'ava_img'},
+        {name: 'bg_img'}
+      ]),
       controllers.users.API_updateUserImgs);                      //->
 
 
   router.route('/api/method/users.deleteUser')
   .post(
-      csrfProtection,
+      //csrfProtection,
       controllers.users.API_deleteUser);       //->
 
 
@@ -186,6 +189,7 @@ var _router = function (app) {
 
   router.route(['/api/method/photos.movePhotos'])// U Перемещение фоток в Др Альбом ( Id альбома,массив Id фоток)
   .post(controllers.photos.API_movePhotos);
+
 
   // DEFAULT  Route 404 ==============================================
   router.use('/api', controllers.error.err_404);

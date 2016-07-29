@@ -24,7 +24,7 @@ var getHome = function (req, res, next) {
       },
       function (err, results) {
         if (err) return next(err);
-console.log(results);
+
         res.render('main',
             {
               title:      'HOME',
