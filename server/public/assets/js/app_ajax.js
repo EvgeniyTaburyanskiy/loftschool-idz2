@@ -243,10 +243,10 @@
     var serviceUrl_ = url || serviceUrl;
 
     return $.ajax({
-      type:        method_,
-      url:         serviceUrl_,
-      dataType:    'json',
-      data:        data
+      type:     method_,
+      url:      serviceUrl_,
+      dataType: 'json',
+      data:     data
     });
   };
 
@@ -439,15 +439,22 @@
   $(document).on('submit', '#resetPasswd_form', function (event) {
     event.preventDefault();
 
-    var dfdResetPasswd_form = window.loftogram.modAuth.resetPasswd('resetPasswd_form');
+    var dfdResetPasswd = window.loftogram.modAuth.resetPasswd('resetPasswd_form');
 
-    $.when(dfdResetPasswd_form).then(
+    $.when(dfdResetPasswd).then(
         function (resResetPasswd) {
           window.location.href = '/';
         },
         function (resResetPasswd) {
           var result = resResetPasswd.responseJSON;
-          alert(result.error_user_msg);
+          var msg = result.error_user_msg + '\n';
+
+          if (result.data.length) {
+            result.data.forEach(function (item) {
+              msg += item + '\n';
+            })
+          }
+          alert(msg);
         }
     );
     return false;

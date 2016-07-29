@@ -20,9 +20,9 @@ block APP_content
                 .card-input
                   .input-ic
                     +use('password', 'input-ic')
-                  input.card__it(type='text' name='password' value='' placeholder="Новый пароль" min='8' size="40")
+                  input.card__it(type='text' name='password' value='' placeholder="Новый пароль" min=8 size="40")
             .btn
               +btnReset('resetPasswd_form')
             .card__t
-              a.card-a(href="index.html") Перейти на лицевую страницу
+              a.card-a(href="/") Перейти на лицевую страницу
     footer.index-f Создано командой профессионалов на продвинутом курсе по вебразработке от Loftschool

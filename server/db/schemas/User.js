@@ -152,6 +152,7 @@ schemaUser.path('hashedPassword').validate(function (value) {
       this.invalidate('password', 'Пароль должен содержать не менее 8 символов ');
     }
   }
+  
   if (this.isNew && !this._plainPassword) {
     this.invalidate('password', 'Пароль не может быть пустым');
   }

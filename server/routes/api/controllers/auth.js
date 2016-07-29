@@ -183,6 +183,7 @@ var api_fogotPasswd = function (req, res, next) {
             user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
             user.save(function (err) {
+              if(err) return done(new  HttpError(500, null, 'Ошибка в процессе сохранения токена', err.message));
               done(err, token, user);
             });
           });
@@ -252,18 +253,18 @@ var api_resetPasswd = function (req, res, next) {
                 var errMsgList = [];
 
                 if (err.errors.email) {
-                  logger.info("Ошибка валидации Email пользователя: %s", err.errors.email.message);
+                  logger.debug("Ошибка валидации Email пользователя: %s", err.errors.email.message);
                   errMsgList.push(err.errors.email.message);
                 }
 
                 if (err.errors.password) {
-                  logger.info("Ошибка валидации пароля пользователя: %s", err.errors.password.message);
+                  logger.debug("Ошибка валидации пароля пользователя: %s", err.errors.password.message);
                   errMsgList.push(err.errors.password.message);
                 }
               }
 
               return errMsgList.length ?
-                  new HttpError(400, 'ILLEGAL_PARAM_VALUE', errMsgList) :
+                  done(new HttpError(400, 'ILLEGAL_PARAM_VALUE','Ошибка при сохранении пользователя', errMsgList)) :
                   done(err);
             }
             //Сохранение прошло успешно. Есть Объект пользователя. Отдаем его в login фунцию которую навешивает  Passport
