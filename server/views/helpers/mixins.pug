@@ -44,7 +44,7 @@ mixin FavIcon
 
 //svg
 mixin use(name, sname)
-  - var svg = 'assets/img/icons/sprite.svg'
+  - var svg = '/assets/img/icons/sprite.svg'
   svg(role='img' class=sname)
     use(xlink:href=svg + '#' + name)
 //кастомная кнопка
@@ -57,25 +57,25 @@ mixin inpFile(inputText, inputName)
     label.inputFile-block__btn #{inputText}
       input(type='file' name=inputName)
 //синяя кнопка Войти
-mixin btnEnter(fomid)
+mixin btnEnter(formid)
   div.enter-block
-    button.enter-block__btn(type="submit" form= fomid) Войти
+    button.enter-block__btn(type="submit" form= formid) Войти
 //синяя кнопка Зарегистрироваться
-mixin btnCreateAcc(fomid)
+mixin btnCreateAcc(formid)
   div.enter-block
-    button.enter-block__btn(type="submit" form= fomid) Создать аккаунт
+    button.enter-block__btn(type="submit" form= formid) Создать аккаунт
 //синяя кнопка Создать аккаунт
-mixin btnRecreatePass(fomid)
+mixin btnRecreatePass(formid)
   div.enter-block
-    button.enter-block__btn(type="submit" form= fomid) Восстановить пароль
+    button.enter-block__btn(type="submit" form= formid) Восстановить пароль
 //синяя кнопка Создать аккаунт
-mixin btnReg(fomid)
+mixin btnReg(formid)
   div.enter-block
-    button.enter-block__btn Зарегистрироваться
+    button.enter-block__btn(type="submit" form= formid) Зарегистрироваться
 //синяя кнопка Сменить
-mixin btnReset(fomid)
+mixin btnReset(formid)
   div.enter-block
-    button.enter-block__btn.reset-block__btn(type="submit" form= fomid) Сменить
+    button.enter-block__btn.reset-block__btn(type="submit" form= formid) Сменить
 //прозрачная кнопка Закрыть
 mixin btnClose
   div.close-block
@@ -118,7 +118,7 @@ mixin btnAdd
 //соц кнопка с параметрами
 mixin socIcon(type, url)
   div.soc-block
-    a.soc-block__a(href=url)
+    a.soc-block__a(class= 'soc-block__a_' + type  href= url )
       - var svg = '';
       - if ( type === 'vk' ) svg = 'soc_vk';
       - if ( type === 'fb' ) svg = 'soc_fb';
@@ -176,10 +176,10 @@ mixin btnCancelPop
       +use('close', 'cancel-popup__svg')
 
 //две нижние кнопки форм добавления фото и альбома
-mixin formMenu
+mixin formMenu(formid)
   div.form-menu
-    input.form-menu__submit(type='submit' value='Сохранить')
-    input.form-menu__reset(type='reset' value='Отменить')
+    button.form-menu__submit(type='submit' form= formid) Сохранить
+    button.form-menu__reset(type='reset' form= formid) Отменить
 
 mixin formMenuReverse
   div.form-menu

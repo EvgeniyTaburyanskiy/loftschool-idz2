@@ -105,7 +105,10 @@ var _router = function (app) {
   router.route('/api/method/users.updateUserImgs')
   .post(
       //csrfProtection,
-      Upload.fields([{name: 'ava_img'}, {name: 'bg_img'}]),
+      Upload.fields([
+        {name: 'ava_img'},
+        {name: 'bg_img'}
+      ]),
       controllers.users.API_updateUserImgs);                      //->
 
 
@@ -187,7 +190,7 @@ var _router = function (app) {
   router.route(['/api/method/photos.movePhotos'])// U Перемещение фоток в Др Альбом ( Id альбома,массив Id фоток)
   .post(controllers.photos.API_movePhotos);
 
-  
+
   // DEFAULT  Route 404 ==============================================
   router.use('/api', controllers.error.err_404);
 

@@ -83,20 +83,18 @@ var API_updateUserImgs = function (req, res, next) {
   if (user_id === undefined) {
     return next(new HttpError(400, null, 'Неверно указан идентификатор пользователя!'));
   }
-
   user_id = user_id.replace(/["']/g, '');
 
-  var ava_img = req.query.ava_img || req.body.ava_img;
+  var ava_img = req.body.ava_img;
   if (!ava_img && req.files['ava_img']) {
     ava_img = req.files['ava_img'][0]
   }
 
-  var bg_img = req.query.bg_img || req.body.bg_img;
+  var bg_img = req.body.bg_img;
   if (!bg_img && req.files['bg_img']) {
     bg_img = req.files['bg_img'][0]
   }
-
-
+  
   try {
     var uid = new ObjectID(user_id);
   }
@@ -127,8 +125,8 @@ var API_updateUserImgs = function (req, res, next) {
           if (isEmpty(ava_img)) {
             return done(null, user);
           }
-
-          ava_img.destfilename = user._id;
+          // Дату добавляем в имя_ чтобы на клиенте КЕШ сбить.
+          ava_img.destfilename = user._id + '_' + Date.now();
 
           PhotoResizer.resize(ava_img, 'avatar', function (err, newImageInfo) {
             if (err) {
@@ -155,8 +153,8 @@ var API_updateUserImgs = function (req, res, next) {
           if (isEmpty(bg_img)) {
             return done(null, user);
           }
-
-          bg_img.destfilename = user._id;
+          // Дату добавляем в имя_ чтобы на клиенте КЕШ сбить.
+          bg_img.destfilename = user._id + '_' + Date.now();
 
           PhotoResizer.resize(bg_img, 'userbg', function (err, newImageInfo) {
             if (err) {
@@ -224,8 +222,6 @@ var API_updateUserProfile = function (req, res, next) {
   if (fb) newData.fb = fb.trim();
   if (vk) newData.vk = vk.trim();
 
-
-  console.log('New User data=', newData);
 
   if (isEmpty(newData)) {
     return next(new HttpError(400, null, 'Не заданы новые значения для полей профиля.'));

@@ -9,7 +9,7 @@ block APP_content
   include ../modules/_slider_item.pug
   header.m-h-w#header(style="background-image: url(" + user.userdata.bg_img + ")")
     div.m-h
-      a.m-h__a(href="/users/" + user._id)
+      a.m-h__a(href="/users/" + user._id.toString())
         img.m-h__img(src= user.userdata.ava_img alt= user.userdata.firstName + " " + user.userdata.lastName )
       div.m-person
         p.m-person__n #{user.userdata.firstName + " " + user.userdata.lastName}

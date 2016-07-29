@@ -174,11 +174,46 @@
     var serviceUrl_ = url || serviceUrl;
 
     return $.ajax({
-      type:        method_,
+      type:     method_,
+      url:      serviceUrl_,
+      dataType: 'json',
+      data:     data
+    });
+  };
+
+  var _ajaxCallFiles = function (url, method, data) {
+    var method_ = method || "POST";
+    var serviceUrl_ = url || serviceUrl;
+
+    return $.ajax({
       url:         serviceUrl_,
-      processData: false,
-      data:        data
-    })
+      type:        method_,
+      xhr:         function () {
+        var myXhr = $.ajaxSettings.xhr();
+        if (myXhr.upload) {
+          myXhr.upload.addEventListener('progress', _progressHandlingFunction, false); // For handling the progress
+          // of the upload
+        }
+        return myXhr;
+      },
+      // Form data
+      data:        data,
+      //Options to tell jQuery not to process data or worry about content-type.
+      cache:       false,
+      contentType: false,
+      processData: false
+    });
+
+    function _progressHandlingFunction(e) {
+      if (e.lengthComputable) {
+        console.log('Upload Progress',
+            {
+              value: e.loaded,
+              max:   e.total
+            });
+      }
+    }
+
   };
 
   var getUsersList = function () {
@@ -198,17 +233,29 @@
   };
 
   var updateUserImgs = function (form_id) {
-
     var profileData = new FormData(document.forms[form_id]);
 
-    return _ajaxCall(serviceUrl + ".updateUserImgs", "POST", profileData);
+    return _ajaxCallFiles(serviceUrl + ".updateUserImgs", "POST", profileData);
   };
 
   var updateUserProfile = function (form_id) {
 
-    var profileData = new FormData(document.forms[form_id]);
+    var form = document.forms[form_id];
 
-    return _ajaxCall(serviceUrl + ".updateUserProfile", "POST", profileData);
+    var data = {
+      'user_id':   form.elements['user_id'].value,
+      '_csrf':     form.elements['_csrf'].value,
+      'firstName': form.elements['firstName'].value,
+      'lastName':  form.elements['lastName'].value,
+      'message':   form.elements['message'].value,
+      'vk':        form.elements['vk'].value,
+      'fb':        form.elements['fb'].value,
+      'tw':        form.elements['tw'].value,
+      'email':     form.elements['email'].value,
+    };
+
+
+    return _ajaxCall(serviceUrl + ".updateUserProfile", "POST", data);
   };
 
   var deleteUser = function (user_id) {
@@ -332,22 +379,65 @@
 (function () {
   $(document).on('submit', '#edit_profile', function (event) {
     event.preventDefault();
-    //var form = $(this);
 
     var dfdEditProfile = window.loftogram.modUser.updateUserProfile('edit_profile');
     var dfdEditProfileImgs = window.loftogram.modUser.updateUserImgs('edit_profile');
 
-    $.when(dfdEditProfile, dfdEditProfileImgs).then(
-        function (EditProfile, EditProfileImgs) {
+    $.when(dfdEditProfile).then(
+        function (EditProfile) {
+          var
+              userData          = EditProfile.data.pop().userdata,
+              $person_header    = $('header .m-person'),
+              person__n         = $person_header.find('.m-person__n'),
+              person__tx        = $person_header.find('.m-person__tx'),
+              person__soc_vk    = $person_header.find('.person-soc .soc-block__a_vk'),
+              person__soc_tw    = $person_header.find('.person-soc .soc-block__a_tw'),
+              person__soc_gl    = $person_header.find('.person-soc .soc-block__a_gl'),
+              person__soc_fb    = $person_header.find('.person-soc .soc-block__a_fb'),
+              person__soc_email = $person_header.find('.person-soc .soc-block__a_email');
 
-          console.log('SUC EditProfile=', JSON.parse(EditProfile.responseText));
-          console.log('SUC EditProfileImgs=', JSON.parse(EditProfileImgs));
+
+          person__n.text(userData.firstName + ' ' + userData.lastName);
+          person__tx.text(userData.message);
+          person__soc_vk.text(userData.vk);
+          person__soc_tw.text(userData.tw);
+          person__soc_gl.text(userData.gl);
+          person__soc_fb.text(userData.fb);
+          person__soc_email.text(userData.email);
+
         },
-        function (EditProfile, EditProfileImgs) {
-          console.log('ERR EditProfile=', JSON.parse(EditProfile.responseText));
-          console.log('ERR  EditProfileImgs=', JSON.parse(EditProfileImgs.responseText));
+        function (EditProfile) {
+          var resultProfile = EditProfile.responseJSON;
+          console.log('ERR EditProfile=', resultProfile);
         }
     );
+
+    $.when(dfdEditProfileImgs).then(
+        function (EditProfileImgs) {
+          var
+              userData        = EditProfileImgs.data.pop().userdata,
+              $person_ava     = $('header img.m-h__img'),
+              $header         = $('header.m-h-w'),
+              $footer         = $('footer.f-w'),
+              $edit_form__ava = $('.edit-profile img.ava_img'),
+              $edit_form__bg  = $('.edit-profile img.bg_img');
+
+          $person_ava.attr("src", userData.ava_img);
+
+          $header.css('background-image', 'url(' + userData.bg_img + ')');
+
+          $footer.css('background-image', 'url(' + userData.bg_img + ')');
+
+          $edit_form__ava.attr("src", userData.ava_img);
+          $edit_form__bg.attr("src", userData.bg_img);
+
+        },
+        function (EditProfileImgs) {
+          var resultImgs = EditProfileImgs.responseJSON;
+        }
+    );
+
+
     return false;
   });
 })();
