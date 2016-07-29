@@ -7,9 +7,9 @@ mixin photoTile(url)
       div.top-mask
     div.tile-mid
       div.tile-mid-wrapper
-        a.tile-avatar(href="person.html")
+        a.tile-avatar(href="/person.html")
           +use('more','tile-avatar__svg')
-          img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
+          img.tile-avatar__img(src="/assets/img/jason.jpg" alt="jason")
           div.tile-avatar-mask
         div.tile-desc
           div.desc-wrapper
@@ -22,4 +22,4 @@ mixin photoTile(url)
     div.tile-bot
       div.tile-bot-wrapper
         +use('album','tile-bot__svg')
-        a.tile-bot__a(href="album.html") Прогулки по воде
+        a.tile-bot__a(href="/album.html") Прогулки по воде

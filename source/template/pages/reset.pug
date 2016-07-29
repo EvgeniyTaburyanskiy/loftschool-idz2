@@ -3,7 +3,7 @@ extends ../_template
 block APP_content
   .b-w
     div.parallax
-      - var parallaxImgs = ["assets/img/01.png","assets/img/02.png","assets/img/03.png","assets/img/04.png","assets/img/05.png","assets/img/06.png"]
+      - var parallaxImgs = ["/assets/img/01.png","/assets/img/02.png","/assets/img/03.png","/assets/img/04.png","/assets/img/05.png","/assets/img/06.png"]
       each item, key in parallaxImgs
         div.parallax-layer(data-key=key)
           img.parallax-layer__img(src=item alt="parallax layer")
@@ -23,5 +23,5 @@ block APP_content
             .btn
               +btnReset
             .card__t
-              a.card-a(href="index.html") Перейти на лицевую страницу
+              a.card-a(href="/index.html") Перейти на лицевую страницу
     footer.index-f Создано командой профессионалов на продвинутом курсе по вебразработке от Loftschool

@@ -40,7 +40,7 @@ $(function() {
         cursorcolor:"#fff",
         cursoropacitymin:".5",
         cursorwidth:"10px",
-        cursorborder:"3px solid #000",
+        cursorborderradius:"1px",
         // autohidemode: "scroll",
         bouncescroll: true,
         railoffset: true,

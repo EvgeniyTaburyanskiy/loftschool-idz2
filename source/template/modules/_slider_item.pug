@@ -1,15 +1,15 @@
 include ../helpers/mixins.pug
 div.slider-item
   div.slider-top
-    img.slider-top__img(src="assets/img/lake.jpg" alt="lake")
+    img.slider-top__img(src="/assets/img/lake.jpg" alt="lake")
   div.slider-mid
     div.slider-desc
       div.desc-top
         div.slider-author
           div.avatar-wrapper
-            a.tile-avatar(href="person.html")
+            a.tile-avatar(href="/person.html")
               +use('more','tile-avatar__svg')
-              img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
+              img.tile-avatar__img(src="/assets/img/jason.jpg" alt="jason")
               div.tile-avatar-mask
           p.slider-author__n Джейсон Стэтхем
         div.slider-likes
@@ -27,9 +27,9 @@ div.slider-item
         +use('arrow_down','roll-comments__svg')
       div.add-comments
         div.avatar-wrapper
-          a.tile-avatar(href="person.html")
+          a.tile-avatar(href="/person.html")
             +use('more','tile-avatar__svg')
-            img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
+            img.tile-avatar__img(src="/assets/img/jason.jpg" alt="jason")
             div.tile-avatar-mask
         form.add-comments__form
           p.add-comments__name Брат Стэтхема
@@ -42,9 +42,9 @@ div.slider-item
         ul.read-comments__lst
           li.read-comments__i
             div.avatar-wrapper
-              a.tile-avatar(href="person.html")
+              a.tile-avatar(href="/person.html")
                 +use('more','tile-avatar__svg')
-                img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
+                img.tile-avatar__img(src="/assets/img/jason.jpg" alt="jason")
                 div.tile-avatar-mask
             div.comments-contents
               p.comments-contents__n Батя Стэтхема
@@ -53,9 +53,9 @@ div.slider-item
                 в Голливуд.
           li.read-comments__i
             div.avatar-wrapper
-              a.tile-avatar(href="person.html")
+              a.tile-avatar(href="/person.html")
                 +use('more','tile-avatar__svg')
-                img.tile-avatar__img(src="assets/img/jason.jpg" alt="jason")
+                img.tile-avatar__img(src="/assets/img/jason.jpg" alt="jason")
                 div.tile-avatar-mask
             div.comments-contents
               p.comments-contents__n Дед Стэтхема
