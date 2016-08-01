@@ -106,19 +106,26 @@
   };
 
 
-  var updateAlbum = function (album_id, name, descr) {
+  var updateAlbum = function (form_id) {
+    var data = new FormData(document.forms[form_id]);
+    //var form = document.forms[form_id];
 
-    var data = {
-      album_id:    album_id || undefined,
-      album_name:  name || undefined,
-      album_descr: descr || undefined,
-      album_bg:    ''
-    };
-    loftogram.modAJAX.ajax(serviceUrl + ".updateAlbum", "POST", data);
+    /*    var data = {
+     'album_id':    form.elements['album_id'].value,
+     '_csrf':       form.elements['_csrf'].value,
+     'album_name':  form.elements['album_name'].value,
+     'album_descr': form.elements['album_descr'].value,
+     'photo_descr': form.elements['photo_descr'].value,
+     'album_bg':    form.elements['album_bg'].value
+     };*/
+
+
+    return loftogram.modAJAX.ajaxFiles(serviceUrl + ".updateAlbum", "POST", data);
   };
 
 
   if (!window.loftogram) window.loftogram = {};
+
   window.loftogram.modAlbum = {
     getAlbumsByUser: getAlbumsByUser,
     getAlbumByID:    getAlbumByID,
@@ -567,22 +574,20 @@
 
 // EDIT ALBUM
 (function () {
-  $(document).on('submit', '#addAlbum_form', function (event) {
+  $(document).on('submit', '#editAlbum_form', function (event) {
     event.preventDefault();
 
-    var dfdAddAlbum = window.loftogram.modAlbum.updateAlbum('addAlbum_form');
+    var dfdUpdateAlbum = window.loftogram.modAlbum.updateAlbum('editAlbum_form');
 
-    $.when(dfdAddAlbum).then(
-        function (resAddAlbum) {
-          var result = resAddAlbum;
-          //TODO: FrontJS - Обновить список Альбомов пользователя
-          //TODO: FrontJS - Обновить список Новых Фоток
+    $.when(dfdUpdateAlbum).then(
+        function (resUpdateAlbum) {
+          var result = resUpdateAlbum;
           alert(result.error_user_msg);
           window.location.reload(true);
         },
-        function (resAddAlbum) {
-          var result = resAddAlbum.responseJSON;
-          console.log('ERR AddAlbum=', result);
+        function (resUpdateAlbum) {
+          var result = resAddAlbum.resUpdateAlbum;
+          console.log('ERR resUpdateAlbum=', result);
         }
     );
     return false;
