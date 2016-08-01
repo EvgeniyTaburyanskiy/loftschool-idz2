@@ -1,16 +1,30 @@
 @font-face {
-  font-family : 'sansus_webissimoregular';
-  src         : url('#{$font-path}sansus-webissimo-regular-webfont.eot');
-  src         : url('#{$font-path}sansus-webissimo-regular-webfont.eot?#iefix') format('embedded-opentype'),
-  url('#{$font-path}sansus-webissimo-regular-webfont.woff2') format('woff2'),
-  url('#{$font-path}sansus-webissimo-regular-webfont.woff') format('woff'),
-  url('#{$font-path}sansus-webissimo-regular-webfont.ttf') format('truetype'),
-  url('#{$font-path}sansus-webissimo-regular-webfont.svg#sansus_webissimoregular') format('svg');
+  font-family : 'Panton';
+  src         : url('#{$font-path}Panton-Bold.otf');
   font-weight : normal;
   font-style  : normal;
-
 }
 
+@font-face {
+  font-family : 'Proxima Nova';
+  src         : url('#{$font-path}Proxima Nova Semibold.otf');
+  font-weight : bold;
+  font-style  : normal;
+}
+
+@font-face {
+  font-family : 'Proxima Nova';
+  src         : url('#{$font-path}ProximaNova-Light.otf');
+  font-weight : normal;
+  font-style  : normal;
+}
+
+@font-face {
+  font-family : 'Proxima Nova';
+  src         : url('#{$font-path}ProximaNova-LightIt.otf');
+  font-weight : normal;
+  font-style  : italic;
+}
 /* ------------ TYPES  ------------ */
 $type-settings : (
     "S": (

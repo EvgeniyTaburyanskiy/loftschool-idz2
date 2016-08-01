@@ -3,11 +3,25 @@ http://frontender.info/organizing-your-css-code-for-preprocessors/
 https://operatino.github.io/MCSS/modules/shorthand_dictionary.html
 */
 
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  min-height: 100%;
+}
+
 /* ------------ BASE ------------ */
 // BASE
 @import "base/variables";
 @import "base/color-swatch";
 @import "base/typography";
+@import "base/buttons";
 
 // VENDORS
 //- в данной сборке вендорные css подключаются через gulp. gulp/paths/css.foundation.js
@@ -32,7 +46,7 @@ https://operatino.github.io/MCSS/modules/shorthand_dictionary.html
 
 // PAGES
 @import "pages/index";
-
-
-
-
+@import "pages/main";
+@import "pages/album";
+@import "pages/search";
+@import "pages/person";

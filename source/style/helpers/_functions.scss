@@ -1,8 +1,12 @@
 
 @function rem($px) {
-  @return $px / $font-base-size + 0rem;
+  @return $px / 16px + 0rem;
 }
 
-@function em($px) {
-  @return $px / $font-base-size + 0em;
-}
+//@function rem($px) {
+//  @return $px / $font-base-size + 0rem;
+//}
+
+//@function em($px) {
+//  @return $px / $font-base-size + 0em;
+//}

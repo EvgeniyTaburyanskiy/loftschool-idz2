@@ -1,0 +1,221 @@
+@import "../helpers/mixins";
+@import "../helpers/functions";
+@keyframes addAlbumSlideDown {
+  from {
+    bottom: 100%;
+    transform: translate(-50%,0);
+  }
+  to {
+    bottom: 50%;
+    transform: translate(-50%,50%);
+  }
+}
+.addAlbumSlideDown {
+  animation-name: addAlbumSlideDown;
+  animation-duration: .3s;
+  animation-fill-mode: both;
+}
+.add__album-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(#000,0.7);
+  z-index: 5555;
+  display: none;
+}
+.add__album {
+  width: 679px;
+  height: 452px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  overflow: hidden;
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translate(-50%,0);
+  @include mediamax(1299px) {
+    width: 596px;
+  }
+  @include mediamax(596px) {
+    width: 300px;
+    height: auto;
+  }
+}
+
+.album__h, .album__f {
+  height: 67px;
+  background: #f1f1f1;
+  display: flex;
+  flex-shrink:0;
+}
+
+.album__h {
+  padding-left: 17px;
+  padding-right: 20px;
+  width: 100%;
+  align-items: center;
+}
+
+.h__title {
+  margin-right: auto;
+  font: 700 21px panton;
+}
+
+.album__f {
+  align-items: center;
+  padding: 0 20px;
+  margin-top: auto;
+  .delete-block {
+    margin-left: auto;
+  }
+  .delete-block__svg {
+    width: 12px;
+    height: 16px;
+  }
+  @include mediamax(596px) {
+    .delete-block {
+      display: none;
+    }
+  }
+}
+
+.album__b {
+  padding-top: 40px;
+  padding-right: 17px;
+  padding-left: 50px;
+  display: flex;
+  @include mediamax(1299px) {
+    padding-right: 20px;
+  }
+  @include mediamax(596px) {
+    padding: 25px 9px 30px 9px;
+  }
+}
+
+.b__form {
+  width: 100%;
+}
+
+.form__field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  &.form__field--direction {
+    @include mediamax(596px) {
+      flex-direction:column;
+    }
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.field__lbl {
+  font: 600 16px Proxima Nova;
+  width: 80px;
+  &.field__lbl-top {
+    align-self: flex-start;
+    margin-top: 14px;
+    @include mediamax(596px) {
+      margin-top: 0;
+    }
+  }
+  @include mediamax(596px) {
+    font-size: 14px;
+    align-self: flex-start;
+    margin-bottom: 7px;
+  }
+}
+
+.field__it {
+  border-radius: 30px;
+  border: 1px solid #d8d6d6;
+  background-color: #fff;
+  width: 513px;
+  height: 40px;
+  margin-left: auto;
+  outline: none;
+  transition: border-color .3s;
+  padding: 10px 20px;
+  font:300 16px Proxima Nova;
+  color: #323232;
+  &:focus {
+    border-color: #28bbf0;
+  }
+  @include mediamax(1299px) {
+    width: 427px;
+  }
+  @include mediamax(596px) {
+    width: 100%;
+    font-size: 14px;
+  }
+}
+
+.field__itx {
+  width: 513px;
+  height: 120px;
+  resize: none;
+  border-radius: 20px;
+  border: 1px solid #d8d6d6;
+  background-color: #fff;
+  outline: none;
+  margin-left: auto;
+  transition: border-color .3s;
+  padding: 10px 20px;
+  font:300 16px/21px Proxima Nova;
+  color: #323232;
+  &:focus {
+    border-color: #28bbf0;
+  }
+  @include mediamax(1299px) {
+    width: 427px;
+  }
+  @include mediamax(596px) {
+    width: 100%;
+    font-size: 14px;
+  }
+}
+.field__cover {
+  width: 80px;
+  display: flex;
+@include mediamax(596px) {
+  width: auto;
+}
+}
+.album-cover {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 50%;
+  margin-left: auto;
+  position: relative;
+}
+.album-cover__img {
+  height: 100%;
+  position: absolute;
+  transform: translate(50%,0);
+  right: 50%;
+}
+.field__cover-info {
+  margin-left: 19px;
+  display: flex;
+  align-items:center;
+}
+.cover-info__text {
+  color: #323232;
+  font:300 14px proxima nova;
+  font-style: italic;
+  width: 192px;
+  margin-left: 20px;
+  span {
+    font-weight: 600;
+  }
+  @include mediamax(596px) {
+    display: none;
+  }
+}
+

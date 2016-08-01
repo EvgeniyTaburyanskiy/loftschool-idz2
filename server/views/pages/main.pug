@@ -1,0 +1,53 @@
+extends ../_template
+block APP_content
+  div.bg-mask
+    div.slide-controls
+      button.slide-controls__btn.slide-controls__btn_left
+        +use('arrow_left','slide-controls__svg')
+      button.slide-controls__btn.slide-controls__btn_right
+        +use('arrow_right','slide-controls__svg')
+  include ../modules/_slider_item.pug
+  header.m-h-w#header(style="background-image: url(" + user.userdata.bg_img + ")")
+    div.m-h
+      a.m-h__a(href="/users/" + user._id.toString())
+        img.m-h__img(src= user.userdata.ava_img alt= user.userdata.firstName + " " + user.userdata.lastName )
+      div.m-person
+        p.m-person__n #{user.userdata.firstName + " " + user.userdata.lastName}
+        p.m-person__tx #{user.userdata.message}
+        div.person-soc
+          +socIcon('vk', user.userdata.vk)
+          +socIcon('fb', user.userdata.fb)
+          +socIcon('tw', user.userdata.tw)
+          +socIcon('gp', user.userdata.gl)
+          +socIcon('em', user.userdata.email)
+    div.m-controls
+      div.controls-w
+        +btnEdit
+      div.controls-w
+        +btnExit
+  main.m-main
+    section.main-search
+      form#search_form.main-search__form(action="/search/")
+        input.main-search__input(type="search" name="q" id="q" placeholder="Исследовать мир (';' разделяет фразы)")
+        +use('search','main-search__svg')
+    section.main-new-w
+      div.main-new
+        h1.main-new__t Новое в мире
+        div.new-photos
+          if (newPotos)
+            for photo in newPotos
+              +photoTile(photo)
+        div.new-show
+          +btnShow
+    section.main-albums-w
+      div.main-albums
+        h2.main-albums__t Мои альбомы
+        div.albums-photos
+          if (userAlbums)
+            for album in userAlbums
+              +albumTile(album)
+      div.albums-controls
+        +btnAdd('addAlbum_btn')
+  include ../modules/_m_edit_profile.pug
+  include ../modules/_m_add_album.pug
+  +footer(user.userdata.bg_img )

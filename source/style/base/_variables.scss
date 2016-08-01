@@ -9,16 +9,20 @@ $font-path : '../fonts/';
 //480/768/992/1200
 //auto/480/750/970
 
-$screen-xs-max : 480px; //mobile
+$screen-xs-max : 479px; //mobile
 $screen-sm-min : $screen-xs-max + 1;
 
-$screen-sm-max : 768px; //tablet
+$screen-sm-max : 767px; //tablet
 $screen-md-min : $screen-sm-max + 1;
 
-$screen-md-max : 1200px; //laptop
+$screen-md-max : 1199px; //laptop
 $screen-lg-min : $screen-md-max + 1;
 
+$screen-lg-max : 1919px; //large
+$screen-xl-min : $screen-lg-max + 1;
+
 // breakpoints
+$breakpoint-large : "only screen and (min-width : "+$screen-xl-min+")";
 $breakpoint-laptop : "only screen and (max-width : "+$screen-md-max+")";
 $breakpoint-tablet : "only screen and (max-width : "+$screen-sm-max+")";
 $breakpoint-mobile : "only screen and (max-width : "+$screen-xs-max+")";

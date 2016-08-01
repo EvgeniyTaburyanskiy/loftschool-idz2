@@ -1,0 +1,72 @@
+extends ../_template
+
+block APP_content
+  .b-w
+    div.parallax
+      - var parallaxImgs = ["/assets/img/01.png","/assets/img/02.png","/assets/img/03.png","/assets/img/04.png", "/assets/img/05.png","/assets/img/06.png"]
+      each item, key in parallaxImgs
+        div.parallax-layer(data-key= key)
+          img.parallax-layer__img(src=item alt="parallax layer")
+    .flip-cnt-w
+      .flip-cnt
+        .flip-cnt__front
+          .flip-cnt__t Добро пожаловать
+          .flip-cnt__tx Перед вами сервис, который поможет вам организовать свои фотографии в альбомы и поделиться ими со всем миром!
+          .card
+            .card__auth-sect
+              form#signin_form.card-form(method="post" action='/api/method/auth.signin')
+                input(type='hidden' name='_csrf' value= csrfToken)
+                .card-input
+                  .input-ic
+                    +use('soc_email', 'input-ic')
+                  input.card__it(type='email' name='username'  placeholder="Электронная почта" size="40")
+                .card-input
+                  .input-ic
+                    +use('password', 'input-ic')
+                  input.card__it(type='password' name='password' placeholder="Пароль" size="40")
+            a.card-a#pass(href="#") Забыли пароль?
+            .btn
+              +btnEnter('signin_form')
+            .card__t Нет аккаунта?
+              a.card-a#reg(href="#") Зарегистрироваться
+        .flip-cnt__back
+          .flip-cnt__t Регистрация
+          .card
+            .card__auth-sect
+              form#signup_form.card-form( method="post" action='/api/method/auth.signup')
+                input(type='hidden' name='_csrf' value= csrfToken)
+                .card-input
+                  .input-ic
+                    +use('name', 'input-ic')
+                  input.card__it(type="text" name='name' placeholder="Имя" size="40")
+                .card-input
+                  .input-ic
+                    +use('soc_email', 'input-ic')
+                  input.card__it(type='email' name='username' placeholder="Электронная почта" size="40")
+                .card-input
+                  .input-ic
+                    +use('password', 'input-ic')
+                  input.card__it(type='password' name='password' placeholder="Пароль" size="40")
+              .reg
+                .card__tx Ваши данные остаются строго конфиденциальны
+            .btn
+              +btnCreateAcc('signup_form')
+            .card__t Уже зарегистрированы?
+              a.card-a(href="#") Войти
+      .pass-rec.hidden
+        .flip-cnt__t Восстановление пароля
+        .card
+          .card__t.bold Забыли пароль?
+          .card__tx Ничего страшного, введите свой и мы вышлем вам инструкции по восстановлению пароля
+          .card__auth_sect
+            form#fogotPasswd_form.card-form( method="post" action='/api/method/auth.fogotPasswd' )
+              input(type='hidden' name='_csrf' value= csrfToken)
+              .card-input.lined
+                .input-ic
+                  +use('password', 'input-ic')
+                input.card__it(type='email' name='email' placeholder="Электронная почта" size="40")
+          .btn
+            +btnRecreatePass('fogotPasswd_form')
+          .card__t Вспомнили пароль?
+            a.card-a(href="#") Войти
+    footer.index-f Создано командой профессионалов на продвинутом курсе по вебразработке от Loftschool

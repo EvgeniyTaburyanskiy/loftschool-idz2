@@ -1,0 +1,20 @@
+include ../helpers/mixins.pug
+.photo-edit-wrap
+    .photo-edit
+        .photo-edit__h
+            h4.h__title Редактировать фотографию
+            +btnCancelPop
+        .photo-edit__b
+            form.b__form
+                input(type="hidden", name="_csrf", value="#{csrf}")
+                .form__field.form__field--direction
+                    .field__lbl
+                        label(for="name") Название
+                    input#name.field__it(type="text" name='photo_name')
+                .form__field.form__field--direction
+                    .field__lbl.field__lbl-top
+                        label(for="descr") Описание
+                    textarea#descr.field__itx(name='photo_descr')
+        .photo-edit__f
+            +formMenu
+            +btnDelete

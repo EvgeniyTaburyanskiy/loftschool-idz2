@@ -1,0 +1,106 @@
+@import "../helpers/mixins";
+@import "../helpers/functions";
+
+.f-w {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 rem(80px);
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: rem(80px);
+  background: url(../img/lake.jpg) no-repeat center 100%;
+  background-size: cover;
+  @include laptop() {
+    flex: 0 0 rem(120px);
+    height: rem(120px);
+  }
+  @include tablet() {
+    flex: 0 0 rem(180px);
+    height: rem(180px);
+  }
+}
+
+.f-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(#000, .7);
+}
+
+.f {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 0 0 auto;
+  max-height: rem(50px);
+  justify-content: space-between;
+  align-items: flex-start;
+  width: rem(1180px);
+  font-family: 'Proxima Nova', sans-serif;
+  font-size: rem(16px);
+  color: rgba(#fff, .8);
+  line-height: rem(22px);
+  @include laptop() {
+    width: rem(720px);
+    max-height: rem(120px);
+  }
+  @include tablet() {
+    flex: 0 0 rem(160px);
+    flex-direction: column;
+    align-items: center;
+    width: rem(290px);
+    max-height: rem(180px);
+    font-size: rem(14px);
+    line-height: rem(20px);
+    text-align: center;
+  }
+}
+
+.f__desc, .f__copyright {
+  flex: 0 0 rem(480px);
+  margin: 0;
+  @include laptop() {
+    flex: 0 0 rem(300px);
+  }
+  @include tablet() {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+.f__copyright {
+  color: rgba(#fff, .5);
+  text-align: right;
+  @include tablet() {
+    text-align: center;
+  }
+}
+
+.f__a {
+  display: flex;
+  flex: 0 0 rem(20px);
+  max-width: rem(20px);
+  max-height: rem(20px);
+  transition: transform .2s;
+  &:hover {
+    .f__svg {
+      fill: #fff;
+    }
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+  @include tablet() {
+    order: -1;
+  }
+}
+
+.f__svg {
+  flex: 0 0 rem(20px);
+  fill: rgba(#fff, .7);
+  transition: fill .2s;
+}

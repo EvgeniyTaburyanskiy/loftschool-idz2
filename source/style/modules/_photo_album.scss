@@ -1,0 +1,161 @@
+@import "../helpers/mixins";
+@import "../helpers/functions";
+
+.photo-album {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0 rem(20px) rem(20px) 0;
+  width: rem(280px);
+  height: rem(330px);
+  box-shadow: 0 1px 1px 1px rgba(#000, .3);
+  font-family: 'Proxima Nova', sans-serif;
+  @include rounded(5px);
+  overflow: hidden;
+  @include large() {
+    width: rem(300px);
+    height: rem(350px);
+  }
+  @include laptop() {
+    width: rem(225px);
+    height: rem(275px);
+  }
+  @include tablet() {
+    margin: 0 0 rem(10px);
+    width: rem(300px);
+    height: rem(350px);
+  }
+}
+
+.album-top {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 rem(280px);
+  width: 100%;
+  overflow: hidden;
+  &:hover {
+    .album-info-wrapper {
+      background-color: rgba(#000, .3);
+    }
+    .album-info {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @include large() {
+    flex: 0 0 rem(300px);
+  }
+  @include laptop() {
+    flex: 0 0 rem(225px);
+  }
+  @include tablet() {
+    flex: 0 0 rem(300px);
+  }
+}
+
+.album-top__img {
+  flex: 1 0 auto;
+  min-width: 100%;
+  max-width: 175%;
+}
+
+.album-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  transition: background-color .2s;
+}
+
+.album-info {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: rem(240px);
+  margin-bottom: rem(10px);
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform .3s, opacity .4s;
+  @include large() {
+    width: rem(260px);
+  }
+  @include laptop() {
+    width: rem(185px);
+  }
+  @include tablet() {
+    width: rem(260px);
+  }
+}
+
+.album-info__tx, .album-info__count {
+  color: #fff;
+  font-size: rem(16px);
+}
+
+.album-info__count {
+  font-weight: bold;
+}
+
+.album-bot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 rem(50px);
+  width: 100%;
+  overflow: hidden;
+}
+
+.album-menu {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 0 0 rem(20px);
+  width: rem(260px);
+  @include large() {
+    width: rem(280px);
+  }
+  @include laptop() {
+    width: rem(205px);
+  }
+  @include tablet() {
+    width: rem(280px);
+  }
+}
+
+.album-menu__svg {
+  flex: 0 0 rem(20px);
+  cursor: pointer;
+  fill: #d6d6d6;
+  &:hover {
+    fill: #a2a2a2;
+  }
+}
+
+.album-menu__a {
+  text-decoration: none;
+  color: #000;
+  font-family: 'Panton', sans-serif;
+  font-size: rem(16px);
+  &:hover {
+    text-decoration: underline;
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+  @include tablet() {
+    font-size: rem(14px);
+  }
+}

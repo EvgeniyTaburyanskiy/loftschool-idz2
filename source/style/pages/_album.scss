@@ -1,0 +1,452 @@
+@import "../helpers/mixins";
+@import "../helpers/functions";
+
+.a-h-w {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 0 0 rem(300px);
+  width: 100%;
+  background: url(../img/lake.jpg) no-repeat;
+  background-size: cover;
+}
+
+.a-h-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(#000, .3);
+}
+
+.a-h-cnt {
+  position: fixed;
+  z-index: 10;
+  top: -100%;
+  //top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: rgba(#fff, .7);
+  @include laptop() {
+    background-color: rgba(#fff, .85);
+  }
+}
+
+.a-h-cnt__form {
+  background-color: rgba(#000, .7);
+}
+
+.a-h-cnt__form, .a-form-w, .a-edit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 rem(240px);
+  width: 100%;
+}
+
+.a-form-w {
+  width: rem(1180px);
+  @include large() {
+    width: rem(1580px);
+  }
+  @include laptop() {
+    width: rem(720px);
+  }
+  @include tablet() {
+    width: 100%;
+  }
+}
+
+.a-edit {
+  flex: 0 0 rem(200px);
+  justify-content: space-around;
+  width: rem(720px);
+  @include laptop() {
+    width: rem(510px);
+  }
+  @include tablet() {
+    width: rem(300px);
+  }
+}
+
+.a-edit__title, .a-edit__desc {
+  width: 100%;
+  @include rounded(20px);
+  padding: 0 rem(15px);
+  outline: none;
+  border: none;
+}
+
+.a-edit__title {
+  flex: 0 0 rem(40px);
+}
+
+.a-edit__desc {
+  flex: 0 0 rem(100px);
+  padding: rem(15px);
+  resize: none;
+}
+
+.a-bg-edit {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: rem(-35px);
+  height: rem(70px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  background: none;
+  outline: none;
+  cursor: pointer;
+  &:hover {
+    .a-bg-edit__svg {
+      fill: #d2d2d2;
+    }
+    .a-bg-edit__span {
+      color: #d2d2d2;
+    }
+    @include tablet() {
+      .a-bg-edit__svg {
+        fill: #121212;
+      }
+      .a-bg-edit__span {
+        color: #121212;
+      }
+    }
+  }
+  @include laptop() {
+    height: rem(50px);
+    margin-top: rem(-25px);
+  }
+  @include tablet() {
+    top: 100%;
+    right: rem(5px);
+    margin-top: rem(20px);
+    z-index: 11;
+  }
+}
+
+.a-bg-edit__svg {
+  flex: 0 0 rem(50px);
+  width: rem(50px);
+  fill: #c5c5c5;
+  transition: fill .2s;
+  @include laptop() {
+    flex: 0 0 rem(35px);
+    width: rem(35px);
+  }
+  @include tablet() {
+    fill: #323232;
+  }
+}
+
+.a-bg-edit__span {
+  font-family: 'Panton', sans-serif;
+  font-size: rem(16px);
+  color: #c5c5c5;
+  letter-spacing: 1px;
+  transition: color .2s;
+  @include laptop() {
+    font-size: rem(14px);
+    letter-spacing: 0;
+  }
+  @include tablet() {
+    color: #323232;
+  }
+}
+
+.a-form-controls {
+  position: absolute;
+  right: 0;
+  bottom: rem(-50px);
+  @include tablet() {
+    left: 0;
+    bottom: rem(-101px);
+    width: 100%;
+    overflow: hidden;
+    background-color: #fff;
+    padding: rem(10px);
+    @include rounded(20px);
+    border: 1px solid #28bbf0;
+  }
+}
+
+.a-controls-w {
+  @include tablet() {
+    max-width: rem(120px);
+  }
+}
+
+.a-h {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: rem(1180px);
+  min-height: 70%;
+  padding-top: rem(20px);
+  @include large() {
+    width: rem(1580px);
+  }
+  @include laptop() {
+    width: rem(720px);
+  }
+  @include tablet() {
+    width: rem(300px);
+    //overflow: hidden; /* св-во для временного адаптива хедера */
+    flex-direction: column;
+    padding-top: 0;
+  }
+}
+
+.a-person {
+  position: relative;
+  display: flex;
+  flex: 0 0 rem(250px);
+  align-items: center;
+  justify-content: flex-start;
+  @include laptop() {
+    flex: 0 0 rem(200px);
+  }
+  @include tablet() {
+    margin-top: rem(20px);
+    flex: 0 0 rem(55px);
+    margin-bottom: rem(10px);
+  }
+}
+
+.a-person__a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: rem(25px);
+  width: rem(55px);
+  height: rem(55px);
+  @include rounded(50%);
+  border: 2px solid #fff;
+  overflow: hidden;
+  @include laptop() {
+    margin-right: rem(10px);
+  }
+}
+
+.a-person__img {
+  flex: 1 0 auto;
+  width: 100%;
+}
+
+.a-person__n {
+  font-family: 'Panton', sans-serif;
+  font-size: rem(16px);
+  color: #fff;
+  @include tablet() {
+    font-size: rem(14px);
+  }
+}
+
+.a-desc {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  max-height: rem(230px);
+  align-self: center;
+  text-align: center;
+  font-family: 'Proxima Nova', sans-serif;
+  color: #fff;
+}
+
+.a-desc__t {
+  margin: 0 0 rem(10px);
+  font-size: rem(21px);
+  font-weight: bold;
+  @include tablet() {
+    font-size: rem(18px);
+  }
+}
+
+.a-desc__tx {
+  margin: 0;
+  font-size: rem(16px);
+  color: rgba(#fff, .8);
+  @include tablet() {
+    font-size: rem(14px);
+  }
+}
+
+.a-controls {
+  //border: 1px solid red;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 rem(250px);
+  height: rem(90px);
+  align-items: flex-end;
+  justify-content: space-between;
+  @include laptop() {
+    flex: 0 0 rem(200px);
+  }
+  @include tablet() {
+    position: absolute;
+    top: rem(10px);
+    right: 0;
+    justify-content: space-around;
+  }
+}
+
+.a-main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.a-info-w {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 rem(60px);
+  margin-top: rem(-60px);
+  width: 100%;
+  background-color: rgba(#f6f6f6, .7);
+}
+
+.a-info {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: rem(60px);
+  min-width: rem(360px);
+  align-items: center;
+  @include tablet() {
+    min-width: rem(300px);
+    max-width: rem(320px);
+  }
+}
+
+.info-photo, .info-likes, .info-comments {
+  display: flex;
+  align-items: center;
+}
+
+.info-photo, .info-likes {
+  margin-right: rem(25px);
+  @include tablet() {
+    margin-right: rem(15px);
+  }
+}
+
+.info-photo__svg, .info-likes__svg, .info-comments__svg {
+  margin-right: rem(5px);
+  width: rem(20px);
+  height: rem(20px);
+  fill: #323232;
+  display: none;
+  @include tablet() {
+    display: block;
+  }
+}
+
+.info-photo__count, .info-likes__count, .info-comments__count {
+  font-family: 'Panton', sans-serif;
+  font-size: rem(16px);
+  margin-right: rem(3px);
+  @include tablet() {
+    margin-right: rem(2px);
+    font-size: rem(14px);
+  }
+}
+
+.info-photo__span, .info-likes__span, .info-comments__span {
+  font-family: 'Proxima Nova', sans-serif;
+  font-size: rem(16px);
+  @include tablet() {
+    display: none;
+  }
+}
+
+.a-photos-w {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: rem(1180px);
+  padding: rem(50px) 0;
+  @include large() {
+    width: rem(1580px);
+  }
+  @include laptop() {
+    width: rem(720px);
+  }
+  @include tablet() {
+    width: rem(300px);
+    padding: rem(30px) 0;
+  }
+}
+
+.a-photos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.a-photo-tile {
+  &:nth-child(3n) {
+    margin: 0 0 rem(20px);
+  }
+  @include large() {
+    &:nth-child(3n) {
+      margin: 0 rem(20px) rem(20px) 0;
+    }
+    &:nth-child(4n) {
+      margin: 0 0 rem(20px);
+    }
+  }
+  @include laptop() {
+    &:nth-child(3n) {
+      margin: 0 rem(20px) rem(20px) 0;
+    }
+    &:nth-child(2n) {
+      margin: 0 0 rem(20px);
+    }
+  }
+  @include tablet() {
+    margin: 0 0rem(10px);
+    &:nth-child(3n) {
+      margin: 0 0rem(10px);
+    }
+    &:nth-child(2n) {
+      margin: 0 0rem(10px);
+    }
+  }
+}
+
+.a-photos-add {
+  position: absolute;
+  top: rem(5px);
+  right: rem(70px);
+  @include large() {
+    right: rem(180px);
+  }
+  @include tablet() {
+    top: rem(-17px);
+    right: 50%;
+    margin-right: rem(-20px);
+  }
+}

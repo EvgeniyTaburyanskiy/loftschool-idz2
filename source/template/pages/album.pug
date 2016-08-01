@@ -1,0 +1,58 @@
+extends ../_template
+block APP_content
+  div.bg-mask
+  include ../../../source/template/modules/_slider_item.pug
+  h.a-h-w#header
+    div.a-h-mask
+    div.a-h-cnt
+      form.a-h-cnt__form(method="POST" enctype="multipart/form-data")
+        div.a-form-w
+          div.a-edit
+            input.a-edit__title(type="text" name="title" id="title")
+            textarea.a-edit__desc(name="description" id="description")
+          button.a-bg-edit
+            +use('cam','a-bg-edit__svg')
+            span.a-bg-edit__span Изменить фон
+            input.a-bg-edit__img(type="file" name="background" id="background" hidden)
+          div.a-form-controls
+            div.a-controls-w
+              +formMenuReverse
+    div.a-h
+      div.a-person
+        a.a-person__a(href="/person.html")
+          img.a-person__img(src="/assets/img/jason.jpg" alt="jason")
+        p.a-person__n Джейсон Стэтхем
+      div.a-desc
+        h1.a-desc__t Лесные прогулки
+        p.a-desc__tx.
+          Фотографии природы леса, озера и гор. Как прекрасно созерцать дивные утренние
+          пейзажи в тени горного дерева, размышляя о вечном и главном. Запах озера и
+          свежих опилок навевает воспоминания.
+      div.a-controls
+        +btnHome
+        +btnEdit
+  main.a-main
+    section.a-info-w
+      div.a-info
+        div.info-photo
+          +use('cam','info-photo__svg')
+          span.info-photo__count 18
+          span.info-photo__span Фотографий
+        div.info-likes
+          +use('like','info-likes__svg')
+          span.info-likes__count 12
+          span.info-likes__span Лайков
+        div.info-comments
+          +use('comments','info-comments__svg')
+          span.info-comments__count 4
+          span.info-comments__span Комментария
+    section.a-photos-w
+      div.a-photos-add
+        +btnAdd
+      div.a-photos
+        - var arr = [1,2,3,4,5,6]
+        for item in arr
+          include ../../../source/template/modules/_a_photo_tile.pug
+  include ../../../source/template/modules/_footer.pug
+  include ../modules/_a_edit_photo
+  include ../modules/_a_add_photo

@@ -1,0 +1,27 @@
+include ../helpers/mixins.pug
+.add__album-wrap
+    .add__album
+        .album__h
+            h4.h__title Добавить альбом
+            +btnCancelPop
+        .album__b
+            form.b__form(method='POST' enctype="multipart/form-data")
+                input(type="hidden", name="_csrf", value="#{csrf}")
+                .form__field.form__field--direction
+                    .field__lbl
+                        label(for="name") Название
+                    input#name.field__it(type="text" name='album_name')
+                .form__field.form__field--direction
+                    .field__lbl.field__lbl-top
+                        label(for="descr") Описание
+                    textarea#descr.field__itx(name='album_descr')
+                .form__field
+                    .field__cover
+                        .album-cover
+                            img.album-cover__img(src='/assets/img/no_photo.jpg' alt='background')
+                    .field__cover-info
+                        +inpFile('Загрузить обложку','album_bg')
+                        .cover-info__text (файл должен быть размером не более&nbsp;
+                            span 1024 КБ)
+        .album__f
+            +formMenu

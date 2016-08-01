@@ -1,0 +1,72 @@
+extends ../_template
+block APP_content
+  - var totalPhotos = (albumPotos)? albumPotos.length:0;
+  - var totalComments = 0;
+  - var totalLikes = 0;
+
+  - if (albumPotos)
+    for photo in albumPotos
+      - totalComments += photo.comments.comment_list.length;
+      - totalLikes += photo.likes.length;
+
+  div.bg-mask
+  h.a-h-w#header(style="background-image: url(" + album._album_bg.img + ")")
+    div.a-h-mask
+    - if (user._id.toString() === owner._id.toString())
+      div.a-h-cnt
+        form#editAlbum_form.a-h-cnt__form(method="POST" enctype="multipart/form-data")
+          input(type="hidden", name="_csrf", value= csrfToken)
+          input(type="hidden", name="album_id", value= album._id.toString())
+          div.a-form-w
+            div.a-edit
+              input.a-edit__title(type="text" name="album_name" id="album_name" value= album.name)
+              textarea.a-edit__desc(name="album_descr" id="album_descr") #{album.descr}
+            button.a-bg-edit
+              +use('cam','a-bg-edit__svg')
+              span.a-bg-edit__span Изменить фон
+              input.a-bg-edit__img(type="file" name="album_bg" id="background" hidden)
+            div.a-form-controls
+              div.a-controls-w
+                +formMenuReverse('editAlbum_form')
+    div.a-h
+      div.a-person
+        a.a-person__a(href="/users/" + owner._id.toString())
+          img.a-person__img(src= owner.userdata.ava_img alt= owner.userdata.firstName + " " + owner.userdata.lastName )
+        p.a-person__n #{owner.userdata.firstName + " " + owner.userdata.lastName}
+      div.a-desc
+        h1.a-desc__t #{album.name}
+        p.a-desc__tx #{album.descr}
+      div.a-controls
+        +btnHome
+        - if (user._id.toString() === owner._id.toString())
+          +btnEdit
+  main.a-main
+    section.a-info-w
+      div.a-info
+        div.info-photo
+          +use('cam','info-photo__svg')
+          span.info-photo__count #{totalPhotos}
+          span.info-photo__span Фотографий
+        div.info-likes
+          +use('like','info-likes__svg')
+          span.info-likes__count #{totalLikes}
+          span.info-likes__span Лайков
+        div.info-comments
+          +use('comments','info-comments__svg')
+          span.info-comments__count #{totalComments}
+          span.info-comments__span Комментария
+    section.a-photos-w
+      div.a-photos-add
+        - if (user._id.toString() === owner._id.toString())
+          +btnAdd('addPhoto_btn')
+      div.a-photos
+        - if (albumPotos)
+          for photo in albumPotos
+            +photoTileAlbum(photo)
+
+
+  +footer(album._album_bg.img)
+  include ../modules/_slider_item.pug
+  - if (user._id.toString() === owner._id.toString())
+    include ../modules/_a_edit_photo
+    include ../modules/_a_add_photo

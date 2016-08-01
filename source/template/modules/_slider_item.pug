@@ -1,0 +1,66 @@
+include ../helpers/mixins.pug
+div.slider-item
+  div.slider-top
+    img.slider-top__img(src="/assets/img/lake.jpg" alt="lake")
+  div.slider-mid
+    div.slider-desc
+      div.desc-top
+        div.slider-author
+          div.avatar-wrapper
+            a.tile-avatar(href="/person.html")
+              +use('more','tile-avatar__svg')
+              img.tile-avatar__img(src="/assets/img/jason.jpg" alt="jason")
+              div.tile-avatar-mask
+          p.slider-author__n Джейсон Стэтхем
+        div.slider-likes
+          +btnLike
+      div.desc-bot
+        p.desc-bot__t Горное путешествие
+        p.desc-bot__tx.
+          Мы отправились в путешествие 2 дня назад, но уже сейчас
+          такое ощущение, что мы посмотрели целый новый мир. Озеро у подножья
+          горы вдохновило нас на новые подвиги.
+  div.slider-bot
+    div.slider-comments
+      div.roll-comments
+        span.roll-comments__span Комментарии
+        +use('arrow_down','roll-comments__svg')
+      div.add-comments
+        div.avatar-wrapper
+          a.tile-avatar(href="/person.html")
+            +use('more','tile-avatar__svg')
+            img.tile-avatar__img(src="/assets/img/jason.jpg" alt="jason")
+            div.tile-avatar-mask
+        form.add-comments__form
+          p.add-comments__name Брат Стэтхема
+          textarea.add-comments__txa(name="comment" id="comment" placeholder="Добавить комментарий")
+          div.close-block
+            button.close-block__btn.add-comments__btn Добавить
+            //add-comments__btn класс для привязки сабмита аякса
+          input(type="hidden", name="_csrf", value="#{csrf}")
+      div.read-comments
+        ul.read-comments__lst
+          li.read-comments__i
+            div.avatar-wrapper
+              a.tile-avatar(href="/person.html")
+                +use('more','tile-avatar__svg')
+                img.tile-avatar__img(src="/assets/img/jason.jpg" alt="jason")
+                div.tile-avatar-mask
+            div.comments-contents
+              p.comments-contents__n Батя Стэтхема
+              p.comments-contents__tx.
+                Сын, прекращай путешествовать, семью нечем кормить, езжай обратно
+                в Голливуд.
+          li.read-comments__i
+            div.avatar-wrapper
+              a.tile-avatar(href="/person.html")
+                +use('more','tile-avatar__svg')
+                img.tile-avatar__img(src="/assets/img/jason.jpg" alt="jason")
+                div.tile-avatar-mask
+            div.comments-contents
+              p.comments-contents__n Дед Стэтхема
+              p.comments-contents__tx.
+                Внучок, не слушай своего батю, посмотри, как прекрасны эти горы.
+                А чудное озеро как манит своей красотой! Зеркальная поверхность
+                живительного источника отразила все необъятное обаяние нашей
+                крохотной планеты в этом бездонном океане вселенной!

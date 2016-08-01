@@ -11,6 +11,7 @@ global.$ = {
   },
   gulp:        require('gulp'),
   rimraf:      require('rimraf'),
+  rsp:         require('remove-svg-properties').stream,
   browserSync: require('browser-sync'),//.create(),
   gp:          require('gulp-load-plugins')({
     rename: {
@@ -31,9 +32,11 @@ $.gulp.task('default', $.gulp.series(
         'pug',            //-> Обрабатывает PUG/ Jade из папки Pages
         'js:foundation',  //-> Собирает  все Вендорные JS указанные в  gulp/paths/foundation.js в один foundation.js
         'js:process',     //-> Собирает все JS указанные в gulp/paths/app.js в один файл с картой app.js
-        'copy:image',     //-> Копирует все(кроме svg) картинки из src/images в /assets/img
+        //'browserify',
+        'copy:image',     //-> Копирует все картинки из source/images в build/assets/img
+        'copy:fonts',     //-> Копирует все шрифты из source/fonts в build/assets/fonts
         'css:foundation', //-> Собирает  все Вендорные CSS указанные в  gulp/paths/css.foundation.js один foundation.css
-        'sprite:svg'      //-> Собирает  все ./source/images/svg/ очищает их от атрибутов и генерит спрайт svg
+        'svgSprite'      //-> Собирает  все ./source/icons/ очищает их от атрибутов и генерит спрайт svg
     ),
     $.gulp.parallel(
         'watch',

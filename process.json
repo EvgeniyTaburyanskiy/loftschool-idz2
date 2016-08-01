@@ -1,0 +1,30 @@
+{
+  "apps": [
+    {
+      "name"              : "loftogram",
+      "script"            : "./www",
+      "watch"             : true,
+      "ignore_watch"      : [
+        "[\\/\\\\]\\./",
+        ".git",
+        "bower_components",
+        "node_modules",
+        "logs/",
+        "public"
+      ],
+      "max_memory_restart": "300M",
+      "max_restarts"      : 20,
+      "cwd"               : "/home/admin/node-www/dev-loftogram/server/",
+      "log_date_format"   : "YYYY-MM-DD HH:mm Z",
+      "merge_logs"        : true,
+      "env"               : {
+        "NODE_ENV": "development",
+        "PORT":8081
+      },
+      "env_production"    : {
+        "NODE_ENV": "production",
+        "PORT":8080
+      }
+    }
+  ]
+}
