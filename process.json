@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name"              : "dev-loftogram",
+      "name"              : "loftogram",
       "script"            : "./www",
       "watch"             : true,
       "ignore_watch"      : [
@@ -9,7 +9,7 @@
         ".git",
         "bower_components",
         "node_modules",
-        "server/logs/",
+        "logs/",
         "public"
       ],
       "max_memory_restart": "300M",
@@ -23,7 +23,7 @@
       },
       "env_production"    : {
         "NODE_ENV": "production",
-        "PORT":8081
+        "PORT":8080
       }
     }
   ]
