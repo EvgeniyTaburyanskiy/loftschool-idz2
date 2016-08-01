@@ -10,25 +10,24 @@ block APP_content
       - totalLikes += photo.likes.length;
 
   div.bg-mask
-  include ../modules/_slider_item.pug
   h.a-h-w#header(style="background-image: url(" + album._album_bg.img + ")")
     div.a-h-mask
-    div.a-h-cnt
-      //- If user._id.toString() === owner._id.toString()
-      form.a-h-cnt__form#editAlbum_form(method="POST" enctype="multipart/form-data")
-        input(type="hidden", name="_csrf", value= csrfToken)
-        input(type="hidden", name="user_id", value= user._id.toString())
-        div.a-form-w
-          div.a-edit
-            input.a-edit__title(type="text" name="album_name" id="album_name")
-            textarea.a-edit__desc(name="album_descr" id="album_descr")
-          button.a-bg-edit
-            +use('cam','a-bg-edit__svg')
-            span.a-bg-edit__span Изменить фон
-            input.a-bg-edit__img(type="file" name="background" id="background" hidden)
-          div.a-form-controls
-            div.a-controls-w
-              +formMenuReverse
+    - if (user._id.toString() === owner._id.toString())
+      div.a-h-cnt
+        form.a-h-cnt__form#editAlbum_form(method="POST" enctype="multipart/form-data")
+          input(type="hidden", name="_csrf", value= csrfToken)
+          input(type="hidden", name="user_id", value= user._id.toString())
+          div.a-form-w
+            div.a-edit
+              input.a-edit__title(type="text" name="album_name" id="album_name")
+              textarea.a-edit__desc(name="album_descr" id="album_descr")
+            button.a-bg-edit
+              +use('cam','a-bg-edit__svg')
+              span.a-bg-edit__span Изменить фон
+              input.a-bg-edit__img(type="file" name="background" id="background" hidden)
+            div.a-form-controls
+              div.a-controls-w
+                +formMenuReverse
     div.a-h
       div.a-person
         a.a-person__a(href="/users/" + owner._id.toString())
@@ -39,7 +38,8 @@ block APP_content
         p.a-desc__tx #{album.descr}
       div.a-controls
         +btnHome
-        +btnEdit
+        - if (user._id.toString() === owner._id.toString())
+          +btnEdit
   main.a-main
     section.a-info-w
       div.a-info
@@ -57,12 +57,16 @@ block APP_content
           span.info-comments__span Комментария
     section.a-photos-w
       div.a-photos-add
-        +btnAdd
+        - if (user._id.toString() === owner._id.toString())
+          +btnAdd('addPhoto_btn')
       div.a-photos
         - if (albumPotos)
           for photo in albumPotos
             +photoTileAlbum(photo)
 
+
   +footer(album._album_bg.img)
-  include ../modules/_a_edit_photo
-  include ../modules/_a_add_photo
+  include ../modules/_slider_item.pug
+  - if (user._id.toString() === owner._id.toString())
+    include ../modules/_a_edit_photo
+    include ../modules/_a_add_photo

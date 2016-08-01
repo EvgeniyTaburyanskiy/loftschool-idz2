@@ -48,7 +48,7 @@ block APP_content
             for album in userAlbums
               +albumTile(album)
       div.albums-controls
-        +btnAdd
+        +btnAdd('addAlbum_btn')
   include ../modules/_m_edit_profile.pug
   include ../modules/_m_add_album.pug
   +footer(user.userdata.bg_img )

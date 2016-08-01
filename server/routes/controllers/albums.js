@@ -5,10 +5,8 @@ var HttpError = require('../../middleware/HttpError').HttpError;
 
 
 var get = function (req, res, next) {
-  // TODO: Обрабатывать reques там может быть задан ID альбома ?album_id=Num
-  res.render('person', {
-    title: 'person'
-  });
+  // TODO: Обрабатывать request там может быть задан ID альбома ?album_id=Num
+  res.redirect('/users/');
 };
 
 

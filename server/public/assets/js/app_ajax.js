@@ -1,12 +1,13 @@
+;
 'use strict';
-//--------------------- API MODULES---------------------------------//
+//--------------------- API MODULES ---------------------------------//
 
 /**
  * mod AJAX
  */
 (function () {
-  var serviceUrl ='';
-  
+  var serviceUrl = '';
+
   var _ajax = function (url, method, data) {
     var method_ = method || "GET";
     var serviceUrl_ = url || serviceUrl;
@@ -85,23 +86,13 @@
     return loftogram.modAJAX.ajax(serviceUrl + ".getAlbumsByUser", null, data);
   };
 
+
   var addAlbum = function (form_id) {
-
-/*    var form = document.forms[form_id];
-
-    var data = {
-      'user_id':   form.elements['user_id'].value,
-      '_csrf':     form.elements['_csrf'].value,
-      'album_name': form.elements['album_name'].value,
-      'album_descr':  form.elements['album_descr'].value,
-      'message':   form.elements['message'].value,
-
-    };*/
-
     var data = new FormData(document.forms[form_id]);
-    
+
     return loftogram.modAJAX.ajaxFiles(serviceUrl + ".addAlbum", "POST", data);
   };
+
 
   var deleteAlbum = function (album_id) {
     var id_ = album_id || 0;
@@ -353,11 +344,11 @@
 })();
 
 
-//---------------------  FRONT API USAGE---------------------------//
+//---------------------  FRONT API USAGE ---------------------------//
 
 // SIGN OUT
 (function () {
-  $(document).on('click', '.exit-block__btn', function (event) {
+  $(document).on('click', '#signout_btn', function (event) {
     event.preventDefault();
     var dfdSignout = window.loftogram.modAuth.signout();
 
@@ -534,10 +525,10 @@
 
 
 // ADD ALBUM
-(function(){
+(function () {
   $(document).on('submit', '#addAlbum_form', function (event) {
     event.preventDefault();
-    
+
     var dfdAddAlbum = window.loftogram.modAlbum.addAlbum('addAlbum_form');
 
     $.when(dfdAddAlbum).then(
@@ -557,8 +548,9 @@
   });
 })();
 
+
 // EDIT ALBUM
-(function(){
+(function () {
   $(document).on('submit', '#addAlbum_form', function (event) {
     event.preventDefault();
 
@@ -580,3 +572,10 @@
     return false;
   });
 })();
+
+
+// ADD PHOTO
+(function () {
+
+})();
+

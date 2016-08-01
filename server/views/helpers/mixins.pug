@@ -94,24 +94,27 @@ mixin btnEdit
     button.edit-block__btn
       +use('edit', 'edit-block__svg')
       span.edit-block__tx Редактировать
+
 //выдвижная кнопка Выйти
 mixin btnExit
   div.exit-block
-    button.exit-block__btn
+    button#signout_btn.exit-block__btn
       a.exit-block__link(href="#")
       +use('off', 'exit-block__svg')
       span.exit-block__tx Выйти
+
 //выдвижная кнопка Домой
 mixin btnHome
   div.exit-block
-    button.exit-block__btn.home-block__btn
+    button#home_btn.exit-block__btn.home-block__btn
       a.home-block__link(href="/")
       +use('home', 'exit-block__svg')
       span.exit-block__tx Домой
+
 //выдвижная кнопка Добавить
-mixin btnAdd
+mixin btnAdd(id)
   div.add-block
-    button.add-block__btn
+    button.add-block__btn(id= id)
       +use('add', 'add-block__svg')
       span.add-block__tx Добавить
 
@@ -201,7 +204,6 @@ mixin albumTile(album)
 
 
 mixin photoTileAlbum(photo)
-  - console.log('Photo=',photo)
   div.a-photo-tile
     a.a-tile-top(href="#")
       +use('loupe','a-tile-top__svg')
