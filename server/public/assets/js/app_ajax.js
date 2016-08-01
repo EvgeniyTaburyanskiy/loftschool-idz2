@@ -1,27 +1,73 @@
 'use strict';
 //--------------------- API MODULES---------------------------------//
+
+/**
+ * mod AJAX
+ */
+(function () {
+  var _ajaxCall = function (url, method, data) {
+    var method_ = method || "GET";
+    var serviceUrl_ = url || serviceUrl;
+
+    return $.ajax({
+      type:     method_,
+      url:      serviceUrl_,
+      dataType: 'json',
+      data:     data
+    });
+  };
+
+  var _ajaxCallFiles = function (url, method, data) {
+    var method_ = method || "POST";
+    var serviceUrl_ = url || serviceUrl;
+
+    return $.ajax({
+      url:         serviceUrl_,
+      type:        method_,
+      xhr:         function () {
+        var myXhr = $.ajaxSettings.xhr();
+        if (myXhr.upload) {
+          myXhr.upload.addEventListener('progress', _progressHandlingFunction, false); // For handling the progress
+          // of the upload
+        }
+        return myXhr;
+      },
+      // Form data
+      data:        data,
+      //Options to tell jQuery not to process data or worry about content-type.
+      cache:       false,
+      contentType: false,
+      processData: false
+    });
+
+    function _progressHandlingFunction(e) {
+      if (e.lengthComputable) {
+        console.log('Upload Progress',
+            {
+              value: e.loaded,
+              max:   e.total
+            });
+      }
+    }
+
+  };
+
+  if (!window.loftogram) window.loftogram = {};
+
+  window.loftogram.modAJAX = {
+    ajaxCall:      _ajaxCall,
+    ajaxCallFiles: _ajaxCallFiles
+
+  };
+})();
+
+
 /**
  * mod ALBUMS
  */
 (function () {
   var serviceUrl = "/api/method/albums";
   var data = {};
-
-  var _ajaxCall = function (url, method, data) {
-    var method_ = method || "GET";
-    var serviceUrl_ = url || serviceUrl;
-
-    $.ajax({
-      type:    method_,
-      url:     serviceUrl_,
-      data:    data,
-      success: function (msg) {
-        console.log(msg);
-      },
-      error:   function (err) {
-      }
-    });
-  };
 
   var getAlbumByID = function (album_id) {
     var id_ = album_id || 0;
@@ -86,23 +132,6 @@
 (function () {
   var serviceUrl = "/api/method/photos";
   var data = {};
-
-  var _ajaxCall = function (url, method, data) {
-    var method_ = method || "GET";
-    var serviceUrl_ = url || serviceUrl;
-
-    $.ajax({
-      type:    method_,
-      url:     serviceUrl_,
-      data:    data,
-      success: function (msg) {
-        console.log(msg);
-      },
-      error:   function (err) {
-      }
-    });
-  };
-
 
   var getPhotoById = function () {
 
@@ -169,73 +198,26 @@
   var serviceUrl = "/api/method/users";
   var data = {};
 
-  var _ajaxCall = function (url, method, data) {
-    var method_ = method || "GET";
-    var serviceUrl_ = url || serviceUrl;
-
-    return $.ajax({
-      type:     method_,
-      url:      serviceUrl_,
-      dataType: 'json',
-      data:     data
-    });
-  };
-
-  var _ajaxCallFiles = function (url, method, data) {
-    var method_ = method || "POST";
-    var serviceUrl_ = url || serviceUrl;
-
-    return $.ajax({
-      url:         serviceUrl_,
-      type:        method_,
-      xhr:         function () {
-        var myXhr = $.ajaxSettings.xhr();
-        if (myXhr.upload) {
-          myXhr.upload.addEventListener('progress', _progressHandlingFunction, false); // For handling the progress
-          // of the upload
-        }
-        return myXhr;
-      },
-      // Form data
-      data:        data,
-      //Options to tell jQuery not to process data or worry about content-type.
-      cache:       false,
-      contentType: false,
-      processData: false
-    });
-
-    function _progressHandlingFunction(e) {
-      if (e.lengthComputable) {
-        console.log('Upload Progress',
-            {
-              value: e.loaded,
-              max:   e.total
-            });
-      }
-    }
-
-  };
-
   var getUsersList = function () {
-    return _ajaxCall(serviceUrl + ".getUsersList", undefined, {});
+    return loftogram.modAJAX.ajaxCall(serviceUrl + ".getUsersList", undefined, {});
   };
 
   var getUserById = function (user_id) {
     var id_ = user_id || undefined;
 
-    return _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
+    return loftogram.modAJAX.ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
   };
 
   var addUser = function (user_id) {
     var id_ = user_id || undefined;
 
-    return _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
+    return loftogram.modAJAX.ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
   };
 
   var updateUserImgs = function (form_id) {
     var profileData = new FormData(document.forms[form_id]);
 
-    return _ajaxCallFiles(serviceUrl + ".updateUserImgs", "POST", profileData);
+    return loftogram.modAJAX.ajaxCallFiles(serviceUrl + ".updateUserImgs", "POST", profileData);
   };
 
   var updateUserProfile = function (form_id) {
@@ -255,13 +237,13 @@
     };
 
 
-    return _ajaxCall(serviceUrl + ".updateUserProfile", "POST", data);
+    return loftogram.modAJAX.ajaxCall(serviceUrl + ".updateUserProfile", "POST", data);
   };
 
   var deleteUser = function (user_id) {
     var id_ = user_id || undefined;
 
-    return _ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
+    return loftogram.modAJAX.ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
   };
 
   if (!window.loftogram) window.loftogram = {};
@@ -284,20 +266,6 @@
   var serviceUrl = "/api/method/auth";
   var data = {};
 
-
-  var _ajaxCall = function (url, method, data) {
-    var method_ = method || "POST";
-    var serviceUrl_ = url || serviceUrl;
-
-    return $.ajax({
-      type:     method_,
-      url:      serviceUrl_,
-      dataType: 'json',
-      data:     data
-    });
-  };
-
-
   var signin = function (form_id) {
 
     var form = document.forms[form_id];
@@ -308,12 +276,12 @@
       '_csrf':    form.elements['_csrf'].value
     };
 
-    return _ajaxCall(serviceUrl + ".signin", "POST", data);
+    return loftogram.modAJAX.ajaxCall(serviceUrl + ".signin", "POST", data);
   };
 
 
   var signout = function () {
-    return _ajaxCall(serviceUrl + ".signout", "POST", {});
+    return loftogram.modAJAX.ajaxCall(serviceUrl + ".signout", "POST", {});
   };
 
 
@@ -327,7 +295,7 @@
       '_csrf':    form.elements['_csrf'].value
     };
 
-    return _ajaxCall(serviceUrl + ".signup", "POST", data);
+    return loftogram.modAJAX.ajaxCall(serviceUrl + ".signup", "POST", data);
   };
 
 
@@ -340,7 +308,7 @@
       '_csrf': form.elements['_csrf'].value
     };
 
-    return _ajaxCall(serviceUrl + ".fogotPasswd", "POST", data);
+    return loftogram.modAJAX.ajaxCall(serviceUrl + ".fogotPasswd", "POST", data);
 
   };
 
@@ -354,7 +322,7 @@
       '_csrf':    form.elements['_csrf'].value
     };
 
-    return _ajaxCall(serviceUrl + ".resetPasswd", "POST", data);
+    return loftogram.modAJAX.ajaxCall(serviceUrl + ".resetPasswd", "POST", data);
 
   };
 
