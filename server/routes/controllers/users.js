@@ -15,7 +15,8 @@ var User = require('../../db/models/User').mUser;
  */
 var getUserPage = function (req, res, next) {
   var user_id = req.query.user_id || req.params.user_id || req.user._id || null;
-  logger.debug('User Id=', user_id);
+
+  //logger.debug('User Id=', user_id);
 
   if (!user_id) {
     return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE', 'Не верно указан ID пользователя'));

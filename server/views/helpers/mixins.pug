@@ -158,24 +158,24 @@ mixin socIconEm
 //красная кнопка Удалить
 mixin btnDelete
   div.delete-block
-    btn.delete-block__btn
+    button.delete-block__btn
       +use('delete','delete-block__svg')
       span.delete-block__tx Удалить
 //красная кнопка Лайк
 mixin btnLike
   div.like-block
-    btn.like-block__btn
+    button.like-block__btn
       +use('no_like','like-block__svg')
       span.like-block__tx 22
 //маленькая красная кнопка отмены добавления фото
 mixin btnCancel
   div.cancel-block
-    btn.cancel-block__btn
+    button.cancel-block__btn
       +use('close', 'cancel-block__svg')
 //кнопка закрытия попапа
 mixin btnCancelPop
   div.cancel-popup
-    btn.cancel-popup__btn
+    button.cancel-popup__btn
       +use('close', 'cancel-popup__svg')
 
 //две нижние кнопки форм добавления фото и альбома
@@ -184,10 +184,10 @@ mixin formMenu(formid)
     button.form-menu__submit(type='submit' form= formid) Сохранить
     button.form-menu__reset(type='reset' form= formid) Отменить
 
-mixin formMenuReverse
+mixin formMenuReverse(formid)
   div.form-menu
-    input.form-menu__reset(type='reset' id="reset" value='Отменить')
-    input.form-menu__submit(type='submit' id="submit" value='Сохранить')
+    button.form-menu__reset(type='reset' id="reset"  form= formid) Отменить
+    button.form-menu__submit(type='submit' id="submit"  form= formid) Сохранить
 
 mixin albumTile(album)
   div.photo-album
@@ -204,7 +204,7 @@ mixin albumTile(album)
 
 
 mixin photoTileAlbum(photo)
-  div.a-photo-tile
+  div.a-photo-tile(id= photo._id.toString())
     a.a-tile-top(href="#")
       +use('loupe','a-tile-top__svg')
       img.a-tile-top__img(src= photo.thumb alt= photo.name)
@@ -236,7 +236,7 @@ mixin photoTile(photo)
           div.tile-avatar-mask
         div.tile-desc
           div.desc-wrapper
-            p.desc-wrapper__tx #{photo.descr}
+            p.desc-wrapper__tx #{photo.name}
           div.tile-stats
             +use('comments','tile-stats__svg')
             span.tile-stats__span.tile-stats__span-comments #{photo.comments.comment_list.length}

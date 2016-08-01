@@ -11,9 +11,10 @@ var getPhotoById = function (photo_id, callback) {
   // Получаем Инфо об Альбоме
   async.waterfall([
         function (done) {
-          Photo.findById(photo_id)
+          Photo
+          .find({'_id': photo_id})
           .deepPopulate('_album_id _album_id._user_id comments')
-          .exec('findById', done);
+          .exec('find', done);
         }
       ],
       callback

@@ -14,9 +14,8 @@ block APP_content
             img.a-person__img(src= user.userdata.ava_img alt= user.userdata.firstName + " " + user.userdata.lastName )
           p.a-person__n_black #{user.userdata.firstName + " " + user.userdata.lastName}
       form#search_form.main-search__form(action="#")
-        input.main-search__input(type="search" name="q" id="q" placeholder="Исследовать мир (; разделяет фразы)"  value= orig_str)
+        input.main-search__input(type="search" name="q" id="q" placeholder="Исследовать мир (';' разделяет фразы)"  value= orig_str)
         +use('search','main-search__svg')
-        input(type="hidden", name="_csrf", value= csrfToken)
       div.show-new
         button.show-new__btn(type="submit" form="search_form") Показать новые
     section.main-new-w

@@ -27,10 +27,9 @@ block APP_content
         +btnExit
   main.m-main
     section.main-search
-      form.main-search__form(action="/search/")
-        input.main-search__input(type="search" name="q" id="q" placeholder="Исследовать мир")
+      form#search_form.main-search__form(action="/search/")
+        input.main-search__input(type="search" name="q" id="q" placeholder="Исследовать мир (';' разделяет фразы)")
         +use('search','main-search__svg')
-        input(type="hidden", name="_csrf", value= csrfToken)
     section.main-new-w
       div.main-new
         h1.main-new__t Новое в мире

@@ -14,20 +14,20 @@ block APP_content
     div.a-h-mask
     - if (user._id.toString() === owner._id.toString())
       div.a-h-cnt
-        form.a-h-cnt__form#editAlbum_form(method="POST" enctype="multipart/form-data")
+        form#editAlbum_form.a-h-cnt__form(method="POST" enctype="multipart/form-data")
           input(type="hidden", name="_csrf", value= csrfToken)
-          input(type="hidden", name="user_id", value= user._id.toString())
+          input(type="hidden", name="album_id", value= album._id.toString())
           div.a-form-w
             div.a-edit
-              input.a-edit__title(type="text" name="album_name" id="album_name")
-              textarea.a-edit__desc(name="album_descr" id="album_descr")
+              input.a-edit__title(type="text" name="album_name" id="album_name" value= album.name)
+              textarea.a-edit__desc(name="album_descr" id="album_descr") #{album.descr}
             button.a-bg-edit
               +use('cam','a-bg-edit__svg')
               span.a-bg-edit__span Изменить фон
-              input.a-bg-edit__img(type="file" name="background" id="background" hidden)
+              input.a-bg-edit__img(type="file" name="album_bg" id="background" hidden)
             div.a-form-controls
               div.a-controls-w
-                +formMenuReverse
+                +formMenuReverse('editAlbum_form')
     div.a-h
       div.a-person
         a.a-person__a(href="/users/" + owner._id.toString())

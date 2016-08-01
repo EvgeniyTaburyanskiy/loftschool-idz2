@@ -136,8 +136,12 @@
   var serviceUrl = "/api/method/photos";
   var data = {};
 
-  var getPhotoById = function () {
+  var getPhotoById = function (photo_id) {
+    data = {
+      photo_id: photo_id || undefined
+    };
 
+    return loftogram.modAJAX.ajax(serviceUrl + ".getPhotoById", 'POST', data);
   };
 
 
@@ -148,7 +152,7 @@
       count: parseInt(count) || undefined
     };
 
-    loftogram.modAJAX.ajax(serviceUrl + ".getNewPhotos", null, data);
+    loftogram.modAJAX.ajax(serviceUrl + ".getNewPhotos", 'POST', data);
   };
 
 
@@ -168,7 +172,19 @@
   };
 
 
-  var updatePhoto = function () {
+  var updatePhoto = function (form_id) {
+
+    var form = document.forms[form_id];
+
+    var data = {
+      'photo_id':    form.elements['photo_id'].value,
+      '_csrf':       form.elements['_csrf'].value,
+      'confirmed':   form.elements['confirmed'].value,
+      'photo_name':  form.elements['photo_name'].value,
+      'photo_descr': form.elements['photo_descr'].value
+    };
+
+    return loftogram.modAJAX.ajax(serviceUrl + ".updatePhoto", "POST", data);
   };
 
 
@@ -574,8 +590,27 @@
 })();
 
 
-// ADD PHOTO
+// EDIT PHOTO
 (function () {
+  $(document).on('submit', '#editPhoto_form', function (event) {
+    event.preventDefault();
 
+    var dfdEditPhoto = window.loftogram.modPhoto.updatePhoto('editPhoto_form');
+
+    $.when(dfdEditPhoto).then(
+        function (resEditPhoto) {
+          var result = resEditPhoto;
+          alert(result.error_user_msg);
+          window.location.reload(true);
+
+        },
+        function (resEditPhoto) {
+          var result = resEditPhoto.responseJSON;
+          console.log('ERR resEditPhoto=', result);
+        }
+    );
+
+    return false;
+  })
 })();
 
