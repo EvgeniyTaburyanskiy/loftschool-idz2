@@ -105,7 +105,7 @@ mixin btnExit
 mixin btnHome
   div.exit-block
     button.exit-block__btn.home-block__btn
-      a.home-block__link(href="main.html")
+      a.home-block__link(href="/")
       +use('home', 'exit-block__svg')
       span.exit-block__tx Домой
 //выдвижная кнопка Добавить
@@ -200,9 +200,27 @@ mixin albumTile(album)
         a.album-menu__a(href="/albums/" + album._id) #{album.name}
 
 
+mixin photoTileAlbum(photo)
+  - console.log('Photo=',photo)
+  div.a-photo-tile
+    a.a-tile-top(href="#")
+      +use('loupe','a-tile-top__svg')
+      img.a-tile-top__img(src= photo.thumb alt= photo.name)
+      div.top-mask
+      div.a-tile-stats
+        +use('comments','a-tile-stats__svg')
+        span.a-tile-stats__span.a-tile-stats__span-comments #{photo.comments.comment_list.length}
+        +use('like','a-tile-stats__svg')
+        span.a-tile-stats__span.a-tile-stats__span-likes #{photo.likes.length}
+    div.a-tile-bot
+      div.a-tile-menu
+        +use('edit','a-tile-menu__svg')
+        a.a-tile-menu__a(href="#") #{photo.name}
+
 mixin photoTile(photo)
   -var owner = photo._album_id._user_id;
   -var album = photo._album_id;
+
   div.photo-tile
     a.tile-top(href="#slide" id= photo._id )
       +use('loupe','tile-top__svg')
@@ -226,3 +244,18 @@ mixin photoTile(photo)
       div.tile-bot-wrapper
         +use('album','tile-bot__svg')
         a.tile-bot__a(href="/albums/" + album._id ) #{album.name}
+
+mixin footer(bg_img)
+  - if(!bg_img) {bg_img='';}
+
+  footer.f-w(style="background-image: url(" + bg_img + ")")
+    div.f-mask
+    div.f
+      p.f__desc.
+        Перед вами сервис, который поможет вам организовать свои
+        фотографии в альбомы и поделиться ими со всем миром!
+      a.f__a(href="#header")
+        +use('top','f__svg')
+      p.f__copyright.
+        2016 | Создано командой профессионалов на продвинутом курсе
+        по веб-разработке от LoftSchool

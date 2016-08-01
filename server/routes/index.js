@@ -24,7 +24,7 @@ var controllers = {
   album:        require('./controllers/albums'),       //-> Обработчик Маршрута Альбом
   users:        require('./controllers/users'),        //-> Обработчик Маршрута Пользователь
   search:       require('./controllers/search'),       //-> Обработчик Маршрута Поиска
-  error:        require('./controllers/error')        //-> Обработчик Ошибочных запросов
+  error:        require('./controllers/error')         //-> Обработчик Ошибочных запросов
 };
 
 
@@ -69,12 +69,13 @@ var _router = function (app) {
 
   // ALBUM ROUTES ==============================================
   router.route(['/albums', '/albums/*'])
-  .all(checkAuth, csrfProtection);
+  .all(checkAuth,csrfProtection);
   /*
    Поумолчанию Отдаем страницу альбомов текущего пользователя(собственные альбомы) редирект на страницу Пользователь
    С параметром отдаем страницу с фотками конкретного альбома 
    */
   router.get('/albums', controllers.album.get);
+  
   router.get('/albums/:album_id', controllers.album.getById);      //-> Отдаем страницу альбом-детальная по его ID
 
   // USERS ROUTES ==============================================

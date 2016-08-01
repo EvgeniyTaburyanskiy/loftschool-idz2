@@ -65,7 +65,7 @@ schemaUser.methods.checkPassword = function (password) {
   return this.encryptPassword(password) === this.hashedPassword;
 };
 
-// ================= Schema Statics Methods =============================
+// ================= Schema Statics Methods ==========================
 schemaUser.statics.authorize = function (username, password, next) {
   var User = this;
   async.waterfall([
@@ -128,7 +128,7 @@ schemaUser.statics.register = function (username, password, next) {
   );
 };
 
-// ================= User Virtuals =============================
+// ================= User Virtuals ===================================
 schemaUser.virtual('userId')
 .get(function () {
   return this.id;
@@ -158,7 +158,7 @@ schemaUser.path('hashedPassword').validate(function (value) {
   }
 }, null);
 
-// ================= Private Func =============================
+// ================= Private Func ===========================
 function AuthError(message) {
   Error.apply(this, arguments);
   Error.captureStackTrace(this, AuthError);

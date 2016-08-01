@@ -99,8 +99,6 @@ var API_getAlbumsByUser = function (req, res, next) {
       });
 
 
-
-
 };
 
 
@@ -117,6 +115,7 @@ var API_addAlbum = function (req, res, next) {
   var album_bg = (req.file !== 'undefined') ? req.file : req.body.album_bg; // ожидаем либо файл либо ID фотки из БД
   var user_id = req.user._id;
   // TODO: API- Валидация данных перед добавлением нового альбома
+  logger.debug(user_id, album_name, album_descr, album_bg);
 
   async.waterfall([
         // Создаем Новый Альбом и сохраняем + связка с пльзователем
@@ -185,7 +184,7 @@ var API_addAlbum = function (req, res, next) {
         // Устанавливаем обратную ссылку альбому на Фотку(фон)
         function (newAlbum, newPhoto, done) {
 
-          newAlbum._album_bg = newPhoto._id;
+          if (newPhoto) newAlbum._album_bg = newPhoto._id;
 
           newAlbum.save(function (err) {
             if (err) {
@@ -194,22 +193,31 @@ var API_addAlbum = function (req, res, next) {
               return done(err);
             }
             // TODO: API- Обработка ошибок валидации Сохранения Альбома
-            return done(null, newAlbum, newPhoto);
+            return done(null, newAlbum);
           });
         },
         //Подготавливаем ответ на запрос
-        function (newAlbum, newPhoto, done) {
-          var result = {
-            _id:       newAlbum.id,
-            name:      newAlbum.name,
-            descr:     newAlbum.descr,
-            _album_bg: {
-              img:   newPhoto.img,
-              thumb: newPhoto.thumb
-            }
-          };
+        function (newAlbum,  done) {
+          Album
+          .findById(newAlbum._id)
+          .lean()
+          //.deepPopulate('_user_id')
+          .deepPopulate('_album_bg')
+          .exec(function (err, album) {
+            if (err) return done(err);
 
-          return done(null, result);
+            var result = {
+              id:        album.id,
+              name:      album.name,
+              descr:     album.descr,
+              _album_bg: {
+                img:   album._album_bg.img,
+                thumb: album._album_bg.thumb
+              }
+
+            };
+            return done(err, result);
+          });
         }
       ],
       //Отдаем результат

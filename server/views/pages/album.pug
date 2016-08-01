@@ -1,15 +1,22 @@
 extends ../_template
 block APP_content
+  - console.log('OWNER-',owner);
+  - console.log('ALBUM-',album);
+  - console.log('PHOTOS-',albumPotos);
+
   div.bg-mask
-  include ../../../source/template/modules/_slider_item.pug
-  h.a-h-w#header
+  include ../modules/_slider_item.pug
+  h.a-h-w#header(style="background-image: url(" + album._album_bg.img + ")")
     div.a-h-mask
     div.a-h-cnt
-      form.a-h-cnt__form(method="POST" enctype="multipart/form-data")
+      //- If user._id.toString() === owner._id.toString()
+      form.a-h-cnt__form#editAlbum_form(method="POST" enctype="multipart/form-data")
+        input(type="hidden", name="_csrf", value= csrfToken)
+        input(type="hidden", name="user_id", value= user._id.toString())
         div.a-form-w
           div.a-edit
-            input.a-edit__title(type="text" name="title" id="title")
-            textarea.a-edit__desc(name="description" id="description")
+            input.a-edit__title(type="text" name="album_name" id="album_name")
+            textarea.a-edit__desc(name="album_descr" id="album_descr")
           button.a-bg-edit
             +use('cam','a-bg-edit__svg')
             span.a-bg-edit__span Изменить фон
@@ -19,15 +26,12 @@ block APP_content
               +formMenuReverse
     div.a-h
       div.a-person
-        a.a-person__a(href="person.html")
-          img.a-person__img(src="assets/img/jason.jpg" alt="jason")
-        p.a-person__n Джейсон Стэтхем
+        a.a-person__a(href="/users/" + owner._id.toString())
+          img.a-person__img(src= owner.userdata.ava_img alt= owner.userdata.firstName + " " + owner.userdata.lastName )
+        p.a-person__n #{owner.userdata.firstName + " " + owner.userdata.lastName}
       div.a-desc
-        h1.a-desc__t Лесные прогулки
-        p.a-desc__tx.
-          Фотографии природы леса, озера и гор. Как прекрасно созерцать дивные утренние
-          пейзажи в тени горного дерева, размышляя о вечном и главном. Запах озера и
-          свежих опилок навевает воспоминания.
+        h1.a-desc__t #{album.name}
+        p.a-desc__tx #{album.descr}
       div.a-controls
         +btnHome
         +btnEdit
@@ -50,9 +54,11 @@ block APP_content
       div.a-photos-add
         +btnAdd
       div.a-photos
-        - var arr = [1,2,3,4,5,6]
-        for item in arr
-          include ../../../source/template/modules/_a_photo_tile.pug
-  include ../../../source/template/modules/_footer.pug
+        - console.log('albumPotos - ',albumPotos)
+        if (albumPotos)
+          for photo in albumPotos
+            +photoTileAlbum(photo)
+
+  +footer(album._album_bg.img)
   include ../modules/_a_edit_photo
   include ../modules/_a_add_photo

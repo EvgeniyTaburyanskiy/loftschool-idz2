@@ -5,7 +5,9 @@
  * mod AJAX
  */
 (function () {
-  var _ajaxCall = function (url, method, data) {
+  var serviceUrl ='';
+  
+  var _ajax = function (url, method, data) {
     var method_ = method || "GET";
     var serviceUrl_ = url || serviceUrl;
 
@@ -17,7 +19,7 @@
     });
   };
 
-  var _ajaxCallFiles = function (url, method, data) {
+  var _ajaxFiles = function (url, method, data) {
     var method_ = method || "POST";
     var serviceUrl_ = url || serviceUrl;
 
@@ -27,8 +29,7 @@
       xhr:         function () {
         var myXhr = $.ajaxSettings.xhr();
         if (myXhr.upload) {
-          myXhr.upload.addEventListener('progress', _progressHandlingFunction, false); // For handling the progress
-          // of the upload
+          myXhr.upload.addEventListener('progress', _progressHandlingFunction, false); // For handling the progress of the upload
         }
         return myXhr;
       },
@@ -55,8 +56,8 @@
   if (!window.loftogram) window.loftogram = {};
 
   window.loftogram.modAJAX = {
-    ajaxCall:      _ajaxCall,
-    ajaxCallFiles: _ajaxCallFiles
+    ajax:      _ajax,
+    ajaxFiles: _ajaxFiles
 
   };
 })();
@@ -73,7 +74,7 @@
     var id_ = album_id || 0;
     if (!id_) return false;
 
-    _ajaxCall(serviceUrl + ".getAlbumByID", undefined, {album_id: id_});
+    return loftogram.modAJAX.ajax(serviceUrl + ".getAlbumByID", null, {album_id: id_});
   };
 
   var getAlbumsByUser = function (user_id) {
@@ -81,15 +82,25 @@
     var data = {
       user_id: user_id_
     };
-    _ajaxCall(serviceUrl + ".getAlbumsByUser", null, data);
+    return loftogram.modAJAX.ajax(serviceUrl + ".getAlbumsByUser", null, data);
   };
 
-  var addAlbum = function (name, descr) {
+  var addAlbum = function (form_id) {
+
+/*    var form = document.forms[form_id];
+
     var data = {
-      album_name:  name,
-      album_descr: descr
-    };
-    _ajaxCall(serviceUrl + ".addAlbum", "POST", data)
+      'user_id':   form.elements['user_id'].value,
+      '_csrf':     form.elements['_csrf'].value,
+      'album_name': form.elements['album_name'].value,
+      'album_descr':  form.elements['album_descr'].value,
+      'message':   form.elements['message'].value,
+
+    };*/
+
+    var data = new FormData(document.forms[form_id]);
+    
+    return loftogram.modAJAX.ajaxFiles(serviceUrl + ".addAlbum", "POST", data);
   };
 
   var deleteAlbum = function (album_id) {
@@ -100,8 +111,9 @@
     };
     if (!id_) return false;
 
-    _ajaxCall(serviceUrl + ".deleteAlbum", "POST", data);
+    loftogram.modAJAX.ajax(serviceUrl + ".deleteAlbum", "POST", data);
   };
+
 
   var updateAlbum = function (album_id, name, descr) {
 
@@ -111,7 +123,7 @@
       album_descr: descr || undefined,
       album_bg:    ''
     };
-    _ajaxCall(serviceUrl + ".updateAlbum", "POST", data);
+    loftogram.modAJAX.ajax(serviceUrl + ".updateAlbum", "POST", data);
   };
 
 
@@ -145,7 +157,7 @@
       count: parseInt(count) || undefined
     };
 
-    _ajaxCall(serviceUrl + ".getNewPhotos", null, data);
+    loftogram.modAJAX.ajax(serviceUrl + ".getNewPhotos", null, data);
   };
 
 
@@ -199,25 +211,25 @@
   var data = {};
 
   var getUsersList = function () {
-    return loftogram.modAJAX.ajaxCall(serviceUrl + ".getUsersList", undefined, {});
+    return loftogram.modAJAX.ajax(serviceUrl + ".getUsersList", undefined, {});
   };
 
   var getUserById = function (user_id) {
     var id_ = user_id || undefined;
 
-    return loftogram.modAJAX.ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
+    return loftogram.modAJAX.ajax(serviceUrl + ".getUserById", undefined, {user_id: id_});
   };
 
   var addUser = function (user_id) {
     var id_ = user_id || undefined;
 
-    return loftogram.modAJAX.ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
+    return loftogram.modAJAX.ajax(serviceUrl + ".getUserById", undefined, {user_id: id_});
   };
 
   var updateUserImgs = function (form_id) {
     var profileData = new FormData(document.forms[form_id]);
 
-    return loftogram.modAJAX.ajaxCallFiles(serviceUrl + ".updateUserImgs", "POST", profileData);
+    return loftogram.modAJAX.ajaxFiles(serviceUrl + ".updateUserImgs", "POST", profileData);
   };
 
   var updateUserProfile = function (form_id) {
@@ -233,17 +245,17 @@
       'vk':        form.elements['vk'].value,
       'fb':        form.elements['fb'].value,
       'tw':        form.elements['tw'].value,
-      'email':     form.elements['email'].value,
+      'email':     form.elements['email'].value
     };
 
 
-    return loftogram.modAJAX.ajaxCall(serviceUrl + ".updateUserProfile", "POST", data);
+    return loftogram.modAJAX.ajax(serviceUrl + ".updateUserProfile", "POST", data);
   };
 
   var deleteUser = function (user_id) {
     var id_ = user_id || undefined;
 
-    return loftogram.modAJAX.ajaxCall(serviceUrl + ".getUserById", undefined, {user_id: id_});
+    return loftogram.modAJAX.ajax(serviceUrl + ".getUserById", undefined, {user_id: id_});
   };
 
   if (!window.loftogram) window.loftogram = {};
@@ -276,12 +288,12 @@
       '_csrf':    form.elements['_csrf'].value
     };
 
-    return loftogram.modAJAX.ajaxCall(serviceUrl + ".signin", "POST", data);
+    return loftogram.modAJAX.ajax(serviceUrl + ".signin", "POST", data);
   };
 
 
   var signout = function () {
-    return loftogram.modAJAX.ajaxCall(serviceUrl + ".signout", "POST", {});
+    return loftogram.modAJAX.ajax(serviceUrl + ".signout", "POST", {});
   };
 
 
@@ -295,7 +307,7 @@
       '_csrf':    form.elements['_csrf'].value
     };
 
-    return loftogram.modAJAX.ajaxCall(serviceUrl + ".signup", "POST", data);
+    return loftogram.modAJAX.ajax(serviceUrl + ".signup", "POST", data);
   };
 
 
@@ -308,7 +320,7 @@
       '_csrf': form.elements['_csrf'].value
     };
 
-    return loftogram.modAJAX.ajaxCall(serviceUrl + ".fogotPasswd", "POST", data);
+    return loftogram.modAJAX.ajax(serviceUrl + ".fogotPasswd", "POST", data);
 
   };
 
@@ -322,7 +334,7 @@
       '_csrf':    form.elements['_csrf'].value
     };
 
-    return loftogram.modAJAX.ajaxCall(serviceUrl + ".resetPasswd", "POST", data);
+    return loftogram.modAJAX.ajax(serviceUrl + ".resetPasswd", "POST", data);
 
   };
 
@@ -342,74 +354,6 @@
 
 
 //---------------------  FRONT API USAGE---------------------------//
-
-// EDIT_PROFILE
-(function () {
-  $(document).on('submit', '#edit_profile', function (event) {
-    event.preventDefault();
-
-    var dfdEditProfile = window.loftogram.modUser.updateUserProfile('edit_profile');
-    var dfdEditProfileImgs = window.loftogram.modUser.updateUserImgs('edit_profile');
-
-    $.when(dfdEditProfile).then(
-        function (EditProfile) {
-          var
-              userData          = EditProfile.data.pop().userdata,
-              $person_header    = $('header .m-person'),
-              person__n         = $person_header.find('.m-person__n'),
-              person__tx        = $person_header.find('.m-person__tx'),
-              person__soc_vk    = $person_header.find('.person-soc .soc-block__a_vk'),
-              person__soc_tw    = $person_header.find('.person-soc .soc-block__a_tw'),
-              person__soc_gl    = $person_header.find('.person-soc .soc-block__a_gl'),
-              person__soc_fb    = $person_header.find('.person-soc .soc-block__a_fb'),
-              person__soc_email = $person_header.find('.person-soc .soc-block__a_email');
-
-
-          person__n.text(userData.firstName + ' ' + userData.lastName);
-          person__tx.text(userData.message);
-          person__soc_vk.text(userData.vk);
-          person__soc_tw.text(userData.tw);
-          person__soc_gl.text(userData.gl);
-          person__soc_fb.text(userData.fb);
-          person__soc_email.text(userData.email);
-
-        },
-        function (EditProfile) {
-          var resultProfile = EditProfile.responseJSON;
-          console.log('ERR EditProfile=', resultProfile);
-        }
-    );
-
-    $.when(dfdEditProfileImgs).then(
-        function (EditProfileImgs) {
-          var
-              userData        = EditProfileImgs.data.pop().userdata,
-              $person_ava     = $('header img.m-h__img'),
-              $header         = $('header.m-h-w'),
-              $footer         = $('footer.f-w'),
-              $edit_form__ava = $('.edit-profile img.ava_img'),
-              $edit_form__bg  = $('.edit-profile img.bg_img');
-
-          $person_ava.attr("src", userData.ava_img);
-
-          $header.css('background-image', 'url(' + userData.bg_img + ')');
-
-          $footer.css('background-image', 'url(' + userData.bg_img + ')');
-
-          $edit_form__ava.attr("src", userData.ava_img);
-          $edit_form__bg.attr("src", userData.bg_img);
-
-        },
-        function (EditProfileImgs) {
-          var resultImgs = EditProfileImgs.responseJSON;
-        }
-    );
-
-
-    return false;
-  });
-})();
-
 
 // SIGN OUT
 (function () {
@@ -513,6 +457,124 @@
             })
           }
           alert(msg);
+        }
+    );
+    return false;
+  });
+})();
+
+
+// EDIT_PROFILE
+(function () {
+  $(document).on('submit', '#edit_profile', function (event) {
+    event.preventDefault();
+
+    var dfdEditProfile = window.loftogram.modUser.updateUserProfile('edit_profile');
+    var dfdEditProfileImgs = window.loftogram.modUser.updateUserImgs('edit_profile');
+
+    $.when(dfdEditProfile).then(
+        function (EditProfile) {
+          var
+              userData          = EditProfile.data.pop().userdata,
+              $person_header    = $('header .m-person'),
+              person__n         = $person_header.find('.m-person__n'),
+              person__tx        = $person_header.find('.m-person__tx'),
+              person__soc_vk    = $person_header.find('.person-soc .soc-block__a_vk'),
+              person__soc_tw    = $person_header.find('.person-soc .soc-block__a_tw'),
+              person__soc_gl    = $person_header.find('.person-soc .soc-block__a_gl'),
+              person__soc_fb    = $person_header.find('.person-soc .soc-block__a_fb'),
+              person__soc_email = $person_header.find('.person-soc .soc-block__a_email');
+
+
+          person__n.text(userData.firstName + ' ' + userData.lastName);
+          person__tx.text(userData.message);
+          person__soc_vk.text(userData.vk);
+          person__soc_tw.text(userData.tw);
+          person__soc_gl.text(userData.gl);
+          person__soc_fb.text(userData.fb);
+          person__soc_email.text(userData.email);
+
+        },
+        function (EditProfile) {
+          var result = EditProfile.responseJSON;
+          console.log('ERR EditProfile=', result);
+        }
+    );
+
+    $.when(dfdEditProfileImgs).then(
+        function (EditProfileImgs) {
+          var
+              userData        = EditProfileImgs.data.pop().userdata,
+              $person_ava     = $('header img.m-h__img'),
+              $header         = $('header.m-h-w'),
+              $footer         = $('footer.f-w'),
+              $edit_form__ava = $('.edit-profile img.ava_img'),
+              $edit_form__bg  = $('.edit-profile img.bg_img');
+
+          $person_ava.attr("src", userData.ava_img);
+
+          $header.css('background-image', 'url(' + userData.bg_img + ')');
+
+          $footer.css('background-image', 'url(' + userData.bg_img + ')');
+
+          $edit_form__ava.attr("src", userData.ava_img);
+          $edit_form__bg.attr("src", userData.bg_img);
+
+        },
+        function (EditProfileImgs) {
+          var result = EditProfileImgs.responseJSON;
+          console.log('ERR EditProfileImgs=', result)
+        }
+    );
+
+
+    return false;
+  });
+})();
+
+
+// ADD ALBUM
+(function(){
+  $(document).on('submit', '#addAlbum_form', function (event) {
+    event.preventDefault();
+    
+    var dfdAddAlbum = window.loftogram.modAlbum.addAlbum('addAlbum_form');
+
+    $.when(dfdAddAlbum).then(
+        function (resAddAlbum) {
+          var result = resAddAlbum;
+          //TODO: FrontJS - Обновить список Альбомов пользователя
+          //TODO: FrontJS - Обновить список Новых Фоток
+          alert(result.error_user_msg);
+          window.location.reload(true);
+        },
+        function (resAddAlbum) {
+          var result = resAddAlbum.responseJSON;
+          console.log('ERR AddAlbum=', result);
+        }
+    );
+    return false;
+  });
+})();
+
+// EDIT ALBUM
+(function(){
+  $(document).on('submit', '#addAlbum_form', function (event) {
+    event.preventDefault();
+
+    var dfdAddAlbum = window.loftogram.modAlbum.updateAlbum('addAlbum_form');
+
+    $.when(dfdAddAlbum).then(
+        function (resAddAlbum) {
+          var result = resAddAlbum;
+          //TODO: FrontJS - Обновить список Альбомов пользователя
+          //TODO: FrontJS - Обновить список Новых Фоток
+          alert(result.error_user_msg);
+          window.location.reload(true);
+        },
+        function (resAddAlbum) {
+          var result = resAddAlbum.responseJSON;
+          console.log('ERR AddAlbum=', result);
         }
     );
     return false;
