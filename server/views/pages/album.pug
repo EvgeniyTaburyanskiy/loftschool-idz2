@@ -1,8 +1,13 @@
 extends ../_template
 block APP_content
-  - console.log('OWNER-',owner);
-  - console.log('ALBUM-',album);
-  - console.log('PHOTOS-',albumPotos);
+  - var totalPhotos = (albumPotos)? albumPotos.length:0;
+  - var totalComments = 0;
+  - var totalLikes = 0;
+
+  - if (albumPotos)
+    for photo in albumPotos
+      - totalComments += photo.comments.comment_list.length;
+      - totalLikes += photo.likes.length;
 
   div.bg-mask
   include ../modules/_slider_item.pug
@@ -40,22 +45,21 @@ block APP_content
       div.a-info
         div.info-photo
           +use('cam','info-photo__svg')
-          span.info-photo__count 18
+          span.info-photo__count #{totalPhotos}
           span.info-photo__span Фотографий
         div.info-likes
           +use('like','info-likes__svg')
-          span.info-likes__count 12
+          span.info-likes__count #{totalLikes}
           span.info-likes__span Лайков
         div.info-comments
           +use('comments','info-comments__svg')
-          span.info-comments__count 4
+          span.info-comments__count #{totalComments}
           span.info-comments__span Комментария
     section.a-photos-w
       div.a-photos-add
         +btnAdd
       div.a-photos
-        - console.log('albumPotos - ',albumPotos)
-        if (albumPotos)
+        - if (albumPotos)
           for photo in albumPotos
             +photoTileAlbum(photo)
 
