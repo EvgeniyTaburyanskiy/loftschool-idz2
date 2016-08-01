@@ -3,6 +3,7 @@ exports = module.exports = {
   getPhotoById:    require('./getPhotoById'),
   getAlbumsByUser: require('./getAlbumsByUser'),
   getAlbumPhotos:  require('./getAlbumPhotos'),
-  getAlbumById:    require('./getAlbumById')
+  getAlbumById:    require('./getAlbumById'),
+  getUserById:     require('./getUserById')
 
 };

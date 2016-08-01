@@ -87,13 +87,13 @@ var _router = function (app) {
    Если задан в запросе req.query набор уточнений. то Ищем в нем UID и отдаем как /users/:user_id
    (список альбомов пользователя + шапка с данными пользователя)
    */
-  router.get('/users', controllers.users.get);
+  router.get('/users', controllers.users.getUserPage);
 
   /*
    Отдаем Персональную страницу  пользователя по ID
    (список альбомов пользователя + шапка с данными пользователя)
    */
-  router.get('/users/:user_id', controllers.users.get);
+  router.get('/users/:user_id', controllers.users.getUserPageByID);
 
   // SEARCH ROUTES ==============================================
   router.route(['/search', '/search/*'])

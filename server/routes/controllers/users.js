@@ -1,8 +1,10 @@
-var logger = require('../../utils/winston')(module);
-var User = require('../../db/models/User').mUser;
-var HttpError = require('../../middleware/HttpError').HttpError;
-var ObjectID = require('mongodb').ObjectID;
 var async = require('async');
+var logger = require('../../utils/winston')(module);
+var Core = require('../../utils/core');
+var HttpError = require('../../middleware/HttpError').HttpError;
+
+
+var User = require('../../db/models/User').mUser;
 
 /**
  *
@@ -12,35 +14,58 @@ var async = require('async');
  * @returns {*}
  */
 var getUserPage = function (req, res, next) {
-  var user_;
-  var uid = req.query.user_id || req.params.user_id || null;
+  var user_id = req.query.user_id || req.params.user_id || req.user._id || null;
+  logger.debug('User Id=', user_id);
 
-  if (uid) {
-    try {
-      var oUid = new ObjectID(uid);
-    }
-    catch (e) {
-      return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE'));
-    }
+  if (!user_id) {
+    return next(new HttpError(400, 'ILLEGAL_PARAM_VALUE', 'Не верно указан ID пользователя'));
+  }
 
-    User.findById(oUid).lean().exec(function (err, user) {
-      if (err) return next(err);
-      res.render('person', {
-        title: 'person',
-        $user: user
+  async.parallel({
+        owner:  function (done) {
+          Core.getUserById(user_id, function (err, owner) {
+            if (err) return done(err);
+            return done(null, owner);
+          })
+        },
+        albums: function (done) {
+          Core.getAlbumsByUser(req.user._id, function (err, albums) {
+            if (err) return done(err);
+            return done(null, albums);
+          })
+        }
+      },
+      function (err, results) {
+        if (err) return next(err);
+
+        res.render('user',
+            {
+              title:     'USER Page',
+              csrfToken: req.csrfToken(),
+              owner:     (results.owner.length) ? results.owner[0] : {},
+              albums:    results.albums || []
+            }
+        );
       });
-    });
-  }
-  else {
-    res.render('person', {
-      title: 'person',
-      $user: req.user
-    });
-  }
+
 
 };
 
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {*}
+ */
+var getUserPageByID = function (req, res, next) {
+  return getUserPage(req, res, next);
+};
+
+
 exports = module.exports = {
-  get: getUserPage
+  getUserPage:     getUserPage,
+  getUserPageByID: getUserPageByID
 };
 
