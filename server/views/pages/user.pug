@@ -21,7 +21,7 @@ block APP_content
               +btnHome
   main.m-main
     section.main-search
-      form.main-search__form(action="#")
+      form.main-search__form(action="/search/")
         input.main-search__input(type="search" name="q" id="q" placeholder="Исследовать мир")
         +use('search','main-search__svg')
         input(type="hidden", name="_csrf", value= csrfToken)

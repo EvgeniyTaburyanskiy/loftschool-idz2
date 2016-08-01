@@ -19,12 +19,12 @@ var csrfProtection = csrf(config.get('csrf')); //-> add req.csrfToken() function
  * ROUTING CONTROLLERS
  */
 var controllers = {
-  main:         require('./controllers/main'),         //-> Обработчик Маршрута Гланая стр
-  auth:         require('./controllers/auth'),         //-> Обработчик Маршрута Авторизация/Регистрация/Восстановление пароля
-  album:        require('./controllers/albums'),       //-> Обработчик Маршрута Альбом
-  users:        require('./controllers/users'),        //-> Обработчик Маршрута Пользователь
-  search:       require('./controllers/search'),       //-> Обработчик Маршрута Поиска
-  error:        require('./controllers/error')         //-> Обработчик Ошибочных запросов
+  main:   require('./controllers/main'),         //-> Обработчик Маршрута Гланая стр
+  auth:   require('./controllers/auth'),         //-> Обработчик Маршрута Авторизация/Регистрация/Восстановление пароля
+  album:  require('./controllers/albums'),       //-> Обработчик Маршрута Альбом
+  users:  require('./controllers/users'),        //-> Обработчик Маршрута Пользователь
+  search: require('./controllers/search'),       //-> Обработчик Маршрута Поиска
+  error:  require('./controllers/error')         //-> Обработчик Ошибочных запросов
 };
 
 
@@ -50,10 +50,10 @@ var _router = function (app) {
       controllers.main.getHome); //-> Выдаем Гл страницу
 
   // AUTH ROUTES ==============================
-  router.get('/auth', 
+  router.get('/auth',
       csrfProtection,
       controllers.auth.signin); //-> Отдаем страницу Авторизации/Регистрации/Восстановления пароля
-  
+
   router.all('/auth/signout', controllers.auth.signout);       //-> Любой метод =  Выход из Системы
 
   router.route('/reset')
@@ -69,13 +69,13 @@ var _router = function (app) {
 
   // ALBUM ROUTES ==============================================
   router.route(['/albums', '/albums/*'])
-  .all(checkAuth,csrfProtection);
+  .all(checkAuth, csrfProtection);
   /*
    Поумолчанию Отдаем страницу альбомов текущего пользователя(собственные альбомы) редирект на страницу Пользователь
    С параметром отдаем страницу с фотками конкретного альбома 
    */
   router.get('/albums', controllers.album.get);
-  
+
   router.get('/albums/:album_id', controllers.album.getById);      //-> Отдаем страницу альбом-детальная по его ID
 
   // USERS ROUTES ==============================================
@@ -105,10 +105,8 @@ var _router = function (app) {
    Так же как /search/:search_words
    */
   router
-  .get('/search', controllers.search.search)
-  .post('/search', controllers.search.search)
-  .get('/search/:search_words', controllers.search.search)
-  .post('/search/:search_words', controllers.search.search);
+  .get('/search', csrfProtection, controllers.search.search)
+  .post('/search', csrfProtection, controllers.search.search);
 
 
   // DEFAULT  Route 404 ==============================================

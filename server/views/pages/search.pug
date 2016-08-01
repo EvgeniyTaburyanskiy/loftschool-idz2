@@ -2,7 +2,7 @@ extends ../_template
 block APP_content
   div.bg-mask
   include ../modules/_slider_item.pug
-  header.s-h#header
+  header.s-h#header(style="background-image: url(" + user.userdata.bg_img + ")")
     h1.s-h__t Исследуй мир
     div.s-return
       +btnHome
@@ -10,20 +10,20 @@ block APP_content
     section.main-search.s-main-search
       div.person-w
         div.a-person
-          a.a-person__a(href="person.html")
-            img.a-person__img(src="assets/img/jason.jpg" alt="jason")
-          p.a-person__n_black Джейсон Стэтхем
-      form.main-search__form(action="#")
-        input.main-search__input(type="search" name="search" id="search" placeholder="Исследовать мир")
+          a.a-person__a(href="/users/" + user._id.toString())
+            img.a-person__img(src= user.userdata.ava_img alt= user.userdata.firstName + " " + user.userdata.lastName )
+          p.a-person__n_black #{user.userdata.firstName + " " + user.userdata.lastName}
+      form#search_form.main-search__form(action="#")
+        input.main-search__input(type="search" name="q" id="q" placeholder="Исследовать мир (; разделяет фразы)"  value= orig_str)
         +use('search','main-search__svg')
-        input(type="hidden", name="_csrf", value="#{csrf}")
+        input(type="hidden", name="_csrf", value= csrfToken)
       div.show-new
-        button.show-new__btn Показать новые
+        button.show-new__btn(type="submit" form="search_form") Показать новые
     section.main-new-w
       div.main-new.s-results
-        p.s-results__tx По запросу "Природа" найдено 6 результатов
+        p.s-results__tx По запросу "#{search_str}" найдено #{photos.length} фотографий
         div.new-photos
-          - var arr = [1,2,3,4,5,6]
-          for item in arr
-            include ../modules/_photo_tile.pug
-  include ../modules/_footer.pug
+          if (photos)
+            for photo in photos
+              +photoTile(photo)
+  +footer(user.userdata.bg_img )
