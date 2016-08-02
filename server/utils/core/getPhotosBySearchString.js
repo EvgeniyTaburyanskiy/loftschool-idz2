@@ -32,7 +32,7 @@ var getPhotosBySearchString = function (search, count, skip, callback) {
     count = undefined;
   }
 
-  if (typeof callback !== 'function') return new Error('Не верные пароаметры');
+  if (typeof callback !== 'function') return new Error('Не верные параметры');
 
   if (!search.length) return callback(null, []);
 
@@ -40,7 +40,7 @@ var getPhotosBySearchString = function (search, count, skip, callback) {
   count = parseInt(count) || 6;
 
   search = search.split(';').map(function (item) {
-    return '\"' + item.trim() + '\"';
+    return '\"#' + item.trim() + '\"';
   });
 
   logger.debug('search array', search);
