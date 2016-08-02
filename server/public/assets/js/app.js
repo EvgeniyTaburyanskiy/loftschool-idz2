@@ -906,10 +906,10 @@ jQuery(document).ready(function(){
           var submitButton = document.querySelector(".add-photo button.form-menu__submit"),
               myDropzone   = this; // closure
 
-          myDropzone.on("success", function (file, responseText) {
-            // Handle the responseText here. For example, add the text to the preview element:
-            //console.log(responseText);
-            //file.previewTemplate.appendChild(document.createTextNode(responseText));
+          myDropzone.on("complete", function (file) {
+            if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+              window.location.reload(true);
+            }
           });
 
           submitButton.addEventListener("click", function () {
