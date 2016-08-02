@@ -121,6 +121,11 @@ var API_addAlbum = function (req, res, next) {
   async.waterfall([
         // Создаем Новый Альбом и сохраняем + связка с пльзователем
         function (done) {
+          if (!album_bg) {
+            // Новой фото не установили на Фоновую картинку
+            return done(new HttpError(400, null, 'Не загружена фоновая картинка альбома'));
+          }
+
           var newAlbum = new Album({
             _user_id: user_id,
             name:     album_name,
@@ -137,18 +142,14 @@ var API_addAlbum = function (req, res, next) {
         function (newAlbum, done) {
           //Если новую фотку не загрузили файлом - движемся дальше
           //TODO: API- При создании альбома обработку указания номера сущ. фотки. без загрузки новой
-          if (!album_bg) {
-            // изменений фотки небыло
-            return done(null, newAlbum, null);
-          }
+
           //создаем пустую болванку для фотки в базе.
           var newPhoto = new Photo({'_album_id': newAlbum._id});
 
           newPhoto.save(function (err) {
             if (err) {
               //Если при сохранении Фотки в БД произошла ошибка. То отменяем создание альбома
-              newAlbum.remove(function (err) {
-              });
+              newAlbum.remove();
               return done(err);
             }
           });

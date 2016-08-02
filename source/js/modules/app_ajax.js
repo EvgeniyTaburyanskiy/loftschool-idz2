@@ -564,6 +564,7 @@
         },
         function (resAddAlbum) {
           var result = resAddAlbum.responseJSON;
+          alert(result.error_user_msg);
           console.log('ERR AddAlbum=', result);
         }
     );

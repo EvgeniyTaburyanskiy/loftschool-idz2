@@ -30,7 +30,7 @@ var getUserPage = function (req, res, next) {
           })
         },
         albums: function (done) {
-          Core.getAlbumsByUser(req.user._id, function (err, albums) {
+          Core.getAlbumsByUser(user_id, function (err, albums) {
             if (err) return done(err);
             return done(null, albums);
           })
