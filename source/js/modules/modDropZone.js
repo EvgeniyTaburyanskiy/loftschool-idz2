@@ -16,10 +16,10 @@
 
           myDropzone.on("success", function (file, responseText) {
             // Handle the responseText here. For example, add the text to the preview element:
-            console.log(responseText);
-            file.previewTemplate.appendChild(document.createTextNode(responseText));
+            //console.log(responseText);
+            //file.previewTemplate.appendChild(document.createTextNode(responseText));
           });
-          
+
           submitButton.addEventListener("click", function () {
             myDropzone.processQueue(); // Tell Dropzone to process all queued files.
           });
