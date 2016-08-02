@@ -7,8 +7,6 @@
         maxFilesize:      2, // MB
         uploadMultiple:   true,
         addRemoveLinks:   true,
-        thumbnailWidth: 135,
-        thumbnailHeight: 135,
         dictRemoveFile: "x",
         maxFiles:         10,
         autoProcessQueue: false,

@@ -44,7 +44,7 @@
   @include mediamax(1299px) {
     width: 596px;
   }
-  @include mediamax(596px) {
+  @include mediamax(767px) {
     width: 300px;
     height: auto;
   }
@@ -83,7 +83,7 @@
   @include mediamax(1299px) {
     padding-right: 20px;
   }
-  @include mediamax(596px) {
+  @include mediamax(767px) {
     padding: 0 10px;
   }
 }
@@ -111,31 +111,77 @@
   height: 329px;
   margin-top: auto;
   margin-bottom: 40px;
+  padding: 0 6px;
+  border-radius: 20px;
+  @include mediamax(1299px) {
+    padding: 0 7px;
+  }
+  @include mediamax(767px) {
+    padding: 22px 3px 0;
+  }
   .dz-message {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
-    margin: 0 !important;
+    margin: 0 ;
   }
-  .dz-preview .dz-remove {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    width: 26px;
-    height: 26px;
-    border: 3px solid #f9f9f9;
-    background: #ee4634;
-    border-radius: 50%;
-    top: -11px;
-    right: -11px;
-    z-index: 55;
-    text-decoration: none;
-    color: #fff;
-    &:hover {
-      text-decoration: none !important;
+  .dz-preview {
+    min-height: 59px;
+    margin: 10px;
+    @include mediamax(767px) {
+      margin: 4px;
+
+      .dz-details {
+        display: none!important; ;
+      }
+      .dz-progress,.dz-error-message {
+        display: none!important; ;
+      }
+    }
+    .dz-image {
+      width: 135px;
+      height: 135px;
+      border-radius: 5px;
+      @include mediamax(1299px) {
+        width: 114px ;
+        height: 114px ;
+      }
+      @include mediamax(767px) {
+        width: 59px;
+        height: 59px;
+      }
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .dz-remove {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border: 3px solid #f9f9f9;
+      background: #ee4634;
+      border-radius: 50%;
+      top: -11px;
+      right: -11px ;
+      z-index: 55;
+      text-decoration: none;
+      color: #fff;
+      &:hover {
+        text-decoration: none ;
+      }
+      @include mediamax(767px) {
+        width: 18px;
+        height: 18px;
+        font-size: 12px;
+        right: -6px;
+        top: -6px;
+      }
     }
   }
   .icon-camera {
@@ -150,7 +196,7 @@
     font: 400 16px/21px proxima nova;
     color: #323232;
     margin-top: 15px;
-    @include mediamax(596px) {
+    @include mediamax(767px) {
       display: none;
     }
   }
@@ -158,7 +204,7 @@
     text-align: center;
     font: 400 16px/21px proxima nova;
     color: #323232;
-    @include mediamax(596px) {
+    @include mediamax(767px) {
       display: none;
     }
   }
@@ -167,7 +213,7 @@
     text-align: center;
     opacity: .6;
     font: 700 16px/21px proxima nova;
-    @include mediamax(596px) {
+    @include mediamax(767px) {
       text-transform: capitalize;
       width: 138px;
       height: 40px;
@@ -179,7 +225,7 @@
       margin-top: 10px;
     }
   }
-  @include mediamax(596px) {
+  @include mediamax(767px) {
     height: 285px;
   }
 }
