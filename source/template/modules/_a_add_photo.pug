@@ -8,9 +8,12 @@ include ../helpers/mixins.pug
             .b__album-name
                 .name Название
                 .title {{some just created album name}}
-            .b__photo-container
-                +use('cam','icon-camera')
-                span.drag Перетащите фото сюда
-                span.file <span class="or">или</span> выберите файл
+            form#my-awesome-dropzone.dropzone.needsclick.nicescroll(action='#!')
+                .dz-message.needsclick
+                    +use('cam','icon-camera')
+                    span.drag Перетащите фото сюда
+                    span.file <span class="or">или</span> выберите файл
         .add-photo__f
             +formMenu
+
+            // \n <svg class=\"erase-photo__svg\" role=\"img\">\n <use xlink:href=\"/assets/img/icons/sprite.svg#close\"></use>\n </svg>\n

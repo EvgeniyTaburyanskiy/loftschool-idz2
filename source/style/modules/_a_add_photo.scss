@@ -1,30 +1,34 @@
 @import "../helpers/mixins";
 @import "../helpers/functions";
+
 @keyframes photoAddSlideDown {
   from {
     bottom: 100%;
-    transform: translate(-50%,0);
+    transform: translate(-50%, 0);
   }
   to {
     bottom: 50%;
-    transform: translate(-50%,50%);
+    transform: translate(-50%, 50%);
   }
 }
+
 .photoAddSlideDown {
   animation-name: photoAddSlideDown;
   animation-duration: .3s;
   animation-fill-mode: both;
 }
+
 .add-photo-wrap {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(#000,0.7);
+  background: rgba(#000, 0.7);
   z-index: 5555;
   display: none;
 }
+
 .add-photo {
   width: 679px;
   height: 594px;
@@ -36,7 +40,7 @@
   position: absolute;
   left: 50%;
   bottom: 100%;
-  transform: translate(-50%,0);
+  transform: translate(-50%, 0);
   @include mediamax(1299px) {
     width: 596px;
   }
@@ -50,7 +54,7 @@
   height: 67px;
   background: #f1f1f1;
   display: flex;
-  flex-shrink:0;
+  flex-shrink: 0;
 }
 
 .add-photo__h {
@@ -74,7 +78,7 @@
 .add-photo__b {
   padding: 0 20px;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   height: 100%;
   @include mediamax(1299px) {
     padding-right: 20px;
@@ -83,33 +87,57 @@
     padding: 0 10px;
   }
 }
+
 .b__album-name {
   display: flex;
-  width:100%;
+  width: 100%;
   height: 91px;
-  align-items:center;
+  align-items: center;
   .name {
     margin-right: 20px;
-    font:700 16px proxima nova;
+    font: 700 16px proxima nova;
   }
   .title {
     font: 400 16px proxima nova
   }
 }
-.b__photo-container {
+
+.dropzone {
   border-width: 3px;
   border-color: rgb(241, 241, 241);
   border-style: dashed;
   background-color: rgb(249, 249, 249);
   width: 100%;
   height: 329px;
-  flex-shrink:0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   margin-top: auto;
   margin-bottom: 40px;
+  .dz-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin: 0 !important;
+  }
+  .dz-preview .dz-remove {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border: 3px solid #f9f9f9;
+    background: #ee4634;
+    border-radius: 50%;
+    top: -11px;
+    right: -11px;
+    z-index: 55;
+    text-decoration: none;
+    color: #fff;
+    &:hover {
+      text-decoration: none !important;
+    }
+  }
   .icon-camera {
     width: 40px;
     height: 32px;
@@ -118,8 +146,8 @@
   }
   .drag {
     text-align: center;
-    opacity:.6;
-    font:400 16px/21px proxima nova;
+    opacity: .6;
+    font: 400 16px/21px proxima nova;
     color: #323232;
     margin-top: 15px;
     @include mediamax(596px) {
@@ -128,7 +156,7 @@
   }
   .or {
     text-align: center;
-    font:400 16px/21px proxima nova;
+    font: 400 16px/21px proxima nova;
     color: #323232;
     @include mediamax(596px) {
       display: none;
@@ -137,16 +165,16 @@
   .file {
     color: #28bbf0;
     text-align: center;
-    opacity:.6;
-    font:700 16px/21px proxima nova;
+    opacity: .6;
+    font: 700 16px/21px proxima nova;
     @include mediamax(596px) {
       text-transform: capitalize;
       width: 138px;
       height: 40px;
       border: 1px solid #28bbf0;
       display: flex;
-      justify-content:center;
-      align-items:center;
+      justify-content: center;
+      align-items: center;
       border-radius: 20px;
       margin-top: 10px;
     }
