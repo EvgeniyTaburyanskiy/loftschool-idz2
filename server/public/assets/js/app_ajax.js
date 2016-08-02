@@ -171,7 +171,12 @@
   };
 
 
-  var addPhotoLike = function () {
+  var addPhotoLike = function (photo_id) {
+    data = {
+      photo_id: photo_id || undefined
+    };
+
+    return loftogram.modAJAX.ajax(serviceUrl + ".addPhotoLike", 'POST', data);
   };
 
 
@@ -620,3 +625,27 @@
   })
 })();
 
+
+// ADD LIKE
+(function () {
+  $(document).on('click', 'button.like-block__btn', function (event) {
+    event.preventDefault();
+    var $that = $(this);
+    var photo_id = $that.data('photoid');
+    var dfdLikePhoto = window.loftogram.modPhoto.addPhotoLike(photo_id);
+
+    $.when(dfdLikePhoto).then(
+        function (resLikePhoto) {
+          var result = resLikePhoto;
+          $that.find('.like-block__tx').text(result.data.likes.length);
+
+        },
+        function (resLikePhoto) {
+          var result = resLikePhoto.responseJSON;
+          console.log('ERR resLikePhoto=', result);
+        }
+    );
+
+    return false;
+  })
+})();

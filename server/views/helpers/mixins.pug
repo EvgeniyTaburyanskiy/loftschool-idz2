@@ -166,7 +166,7 @@ mixin btnLike
   div.like-block
     button.like-block__btn
       +use('no_like','like-block__svg')
-      span.like-block__tx 22
+      span.like-block__tx 0
 //маленькая красная кнопка отмены добавления фото
 mixin btnCancel
   div.cancel-block
@@ -223,8 +223,8 @@ mixin photoTile(photo)
   -var owner = photo._album_id._user_id;
   -var album = photo._album_id;
 
-  div.photo-tile
-    a.tile-top(href="#slide" id= photo._id )
+  div.photo-tile(id= photo._id.toString())
+    a.tile-top(href="#slide" )
       +use('loupe','tile-top__svg')
       img.tile-top__img(src= photo.thumb alt= photo.name)
       div.top-mask
