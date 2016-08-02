@@ -7,10 +7,13 @@ include ../helpers/mixins.pug
     .add-photo__b
       .b__album-name
         .name Название
-        .title {{some just created album name}}
-      .b__photo-container
+        .title
+      form#photoDropZone.dropzone.b__photo-container(action="/api/method/photos.addPhoto")
+        input(type='hidden' name='album_id' value= album._id.toString())
         +use('cam','icon-camera')
-        span.drag Перетащите фото сюда
-        span.file <span class="or">или</span> выберите файл
+        span.drag.dz-message Перетащите фото сюда
+        span.file
+          span.or или
+          |выберите файл
     .add-photo__f
       +formMenu

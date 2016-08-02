@@ -170,7 +170,9 @@ var _router = function (app) {
   .post(controllers.photos.API_getPhotoById);
 
   router.route(['/api/method/photos.addPhoto']) // С Добавление Фото (Id альбома,файлы фоток)
-  .post(controllers.photos.API_addPhoto);
+  .post(
+      Upload.any(),
+      controllers.photos.API_addPhoto);
 
   router.route(['/api/method/photos.addPhotoComment'])// U Добавление коментария  (Id фото, Текст Коментария)
   .post(controllers.photos.API_addPhotoComment);

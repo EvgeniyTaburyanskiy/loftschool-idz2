@@ -2,6 +2,7 @@ var async = require('async');
 var path = require('path');
 var logger = require('../../../utils/winston')(module);
 var HttpError = require('../../../middleware/HttpError').HttpError;
+var ObjectID = require('mongodb').ObjectID;
 var config = require('../../../utils/nconf');
 var PhotoResizer = require('../../../utils/PhotoResizer');
 var Core = require('../../../utils/core');
@@ -37,8 +38,75 @@ var API_getPhotoById = function (req, res, next) {
 
 var API_addPhoto = function (req, res, next) {
   var album_id = req.query.album_id || req.params.album_id || req.body.album_id;
+  var files = (req.files !== 'undefined') ? req.files : [];
+  var aid = album_id;
+
+  if (!album_id) {
+    next(new HttpError(400, null, 'ID альбома указано не верно!'));
+  }
+  try {
+    aid = new ObjectID(album_id);
+  }
+  catch (e) {
+    return next(new HttpError(400, null, 'ID альбома указано не верно!'));
+  }
 
 
+  // Перебираем все что прилетело и обрабатываем только фотки
+  async.eachSeries(files, function (file, callback) {
+
+    logger.debug('Обрабатываем Файл ' + file.fieldname);
+
+    if (~file.fieldname.indexOf("photos")) {
+      var newPhoto = new Photo({'_album_id': aid});
+
+      newPhoto.save(function (err) {
+        if (err) {
+          return callback(err);
+        }
+      });
+
+      file.destfilename = newPhoto._id;
+
+      PhotoResizer.resize(file, function (err, newImageInfo) {
+        if (err) {
+          // если при ресайзе что-то пошло не так, удаляем фотку
+          newPhoto.remove();
+          return callback(new HttpError(500, null, 'Ошибка в процессе обработки файла!', err.message));
+        }
+
+        logger.debug('Resized info - ', newImageInfo);
+
+        newPhoto.img = '/uploads/files/photos/' + path.basename(newImageInfo.imgPath);
+        newPhoto.thumb = '/uploads/files/photos/' + path.basename(newImageInfo.thumbPath);
+
+        // Обновляем фотку в БД
+        newPhoto.save(function (err) {
+          if (err) {
+            newPhoto.remove();
+            return callback(new HttpError(500, null, 'Ошибка в процессе обработки файла!', err.message))
+          }
+
+          return callback();
+        });
+      });
+
+
+    }
+    else {
+      // Do work to process file here
+      logger.debug('Пропускаем файл!');
+      callback();
+    }
+  }, function (err) {
+    if (err) {
+      logger.debug('Ошибка в процессе обработки файлов');
+      return next(err);
+    } else {
+      logger.debug('Фото приняты и сохранены в альбом');
+      return next(new HttpError(200, null, 'Фото приняты и сохранены в альбом'));
+    }
+  });
 };
 
 

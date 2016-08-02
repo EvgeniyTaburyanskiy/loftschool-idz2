@@ -1,6 +1,7 @@
 var async = require('async');
 var path = require('path');
 var logger = require('../../../utils/winston')(module);
+var ObjectID = require('mongodb').ObjectID;
 var HttpError = require('../../../middleware/HttpError').HttpError;
 var config = require('../../../utils/nconf');
 var PhotoResizer = require('../../../utils/PhotoResizer');
@@ -175,7 +176,6 @@ var API_addAlbum = function (req, res, next) {
                 });
                 return done(err)
               }
-
 
               return done(null, newAlbum, newPhoto);
             });

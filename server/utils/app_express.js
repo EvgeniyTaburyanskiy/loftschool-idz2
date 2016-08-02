@@ -25,9 +25,6 @@ var
     apiRouter    = require('../routes/api').Router,
     mongoose     = require('./mongoose');
 
-var multer = require('multer');
-var Upload = multer(config.get('multer'));
-
 var serverRoot = path.join(__dirname, '/../');
 var documentRoot = path.join(serverRoot, config.get('documentRoot'));
 var viewsDir = path.join(serverRoot, config.get('viewsDir'));
