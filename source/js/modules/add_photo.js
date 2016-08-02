@@ -27,8 +27,12 @@ $ ( function() {
         photoAdd.fadeOut(100);
         photoAddCard.removeClass('photoAddSlideDown');
     });
+    $('.form-menu__reset').on('click',function () {
+        photoAdd.fadeOut(100);
+        photoAddCard.removeClass('photoAddSlideDown');
+    });
 
-    $(document).on('click', (function(e) {
+    photoAdd.on('click', (function(e) {
         if ($(e.target).closest(".add-photo").length) return;
         photoAdd.fadeOut(100);
         photoAddCard.removeClass('photoAddSlideDown');

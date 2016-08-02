@@ -7,4 +7,6 @@ $(document).ready(function() {
         railoffset: true,
         railpadding: { top: 10,bottom:10}
     });
+    $('.dropzone').niceScroll({
+    });
 });
