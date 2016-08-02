@@ -8,7 +8,8 @@ include ../helpers/mixins.pug
             .b__album-name
                 .name Название
                 .title {{some just created album name}}
-            form#my-awesome-dropzone.dropzone.needsclick.nicescroll(action='#!')
+            form#photoDropZone.dropzone.needsclick.nicescroll(action='/api/method/photos.addPhoto')
+                input(type='hidden' name='_csrf' value= csrfToken)
                 .dz-message.needsclick
                     +use('cam','icon-camera')
                     span.drag Перетащите фото сюда

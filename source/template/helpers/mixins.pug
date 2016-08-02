@@ -155,31 +155,31 @@ mixin socIconEm
 //красная кнопка Удалить
 mixin btnDelete
   div.delete-block
-    btn.delete-block__btn
+    button.delete-block__btn
       +use('delete','delete-block__svg')
       span.delete-block__tx Удалить
 //красная кнопка Лайк
 mixin btnLike
   div.like-block
-    btn.like-block__btn
+    button.like-block__btn
       +use('no_like','like-block__svg')
       span.like-block__tx 22
 //маленькая красная кнопка отмены добавления фото
 mixin btnCancel
   div.cancel-block
-    btn.cancel-block__btn
+    button.cancel-block__btn
       +use('close', 'cancel-block__svg')
 //кнопка закрытия попапа
 mixin btnCancelPop
   div.cancel-popup
-    btn.cancel-popup__btn
+    button.cancel-popup__btn
       +use('close', 'cancel-popup__svg')
 //две нижние кнопки форм добавления фото и альбома
 mixin formMenu
   div.form-menu
-    input.form-menu__submit(type='submit' value='Сохранить')
-    input.form-menu__reset(type='reset' value='Отменить')
+    button.form-menu__submit(type='submit' value='Сохранить') Сохранить
+    button.form-menu__reset(type='reset' value='Отменить') Отменить
 mixin formMenuReverse
   div.form-menu
-    input.form-menu__reset(type='reset' id="reset" value='Отменить')
-    input.form-menu__submit(type='submit' id="submit" value='Сохранить')
+    button.form-menu__reset(type='reset' id="reset" value='Отменить') Отменить
+    button.form-menu__submit(type='submit' id="submit" value='Сохранить') Сохранить
