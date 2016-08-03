@@ -1,5 +1,5 @@
 mixin GTM(TAG)
-  //Google Tag Manager
+  //- Google Tag Manager
   | <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TRS3HP"
   |    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   | <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -7,11 +7,11 @@ mixin GTM(TAG)
   | j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   | '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   | })(window,document,'script','dataLayer','#{TAG}');</script>
-  //END Google Tag Manager
+  //- END Google Tag Manager
 
 mixin GA (GA_ID)
   //- GA_ID = UA-XXXXX-X
-  // Google Analytics: change UA-XXXXX-X to be your site's ID.
+  //- Google Analytics: change UA-XXXXX-X to be your site's ID.
   | <script>
   | (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
   | function(){(b[l].q=b[l].q || []).push(arguments)});b[l].l=+new Date;
@@ -20,7 +20,7 @@ mixin GA (GA_ID)
   | r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
   | ga('create','#{GA_ID}','auto');ga('send','pageview');
   | </script>
-  // End Google Analytics
+  //- End Google Analytics
 
 mixin FavIcon
   | <link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
@@ -42,80 +42,80 @@ mixin FavIcon
   meta(name="theme-color", content="#ffffff")
   meta(name="msapplication-config", content="/assets/img/favicon/browserconfig.xml")
 
-//svg
+//- svg
 mixin use(name, sname)
   - var svg = '/assets/img/icons/sprite.svg'
   svg(role='img' class=sname)
     use(xlink:href=svg+'#'+name)
-//кастомная кнопка
+//- кастомная кнопка
 mixin btnCustom(buttontext)
   div.custom-block
     button.custom-block__btn #{buttontext}
-//кнопка input type=file
+//- кнопка input type=file
 mixin inpFile(inputText, inputName)
   div.inputFile-block
     label.inputFile-block__btn #{inputText}
       input(type='file' name=inputName)
-//синяя кнопка Войти
+//- синяя кнопка Войти
 mixin btnEnter
   div.enter-block
     button.enter-block__btn Войти
-//синяя кнопка Сменить
+//- синяя кнопка Сменить
 mixin btnReset
   div.enter-block
     button.enter-block__btn.reset-block__btn Сменить
-//синяя кнопка Зарегистрироваться
+//- синяя кнопка Зарегистрироваться
 mixin btnCreateAcc
   div.enter-block
     button.enter-block__btn Создать аккаунт
-//синяя кнопка Создать аккаунт
+//- синяя кнопка Создать аккаунт
 mixin btnRecreatePass
   div.enter-block
     button.enter-block__btn Восстановить пароль
-//синяя кнопка Создать аккаунт
+//- синяя кнопка Создать аккаунт
 mixin btnReg
   div.enter-block
     button.enter-block__btn Зарегистрироваться
-//прозрачная кнопка Закрыть
+//- прозрачная кнопка Закрыть
 mixin btnClose
   div.close-block
     button.close-block__btn Закрыть
-//Кнопка Загрузить обложку
+//- Кнопка Загрузить обложку
 mixin btnLoad
   div.load-cover
     button.load-cover__btn Загрузить обложку
-//прозрачная кнопка Показать еще
+//- прозрачная кнопка Показать еще
 mixin btnShow
   div.show-block
     button.show-block__btn Показать еще
-//выдвижная кнопка Редактировать
+//- выдвижная кнопка Редактировать
 mixin btnEdit
   div.edit-block
     button.edit-block__btn
       +use('edit', 'edit-block__svg')
       span.edit-block__tx Редактировать
-//выдвижная кнопка Выйти
+//- выдвижная кнопка Выйти
 mixin btnExit
   div.exit-block
     button.exit-block__btn
       a.exit-block__link(href="index.html")
       +use('off', 'exit-block__svg')
       span.exit-block__tx Выйти
-//выдвижная кнопка Домой
+//- выдвижная кнопка Домой
 mixin btnHome
   div.exit-block
     button.exit-block__btn.home-block__btn
       a.home-block__link(href="main.html")
       +use('home', 'exit-block__svg')
       span.exit-block__tx Домой
-//выдвижная кнопка Добавить
+//- выдвижная кнопка Добавить
 mixin btnAdd
   div.add-block
     button.add-block__btn
       +use('add', 'add-block__svg')
       span.add-block__tx Добавить
 
-//соц кнопка с параметрами
+//- соц кнопка с параметрами
 mixin socIcon(type, url)
   div.soc-block
     a.soc-block__a(href=url)
@@ -127,54 +127,54 @@ mixin socIcon(type, url)
       - if ( type === 'em' ) svg = 'soc_email';
         +use(svg, 'soc-block__svg')
 
-//соц кнопка ВК
+//- соц кнопка ВК
 mixin socIconVk
   div.soc-block
     a.soc-block__a(href="#")
       +use('soc_vk','soc-block__svg')
-//соц кнопка ФБ
+//- соц кнопка ФБ
 mixin socIconFb
   div.soc-block
     a.soc-block__a(href="#")
       +use('soc_fb','soc-block__svg')
-//соц кнопка Твиттер
+//- соц кнопка Твиттер
 mixin socIconTw
   div.soc-block
     a.soc-block__a(href="#")
       +use('soc_twitter','soc-block__svg')
-//соц кнопка Google Plus
+//- соц кнопка Google Plus
 mixin socIconGp
   div.soc-block
     a.soc-block__a(href="#")
       +use('social_google','soc-block__svg')
-//соц кнопка Почты
+//- соц кнопка Почты
 mixin socIconEm
   div.soc-block
     a.soc-block__a(href="#")
       +use('soc_email','soc-block__svg')
-//красная кнопка Удалить
+//- красная кнопка Удалить
 mixin btnDelete
   div.delete-block
     button.delete-block__btn
       +use('delete','delete-block__svg')
       span.delete-block__tx Удалить
-//красная кнопка Лайк
+//- красная кнопка Лайк
 mixin btnLike
   div.like-block
     button.like-block__btn
       +use('no_like','like-block__svg')
       span.like-block__tx 22
-//маленькая красная кнопка отмены добавления фото
+//- маленькая красная кнопка отмены добавления фото
 mixin btnCancel
   div.cancel-block
     button.cancel-block__btn
       +use('close', 'cancel-block__svg')
-//кнопка закрытия попапа
+//- кнопка закрытия попапа
 mixin btnCancelPop
   div.cancel-popup
     button.cancel-popup__btn
       +use('close', 'cancel-popup__svg')
-//две нижние кнопки форм добавления фото и альбома
+//- две нижние кнопки форм добавления фото и альбома
 mixin formMenu
   div.form-menu
     button.form-menu__submit(type='submit' value='Сохранить') Сохранить
