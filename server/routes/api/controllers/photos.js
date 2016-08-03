@@ -115,6 +115,45 @@ var API_addPhotoComment = function (req, res, next) {
 
 
 var API_addPhotoLike = function (req, res, next) {
+  var photo_id = req.query.photo_id || req.body.photo_id;
+  if (!photo_id) return (next(new HttpError(400, null, 'Не верно указан ID фотографии')));
+
+  async.waterfall([
+        //Находим фото в БД и проверяем что мы ее еще не "Лайкали"
+        function (done) {
+          Photo
+          .findOne({'_id': photo_id, 'likes._user_id': req.user._id})
+          .exec(function (err, photo) {
+            if (photo) return done(new HttpError(400, null, 'Вы уже ставили Like данной фото'));
+            return done(err);
+          });
+        },
+        // Если еще фотку не лайкали то получаем ее из базы и ставим Лайк
+        function (done) {
+          Photo
+          .findOne({'_id': photo_id})
+          .exec(function (err, photo) {
+            if (!photo) return done(new HttpError(400, null, 'Фотография не существует!'));
+            return done(err, photo);
+          });
+        },
+        //Вносим изменения в Фото
+        function (photo, done) {
+          //Ставим Like фотке
+          photo.likes.push({_user_id: req.user._id});
+          photo.save(function (err) {
+            if (err) {
+              return done(new HttpError(500, null, 'В процессе сохранения данных о фото произошла ошибка!', err.message));
+            }
+            done(null, photo);
+          });
+        }
+      ],
+      function (err, result) {
+        if (err) return next(err);
+        next(new HttpError(200, null, 'Like Успешно сохранен!', result));
+      }
+  )
 };
 
 

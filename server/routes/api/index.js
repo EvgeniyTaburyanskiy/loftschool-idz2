@@ -119,6 +119,9 @@ var _router = function (app) {
 
 
   // ALBUM ROUTES ==============================================
+  router.route(['/api/method/albums*'])
+  .all(checkAuth);
+
   router.route(['/api/method/albums.getAlbumByID'])// R Список Фоток Альбома (Id альбома)
   .get(controllers.albums.API_getAlbumById);
 
@@ -147,21 +150,17 @@ var _router = function (app) {
 
   // PHOTO ROUTES ==============================================
   /*
-   *  TODO: API-ROUTE - С Добавление Фото (Id альбома,фалы фоток)
-   *
    *  TODO: API-ROUTE - R Список новых фоток (Кол-во, Номер с которого)
    *  (https://stackoverflow.com/questions/12542620/how-to-make-pagination-with-mongoose)
    *  (https://stackoverflow.com/questions/5539955/how-to-paginate-with-mongoose-in-node-js)
-   *  TODO: API-ROUTE - R Поиск Фоток по ключевому слову описанию и/или имени (ключевое слово)
    *  TODO: API-ROUTE - R Детальная Инфо о фотографии (Id фото)
-   *
-   *  TODO: API-ROUTE - U Изменение Фото по ID ( Id фото,Имя,Описание)
    *  TODO: API-ROUTE - U Добавить Like фотке (Id фото)
    *  TODO: API-ROUTE - U Добавление коментария  (Id фото, Текст Коментария)
    *  TODO: API-ROUTE - U Перенос Фотки в другой альбом (Список ID фото, Id нового альбома)
-   *
    *  TODO: API-ROUTE - D Удаление Фото (ID Фото,Флаг подтверждения)
    * */
+  router.route(['/api/method/photos*'])
+  .all(checkAuth);
 
   router.route(['/api/method/photos.getNewPhotos'])// R Список новых фоток (Кол-во, Стартовый номер)
   .all(controllers.photos.API_getNewPhotos);
